@@ -28,7 +28,7 @@ export function Footer () {
                             <div className="flex items-center content-center sm:justify-end justify-left">
                                 <CCircle className="dark:text-white text-3xl mr-2" />
                                 <h2 className="text-gray-800 font-mona text-3xl font-bold dark:text-white">
-                                    ZakaCoding 2025
+                                    ZakaCoding 2026
                                 </h2>
                             </div>
                             <h2 className="sm:text-right text-left text-gray-800 dark:text-white pr-1 font-bold">FULLSTACK WEB DEV</h2>

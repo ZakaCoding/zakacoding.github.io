@@ -53,3 +53,33 @@
 .read-the-docs {
   color: #888;
 }
+
+.coffee-floating {
+  position: absolute;
+  bottom: -25px;
+  right: -15px;
+  width: 90px;
+  animation: coffeeFloat 4s ease-in-out infinite;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
+}
+
+/* floating motion */
+@keyframes coffeeFloat {
+  0% {
+    transform: translateY(0px) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(-4deg);
+  }
+}
+
+/* hover interaction */
+.coffee-floating:hover {
+  animation-play-state: paused;
+  transform: scale(2);
+}
