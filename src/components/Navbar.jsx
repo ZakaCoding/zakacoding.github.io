@@ -5,7 +5,7 @@ import { Alt } from 'react-bootstrap-icons';
 export function Navbar() {
   return (
     <>
-      <header className='fixed z-10 top-2 left-0 w-full p-2 flex content-center lg:justify-center sm:justify-start'>
+      <header className='fixed z-10 top-2 left-0 w-full p-2 flex content-center lg:justify-center sm:justify-start transition-all duration-300 navbar-header'>
         <nav className='rounded-3xl p-2 px-1 bg-gray-200 dark:bg-gray-800'>
           <ul className='flex content-center justify-center'>
             <li className='flex'>

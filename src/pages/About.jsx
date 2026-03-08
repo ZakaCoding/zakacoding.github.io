@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
+import { motion } from 'framer-motion';
 
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
@@ -15,6 +16,7 @@ import  animoji  from '../assets/lottie/memoji.json';
 
 // logo
 import ZakaCodingLogo from '../../public/logo/final-logo.png';
+import PillSlider from '../components/PillSlider';
 
 // Bootstrap icons
 // import { BiGithub } from 'react-bootstrap-icons';
@@ -41,6 +43,33 @@ const About = () => {
         };
     }, []);
 
+    const fadeUp = {
+        hidden: { opacity: 0, y: 60 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.8, ease: "easeOut" }
+        }
+    };
+
+    const fadeRight = {
+        hidden: { opacity: 0, x: 80 },
+        visible: {
+            opacity: 1,
+            x: 0,
+            transition: { duration: 0.8 }
+        }
+    };
+
+    const fadeLeft = {
+        hidden: { opacity: 0, x: -80 },
+        visible: {
+            opacity: 1,
+            x: 0,
+            transition: { duration: 0.8 }
+        }
+    };
+
     return (
 
         <>
@@ -49,24 +78,46 @@ const About = () => {
                 ref={scrollContainerRef}
                 style={{ scrollSnapType: 'x mandatory', scrollBehavior: 'smooth' }}
                 >
-                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" style={{ scrollSnapAlign: 'start' }}>
+                <motion.div 
+                    className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" 
+                    style={{ scrollSnapAlign: 'start' }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                >
                     <section className='flex content-center space-x-7 px-5 pt-28'>
-                        <h1 className='text-8xl font-bold font-mona'>
+                        <motion.h1
+                            variants={fadeLeft}
+                            initial="hidden"
+                            animate="visible"
+                            className='text-8xl font-bold font-mona'
+                        >
                             ZakaCoding
-                        </h1>
-                        <p className='my-auto text-xl text-gray-500'>
+                        </motion.h1>
+                        <motion.p
+                            variants={fadeRight}
+                            initial="hidden"
+                            animate="visible"
+                            className='my-auto text-xl text-gray-500'
+                        >
                             Hello World! I'm  <span className='text-black font-bold'>Zaka</span>, a fullstack web developer with experience in backend and frontend development. I design and code beautifully simple things and love what I do. <br /> <br />
                             Kindly reach out if you see me a good fit.
-                        </p>
+                        </motion.p>
                     </section>
                     <section className='p-5 absolute w-full bottom-0 flex items-center justify-between'>
-                        <img src={ZakaCodingLogo} alt="My LOGO" className='max-w-xl' />
+                        {/* <img src={ZakaCodingLogo} alt="My LOGO" className='max-w-xl' /> */}
+                        <motion.img
+                        variants={fadeUp}
+                        initial="hidden"
+                        animate="visible"
+                        className='max-w-xl'
+                        src={ZakaCodingLogo}></motion.img>
 
-                        <Player 
+                        <Player
                             src={animoji}
                             hover
                             speed={2.1}
-                            className='w-80 cursor-grab'
+                            className='w-80 cursor-grab memoji-float'
                         />
 
                         <div className="absolute right-10 bottom-0">
@@ -75,11 +126,23 @@ const About = () => {
                             </svg>
                         </div>
                     </section>
-                </div>
-                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" style={{ scrollSnapAlign: 'start' }}>
+                </motion.div>
+                <motion.div 
+                    className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" 
+                    style={{ scrollSnapAlign: 'start' }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                >
                     <Row className='h-full'>
                         <Col xs lg={6} className='flex items-center flex-wrap'>
-                            <section className='block px-5 pt-28'>
+                            <motion.section
+                                variants={fadeLeft}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                className='block px-5 pt-28'
+                            >
                                 <div className="flex items-center text-gray-400">
                                     <div className='mr-2 relative flex h-3 w-3'>
                                         <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span>
@@ -93,7 +156,7 @@ const About = () => {
                                 <p className='text-3xl text-gray-500'>
                                     Thanks for stopping by, I’m currently looking to join a new team of creative designers and developers. If you think we might be a good fit for one another. send me an email 📧
                                 </p>
-                            </section>
+                            </motion.section>
                             <section className='flex items-center px-5 text-2xl'>
                                 <span className='text-gray-400 mr-2'>Elsewhere</span>
 
@@ -108,15 +171,27 @@ const About = () => {
                         <Col xs lg={6}>
                             <section className='h-full flex items-center justify-center text-center'>
                                 <div className="block">
-                                    <a href="mailto:zakanoor@outlook.co.id" className='p-2 px-4 rounded-lg border-2 border-gray-300 shadow-lg text-2xl hover:ring-blue-700 hover:ring-4'>
+                                    {/* <a href="mailto:zakanoor@outlook.co.id" className='p-2 px-4 rounded-lg border-2 border-gray-300 shadow-lg text-2xl hover:ring-blue-700 hover:ring-4'> */}
+                                    <motion.a
+                                        variants={fadeUp}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        className='p-2 px-4 rounded-lg border-2 border-gray-300 shadow-lg text-2xl hover:ring-blue-700 hover:ring-4'
+                                        href="mailto:zakanoor@outlook.co.id">
                                         <span className="text-gray-400">Say hi, </span>
                                         <span className='text-blue-700'>zakanoor@outlook.co.id</span>
-                                    </a>
+                                    </motion.a>
                                     <p className="text-2xl text-gray-400 mt-4">Looking for help? Feel free to reach out!</p>
                                 </div>
                             </section>
                         </Col>
                     </Row>
+                </motion.div>
+                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen flex items-center justify-center relative"
+                    style={{ scrollSnapAlign: 'start' }}>
+
+                    <PillSlider />
+
                 </div>
             </div>
         </>

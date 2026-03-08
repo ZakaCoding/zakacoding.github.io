@@ -79,6 +79,13 @@ button:focus-visible {
   font-family: 'Grotesk';
 }
 
+/* Hide navbar when PillSlider is in view */
+body.hide-navbar .navbar-header {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
