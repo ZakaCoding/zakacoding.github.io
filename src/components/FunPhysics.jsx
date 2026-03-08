@@ -1,11 +1,34 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
 
 export function FunPhysics() {
 
     const sceneRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                }
+            },
+            { threshold: 0.3 }
+        );
+
+        if (sceneRef.current) {
+            observer.observe(sceneRef.current);
+        }
+
+        return () => {
+            if (sceneRef.current) {
+                observer.unobserve(sceneRef.current);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isVisible) return;
 
         const {
             Engine,
@@ -384,7 +407,7 @@ export function FunPhysics() {
             render.textures = {};
         };
 
-    }, []);
+    }, [isVisible]);
 
     return (
         <div

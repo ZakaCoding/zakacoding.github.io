@@ -51,7 +51,7 @@ export function Welcome () {
                 <div className="container">
                     <Row>
                         <Col xs={12} lg={6} className='mb-5'>
-                            <div className="sticky top-10 pt-5">
+                            <div className="sticky top-20 pt-5">
                                 <h1 className="font-block mb-3 dark:text-white">
                                     Selected Work
                                 </h1>
@@ -123,14 +123,24 @@ export function Welcome () {
             <section id="tools" className='mb-5 h-[100vh] flex items-center relative'>
                 <div className="container">
                     <Row>
-                        <Col xs={12} lg={6} className='mb-5'>
-                            <div className="top-10 pt-5">
+                        <Col xs={12} lg={6} className='mb-5 flex items-center'>
+                            <div className="pt-5">
                                 <h1 className="font-block mb-3 dark:text-white">
                                     Tools & Experiments
                                 </h1>
                                 <p className="text-gray-400 text-3xl">
                                     Side projects and experimental tools I've built to solve problems and explore new ideas.
                                 </p>
+                                <a
+                                    href="https://open-cmap.fly.dev/presentation"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex items-center gap-2 mt-6 px-5 py-2.5 rounded-full text-green-500 font-medium text-lg transition-colors hover:text-black hover:bg-green-50 dark:hover:bg-green-950"
+                                    style={{ border: "1.5px dashed #22c55e" }}
+                                >
+                                    <span className="w-6 h-6 rounded-full bg-green-50 dark:bg-green-950 flex items-center justify-center text-sm font-bold">+</span>
+                                    Read the docs
+                                </a>
                             </div>
                         </Col>
                         <Col xs={12} lg={6} className='mb-5'>
@@ -144,14 +154,17 @@ export function Welcome () {
                                 <p className='text-gray-400 text-xl font-light'>
                                     A free and open-source tool for creating concept maps. Visually organize and represent knowledge, making it easier to understand complex ideas and relationships. Create, edit, and share concept maps online.
                                 </p>
+                                <div className='mt-3'>
+                                    <video id="video" class="mx-auto lg:rounded-xl border-0 drop-shadow-lg sm:rounded-none md:rounded-2xl" src="https://open-cmap.fly.dev/assets/video/concept.mp4" autoplay="" loop="" muted=""></video>
+                                </div>
                             </div>
                         </Col>
                     </Row>
                 </div>
             </section>
 
-            <section id='project' className='h-screen relative'>
-                <div className="absolute inset-0 flex flex-col">
+            <section id='project' className='h-screen relative mb-5'>
+                <div className="absolute inset-0 flex flex-col z-0">
                     <div className="mx-auto text-center w-fit py-10 z-10">
                         <h1 className="font-bold lg:text-8xl sm:text-6xl mb-5 dark:text-white">
                             Fun Project

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 
 import { Row } from 'react-bootstrap';
@@ -22,30 +22,34 @@ import ZakaCodingLogo from '../../public/logo/final-logo.png';
 const About = () => {
     const scrollContainerRef = useRef(null);
 
-    const handleScroll = (event) => {
+    useEffect(() => {
         const scrollContainer = scrollContainerRef.current;
+        if (!scrollContainer) return;
+        
+        const handleWheel = (e) => {
+            e.preventDefault();
+            scrollContainer.scrollBy({
+                left: e.deltaY + e.deltaX,
+                behavior: 'auto'
+            });
+        };
 
-        if(event.deltaY > 0)
-        {
-            // scroll right
-            scrollContainer.scrollLeft += 100;
-        } else {
-            // scroll left
-            scrollContainer.scrollLeft -= 100;
-        }
-    }
+        scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
 
-    // start animation when already 2 second
+        return () => {
+            scrollContainer.removeEventListener('wheel', handleWheel);
+        };
+    }, []);
 
     return (
 
         <>
             <div
-                className="overflow-hidden whitespace-normal flex relative bg-white"
+                className="overflow-x-scroll overflow-y-hidden flex bg-white h-screen w-screen"
                 ref={scrollContainerRef}
-                onWheel={handleScroll}
+                style={{ scrollSnapType: 'x mandatory', scrollBehavior: 'smooth' }}
                 >
-                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen static">
+                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" style={{ scrollSnapAlign: 'start' }}>
                     <section className='flex content-center space-x-7 px-5 pt-28'>
                         <h1 className='text-8xl font-bold font-mona'>
                             ZakaCoding
@@ -55,7 +59,7 @@ const About = () => {
                             Kindly reach out if you see me a good fit.
                         </p>
                     </section>
-                    <section className='p-5 absolute w-screen bottom-0 flex items-center justify-between'>
+                    <section className='p-5 absolute w-full bottom-0 flex items-center justify-between'>
                         <img src={ZakaCodingLogo} alt="My LOGO" className='max-w-xl' />
 
                         <Player 
@@ -72,7 +76,7 @@ const About = () => {
                         </div>
                     </section>
                 </div>
-                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen relative">
+                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" style={{ scrollSnapAlign: 'start' }}>
                     <Row className='h-full'>
                         <Col xs lg={6} className='flex items-center flex-wrap'>
                             <section className='block px-5 pt-28'>
