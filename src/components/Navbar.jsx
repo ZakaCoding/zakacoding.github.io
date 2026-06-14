@@ -21,7 +21,7 @@ export function Navbar() {
               </NavLink>
             </li>
             <li className='flex'>
-              <NavLink to='https://read.cv/zakacoding' className={
+              <NavLink to='https://path.cv/zakanoor' className={
                 ({ isActive }) => (isActive ? 'transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-600 hover:text-gray-600 bg-gray-100 dark:bg-slate-700 dark:text-white' : 'transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-500 hover:text-gray-500')
               }>Resume</NavLink>
             </li>
