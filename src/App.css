@@ -1,13 +1,16 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
+::-webkit-scrollbar{width:2px;height:2px;}
+::-webkit-scrollbar-button{width:2px;height:2px;}
+
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 7em;
+  padding: 0.5em;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -16,6 +19,11 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+.frame {
+  background-image: url('../src/assets/image/device.png');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 @keyframes logo-spin {
@@ -37,6 +45,51 @@
   padding: 2em;
 }
 
+.card:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+
 .read-the-docs {
   color: #888;
+}
+
+.coffee-floating {
+  position: absolute;
+  bottom: -25px;
+  right: -15px;
+  width: 90px;
+  animation: coffeeFloat 4s ease-in-out infinite;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
+}
+
+/* floating motion */
+@keyframes coffeeFloat {
+  0% {
+    transform: translateY(0px) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(-4deg);
+  }
+}
+
+/* hover interaction */
+.coffee-floating:hover {
+  animation-play-state: paused;
+  transform: scale(2);
+}
+
+.memoji-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
 }
