@@ -1,35 +1,86 @@
-import { NavLink } from 'react-router-dom';
-import Switcher from '../functions/switchTheme';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Alt } from 'react-bootstrap-icons';
+import { useEffect, useRef, useState } from 'react';
+
+const links = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About', icon: true },
+  { to: 'https://path.cv/zakanoor', label: 'Resume', external: true },
+];
 
 export function Navbar() {
-  return (
-    <>
-      <header className='fixed z-10 top-2 left-0 w-full p-2 flex content-center lg:justify-center sm:justify-start transition-all duration-300 navbar-header'>
-        <nav className='rounded-3xl p-2 px-1 bg-gray-200 dark:bg-gray-800'>
-          <ul className='flex content-center justify-center'>
-            <li className='flex'>
-              <NavLink to='/' className={
-                ({ isActive }) => (isActive ? 'transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-600 hover:text-gray-600 bg-gray-100 dark:bg-slate-700 dark:text-white' : 'transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-500 hover:text-gray-500')
-              }>Home</NavLink>
-            </li>
-            <li className='flex'>
-              <NavLink to='/about' className={
-                ({ isActive }) => (isActive ? 'flex content-center justify-center transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-600 hover:text-gray-600 bg-gray-100 dark:bg-slate-700 dark:text-white' : 'flex content-center justify-center transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-500 hover:text-gray-500')
-              }>
-                <span className='mr-2'>About</span> <Alt className='my-auto' /> 
-              </NavLink>
-            </li>
-            <li className='flex'>
-              <NavLink to='https://path.cv/zakanoor' className={
-                ({ isActive }) => (isActive ? 'transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-600 hover:text-gray-600 bg-gray-100 dark:bg-slate-700 dark:text-white' : 'transition-all duration-300 p-2 px-4 mx-2 cursor-pointer rounded-3xl text-gray-500 hover:text-gray-500')
-              }>Resume</NavLink>
-            </li>
-          </ul>
-        </nav>
+  const [visible, setVisible] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const [pillStyle, setPillStyle] = useState({});
+  const lastScrollY = useRef(0);
+  const navRef = useRef(null);
+  const itemRefs = useRef([]);
+  const location = useLocation();
 
-        <Switcher />
-      </header>
-    </>
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setVisible(currentY < lastScrollY.current || currentY < 10);
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [mounted]);
+
+  useEffect(() => {
+    const activeIndex = links.findIndex(l =>
+      l.external ? false : (l.to === '/' ? location.pathname === '/' : location.pathname.startsWith(l.to))
+    );
+    const el = itemRefs.current[activeIndex];
+    const nav = navRef.current;
+    if (!el || !nav) return;
+    const navRect = nav.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    setPillStyle({
+      width: elRect.width,
+      transform: `translateX(${elRect.left - navRect.left}px)`,
+    });
+  }, [location.pathname, mounted]);
+
+  return (
+    <header
+      className='fixed z-10 top-4 left-0 w-full flex justify-center navbar-header'
+      style={
+        mounted
+          ? { transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1)', transform: visible ? 'translateY(0)' : 'translateY(-140%)' }
+          : { animation: 'navSlideDown 0.8s cubic-bezier(0.4,0,0.2,1) forwards' }
+      }
+    >
+      <nav ref={navRef} className='nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full'>
+        {/* sliding pill */}
+        <span
+          className='nav-pill absolute top-2 left-0 h-[calc(100%-16px)] rounded-full pointer-events-none'
+          style={{ transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1), width 0.4s cubic-bezier(0.4,0,0.2,1)', ...pillStyle }}
+        />
+        {links.map((link, i) => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noreferrer' : undefined}
+            ref={el => itemRefs.current[i] = el}
+            className={({ isActive }) =>
+              `relative z-10 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-300 ${
+                isActive ? 'text-gray-900' : 'text-gray-400 hover:text-gray-200'
+              }`
+            }
+          >
+            {link.label}
+            {link.icon && <Alt size={13} />}
+          </NavLink>
+        ))}
+      </nav>
+    </header>
   );
 }
