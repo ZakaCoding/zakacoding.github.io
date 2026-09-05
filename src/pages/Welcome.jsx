@@ -205,7 +205,79 @@ export function Welcome() {
               </div>
 
               <div className="cmap-preview">
-                <video src="https://open-cmap.fly.dev/assets/video/concept.mp4" autoPlay loop muted playsInline aria-label="Open CMAP concept mapping demonstration"></video>
+                <div
+                  className="cmap-ui"
+                  role="img"
+                  aria-label="Simplified Open CMAP interface showing a concept map being built from a central idea"
+                >
+                  <div className="cmap-ui-nav">
+                    <span className="cmap-mark" aria-hidden="true">O</span>
+                    <span>Dashboard</span>
+                    <span>Release Notes</span>
+                    <span className="cmap-user">Zaka Noor⌄</span>
+                  </div>
+
+                  <div className="cmap-ui-header">
+                    <div>
+                      <strong>Map Board</strong>
+                      <small>CMAP Key: T9D-MNH-CMAP</small>
+                    </div>
+                    <div className="cmap-ui-actions" aria-hidden="true">
+                      <span>Save</span>
+                      <span>Export Map</span>
+                      <b>✓ Create Assignment</b>
+                    </div>
+                  </div>
+
+                  <div className="cmap-ui-workspace">
+                    <div className="cmap-ui-sidebar" aria-hidden="true">
+                      <strong>Build From</strong>
+                      <div className="cmap-source-buttons"><span>Scratch</span><span>File PDF</span></div>
+                      <hr />
+                      <strong>Super Concept</strong>
+                      <div className="cmap-faux-input">Concept mapping</div>
+                      <small>The most important concept in the map.</small>
+                      <strong>Concept</strong>
+                      <div className="cmap-faux-input muted">Add a concept</div>
+                      <hr />
+                      <strong>ⓘ Tips</strong>
+                    </div>
+
+                    <div className="cmap-ui-board" aria-hidden="true">
+                      <span className="cmap-collapse">‹</span>
+                      <svg className="cmap-connectors" viewBox="0 0 600 380" preserveAspectRatio="none">
+                        <motion.path
+                          d="M304 154 C365 132 404 118 463 118"
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          whileInView={{ pathLength: 1, opacity: 1 }}
+                          viewport={{ once: true, amount: 0.5 }}
+                          transition={{ duration: 0.7, delay: 0.35, ease: easeOut }}
+                        />
+                        <motion.path
+                          d="M294 170 C264 205 222 239 176 264"
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          whileInView={{ pathLength: 1, opacity: 1 }}
+                          viewport={{ once: true, amount: 0.5 }}
+                          transition={{ duration: 0.7, delay: 0.6, ease: easeOut }}
+                        />
+                        <motion.path
+                          d="M313 171 C337 212 356 240 378 273"
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          whileInView={{ pathLength: 1, opacity: 1 }}
+                          viewport={{ once: true, amount: 0.5 }}
+                          transition={{ duration: 0.7, delay: 0.82, ease: easeOut }}
+                        />
+                      </svg>
+                      <span className="cmap-link-label cmap-link-one">Link</span>
+                      <span className="cmap-link-label cmap-link-two">Link</span>
+                      <span className="cmap-link-label cmap-link-three">Link</span>
+                      <motion.span className="cmap-node cmap-super-node" initial={{ opacity: 0, scale: 0.72 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.45, ease: easeOut }}>Concept mapping</motion.span>
+                      <motion.span className="cmap-node cmap-proposition-node" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.8 }}>Proposition</motion.span>
+                      <motion.span className="cmap-node cmap-concept-node" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 1.02 }}>concept</motion.span>
+                      <motion.span className="cmap-node cmap-new-node" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 1.18 }}>new node</motion.span>
+                    </div>
+                  </div>
+                </div>
                 <span className="preview-note">Ideas become visible</span>
               </div>
             </motion.article>
