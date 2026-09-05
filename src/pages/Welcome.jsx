@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
 import { Footer } from '../components/Footer';
-import { FunPhysics } from '../components/FunPhysics';
 
 import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
 import ngefont from '../assets/image/ngefont/ngfont-illustration.png';
@@ -245,14 +244,6 @@ export function Welcome() {
             <div><span>03</span><strong>Ship</strong><p>Verify, observe, and improve.</p></div>
           </div>
         </motion.div>
-      </section>
-
-      <section id="project" className="fun-project-section">
-        <div className="fun-project-heading">
-          <h2>Still curious?</h2>
-          <p>Drag, throw, and play with the things developers say.</p>
-        </div>
-        <div className="fun-project-canvas"><FunPhysics /></div>
       </section>
 
       <section id="contact" className="contact-story" aria-labelledby="contact-story-title">
