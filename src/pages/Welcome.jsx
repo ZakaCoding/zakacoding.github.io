@@ -1,7 +1,6 @@
 // Static component
 import { Footer } from '../components/Footer';
 import { FunPhysics } from '../components/FunPhysics';
-import { Player } from '@lottiefiles/react-lottie-player';
 import { motion } from 'framer-motion';
 
 // Bootstrap component
@@ -9,7 +8,7 @@ import { Row, Col } from 'react-bootstrap';
 // bootstrap icon
 import {  BoxArrowUpRight } from 'react-bootstrap-icons'
 
-import animoji from '../assets/lottie/memoji.json';
+import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
 
 // Image
 import ngefont from '../assets/image/ngefont/ngfont-illustration.png';
@@ -75,12 +74,12 @@ export function Welcome () {
                             <span>ZakaCoding</span>
                             <span>GMT+7</span>
                         </div>
-                        <Player
-                            autoplay
-                            loop
-                            src={animoji}
+                        <img
+                            src={zakaMemoji}
                             className="hero-memoji"
-                            aria-label="Animated memoji of Zaka"
+                            alt="Zaka's memoji smiling behind a sticker-covered laptop"
+                            width="1420"
+                            height="1781"
                         />
                         <p>Code, coffee, curiosity.</p>
                     </motion.article>

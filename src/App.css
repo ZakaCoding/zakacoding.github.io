@@ -248,7 +248,7 @@
   align-items: center;
   justify-content: center;
   min-height: 0;
-  background: linear-gradient(155deg, #c9dcff 0%, #e4d4ff 55%, #ffe6ce 100%);
+  background: #000;
 }
 
 .memoji-caption {
@@ -257,7 +257,7 @@
   z-index: 2;
   display: flex;
   justify-content: space-between;
-  color: rgba(32, 35, 45, 0.6);
+  color: rgba(255, 255, 255, 0.62);
   font-size: 0.72rem;
   font-weight: 680;
   letter-spacing: 0.045em;
@@ -265,10 +265,10 @@
 }
 
 .hero-memoji {
-  width: min(135%, 560px);
-  max-width: none;
-  transform: translateY(2%);
-  filter: drop-shadow(0 22px 28px rgba(45, 52, 79, 0.17));
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 .hero-memoji-card > p {
@@ -278,11 +278,11 @@
   left: 1rem;
   margin: 0;
   padding: 0.7rem 0.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(20, 20, 20, 0.46);
   backdrop-filter: blur(12px);
-  color: rgba(31, 33, 41, 0.72);
+  color: rgba(255, 255, 255, 0.78);
   text-align: center;
   font-size: 0.78rem;
   font-weight: 650;
