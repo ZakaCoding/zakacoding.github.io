@@ -1,202 +1,283 @@
-import React, { useRef, useEffect } from 'react';
-import { Player } from '@lottiefiles/react-lottie-player';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import {
+  ArrowLeft,
+  ArrowRight,
+  BoxArrowUpRight,
+  Github,
+  Instagram,
+  Linkedin,
+} from 'react-bootstrap-icons';
 
-import { Row } from 'react-bootstrap';
-import { Col } from 'react-bootstrap';
+import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
 
-// Bootstrap Icons
-import { Github } from 'react-bootstrap-icons';
-import { Linkedin } from 'react-bootstrap-icons';
-import { Twitter } from 'react-bootstrap-icons';
-import { Instagram } from 'react-bootstrap-icons';
+const slideCount = 6;
+const easeOut = [0.22, 1, 0.36, 1];
 
-// Lottie Source
-import  animoji  from '../assets/lottie/memoji.json';
+const reveal = {
+  initial: { opacity: 0, y: 34 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.35 },
+  transition: { duration: 0.7, ease: easeOut },
+};
 
-// logo
-import ZakaCodingLogo from '../../public/logo/final-logo.png';
-import PillSlider from '../components/PillSlider';
+const toolGroups = [
+  {
+    number: '01',
+    title: 'Shape the product',
+    tools: 'Domain mapping · User flows · Prototyping',
+  },
+  {
+    number: '02',
+    title: 'Build the system',
+    tools: 'Laravel · React · PHP · JavaScript · Python',
+  },
+  {
+    number: '03',
+    title: 'Protect the data',
+    tools: 'PostgreSQL · MySQL · Redis · S3',
+  },
+  {
+    number: '04',
+    title: 'Keep it running',
+    tools: 'Docker · Linux · Nginx · CI/CD · Observability',
+  },
+];
 
-// Bootstrap icons
-// import { BiGithub } from 'react-bootstrap-icons';
+const chapterLabels = ['Hello', 'Operations', 'Thinking', 'Toolbox', 'Curiosity', 'Contact'];
 
-const About = () => {
-    const scrollContainerRef = useRef(null);
+export default function About() {
+  const trackRef = useRef(null);
+  const slideRefs = useRef([]);
+  const [activeSlide, setActiveSlide] = useState(0);
 
-    useEffect(() => {
-        const scrollContainer = scrollContainerRef.current;
-        if (!scrollContainer) return;
-        
-        const handleWheel = (e) => {
-            e.preventDefault();
-            scrollContainer.scrollBy({
-                left: e.deltaY + e.deltaX,
-                behavior: 'auto'
-            });
-        };
+  const goToSlide = (index) => {
+    slideRefs.current[index]?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'start',
+    });
+  };
 
-        scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return undefined;
 
-        return () => {
-            scrollContainer.removeEventListener('wheel', handleWheel);
-        };
-    }, []);
+    const desktop = window.matchMedia('(min-width: 821px)');
 
-    const fadeUp = {
-        hidden: { opacity: 0, y: 60 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.8, ease: "easeOut" }
-        }
+    const handleWheel = (event) => {
+      if (!desktop.matches || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      event.preventDefault();
+      track.scrollLeft += event.deltaY;
     };
 
-    const fadeRight = {
-        hidden: { opacity: 0, x: 80 },
-        visible: {
-            opacity: 1,
-            x: 0,
-            transition: { duration: 0.8 }
-        }
+    const handleKeyDown = (event) => {
+      if (event.target.closest('a, button, input, textarea, select')) return;
+
+      if (['ArrowRight', 'ArrowDown', 'PageDown'].includes(event.key)) {
+        event.preventDefault();
+        goToSlide(Math.min(activeSlide + 1, slideCount - 1));
+      }
+
+      if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) {
+        event.preventDefault();
+        goToSlide(Math.max(activeSlide - 1, 0));
+      }
+
+      if (event.key === 'Home') {
+        event.preventDefault();
+        goToSlide(0);
+      }
+
+      if (event.key === 'End') {
+        event.preventDefault();
+        goToSlide(slideCount - 1);
+      }
     };
 
-    const fadeLeft = {
-        hidden: { opacity: 0, x: -80 },
-        visible: {
-            opacity: 1,
-            x: 0,
-            transition: { duration: 0.8 }
-        }
+    track.addEventListener('wheel', handleWheel, { passive: false });
+    track.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      track.removeEventListener('wheel', handleWheel);
+      track.removeEventListener('keydown', handleKeyDown);
     };
+  }, [activeSlide]);
 
-    return (
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return undefined;
 
-        <>
-            <div
-                className="overflow-x-scroll overflow-y-hidden flex bg-white h-screen w-screen"
-                ref={scrollContainerRef}
-                style={{ scrollSnapType: 'x mandatory', scrollBehavior: 'smooth' }}
-                >
-                <motion.div 
-                    className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" 
-                    style={{ scrollSnapAlign: 'start' }}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.3 }}
-                >
-                    <section className='flex content-center space-x-7 px-5 pt-28'>
-                        <motion.h1
-                            variants={fadeLeft}
-                            initial="hidden"
-                            animate="visible"
-                            className='text-8xl font-bold font-mona'
-                        >
-                            ZakaCoding
-                        </motion.h1>
-                        <motion.p
-                            variants={fadeRight}
-                            initial="hidden"
-                            animate="visible"
-                            className='my-auto text-xl text-gray-500'
-                        >
-                            Hello World! I'm  <span className='text-black font-bold'>Zaka</span>, a fullstack web developer with experience in backend and frontend development. I design and code beautifully simple things and love what I do. <br /> <br />
-                            Kindly reach out if you see me a good fit.
-                        </motion.p>
-                    </section>
-                    <section className='p-5 absolute w-full bottom-0 flex items-center justify-between'>
-                        {/* <img src={ZakaCodingLogo} alt="My LOGO" className='max-w-xl' /> */}
-                        <motion.img
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="visible"
-                        className='max-w-xl'
-                        src={ZakaCodingLogo}></motion.img>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
-                        <Player
-                            src={animoji}
-                            hover
-                            speed={2.1}
-                            className='w-80 cursor-grab memoji-float'
-                        />
-
-                        <div className="absolute right-10 bottom-0">
-                            <svg className='w-32 arrow' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
-                                <path fill="#212B50" d="M227.68 182.95c-20.16 4.41-40.6 7.36-61.19 8.75-9.9.67-19.9 1.17-29.82.92-6.73-.17-14.22-.92-19.96-4.79-7.49-5.05-6.75-13.98-5.35-21.87 1.74-9.84 3.07-19.7 3.58-29.69.43-8.51.93-17.73-1.98-25.9-2.62-7.37-7.96-12.78-15.22-15.65-17.34-6.87-39.26-1.01-54.55 8.23-3.57 2.16-.31 7.78 3.28 5.61 7.78-4.7 16.33-7.91 25.32-9.32 7.89-1.23 16.82-1.44 24.31 1.77 8.07 3.46 11.54 10.88 12.34 19.26.9 9.47.02 19.31-1.03 28.73-1.68 15.02-9.45 35 6.72 44.86 5.91 3.61 13.1 4.74 19.91 5.14 9.3.54 18.75 0 28.03-.54 22.65-1.28 45.19-4.41 67.35-9.26 4.08-.89 2.36-7.16-1.73-6.27z"></path><path fill="#212B50" d="M255.06 172.05l-55.25-3.36c-4.18-.25-4.16 6.25 0 6.5l50.33 3.06c-6.79 11.78-22.45 16.75-32.74 24.7-3.3 2.55 1.33 7.12 4.6 4.6 12.83-9.92 30.13-14.77 36.19-31.39.77-2.11-1.19-4-3.13-4.11z"></path>
-                            </svg>
-                        </div>
-                    </section>
-                </motion.div>
-                <motion.div 
-                    className="flex-grow-1 flex-shrink-0 w-screen h-screen relative" 
-                    style={{ scrollSnapAlign: 'start' }}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.3 }}
-                >
-                    <Row className='h-full'>
-                        <Col xs lg={6} className='flex items-center flex-wrap'>
-                            <motion.section
-                                variants={fadeLeft}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                className='block px-5 pt-28'
-                            >
-                                <div className="flex items-center text-gray-400">
-                                    <div className='mr-2 relative flex h-3 w-3'>
-                                        <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                    </div>
-                                    <strong>AVAILABLE FOR WORK</strong>
-                                </div>
-                                <h1 className='text-5xl font-bold text-black mb-3'>
-                                    LET'S BUILD SOMETHING GREAT (READY WHEN YOU ARE)
-                                </h1>
-                                <p className='text-3xl text-gray-500'>
-                                    Thanks for stopping by, I’m currently looking to join a new team of creative designers and developers. If you think we might be a good fit for one another. send me an email 📧
-                                </p>
-                            </motion.section>
-                            <section className='flex items-center px-5 text-2xl'>
-                                <span className='text-gray-400 mr-2'>Elsewhere</span>
-
-                                <div className='flex items-center content-center'>
-                                    <a className='mx-2 my-auto' href="https://github.com/ZakaCoding"><Github /></a>
-                                    <a className='mx-2 my-auto' href="https://twitter.com/zakacoding"><Twitter /></a>
-                                    <a className='mx-2 my-auto' href="https://www.linkedin.com/in/zaka-n-693018111"><Linkedin /></a>
-                                    <a className='mx-2 my-auto' href="https://instagram.com/youn8e_"><Instagram /></a>
-                                </div>
-                            </section>
-                        </Col>
-                        <Col xs lg={6}>
-                            <section className='h-full flex items-center justify-center text-center'>
-                                <div className="block">
-                                    {/* <a href="mailto:zakanoor@outlook.co.id" className='p-2 px-4 rounded-lg border-2 border-gray-300 shadow-lg text-2xl hover:ring-blue-700 hover:ring-4'> */}
-                                    <motion.a
-                                        variants={fadeUp}
-                                        initial="hidden"
-                                        whileInView="visible"
-                                        className='p-2 px-4 rounded-lg border-2 border-gray-300 shadow-lg text-2xl hover:ring-blue-700 hover:ring-4'
-                                        href="mailto:zakanoor@outlook.co.id">
-                                        <span className="text-gray-400">Say hi, </span>
-                                        <span className='text-blue-700'>zakanoor@outlook.co.id</span>
-                                    </motion.a>
-                                    <p className="text-2xl text-gray-400 mt-4">Looking for help? Feel free to reach out!</p>
-                                </div>
-                            </section>
-                        </Col>
-                    </Row>
-                </motion.div>
-                <div className="flex-grow-1 flex-shrink-0 w-screen h-screen flex items-center justify-center relative"
-                    style={{ scrollSnapAlign: 'start' }}>
-
-                    <PillSlider />
-
-                </div>
-            </div>
-        </>
-
+        if (visible) setActiveSlide(Number(visible.target.dataset.slide));
+      },
+      { root: track, threshold: [0.45, 0.6, 0.8] },
     );
-}
 
-export default About;
+    slideRefs.current.forEach((slide) => slide && observer.observe(slide));
+    return () => observer.disconnect();
+  }, []);
+
+  const setSlideRef = (index) => (element) => {
+    slideRefs.current[index] = element;
+  };
+
+  return (
+    <main className="about-story">
+      <div
+        ref={trackRef}
+        className="about-track"
+        tabIndex="0"
+        aria-label="About Zaka, a six-part horizontal story. Use the arrow keys or scroll to navigate."
+      >
+        <section ref={setSlideRef(0)} data-slide="0" className="about-slide about-intro" aria-labelledby="about-intro-title">
+          <div className="about-slide-inner about-intro-grid">
+            <motion.div className="about-copy" {...reveal}>
+              <span className="about-eyebrow">01 / Hello</span>
+              <h1 id="about-intro-title">Hello, I’m <em>Zaka.</em></h1>
+              <p className="about-lede">
+                A full-stack engineer in Indonesia. I turn operational complexity into calm, dependable software—and keep exploring strange ideas after work.
+              </p>
+              <div className="about-quick-facts">
+                <span><b>Based</b> GMT+7</span>
+                <span><b>Focus</b> Product systems</span>
+                <span><b>Mode</b> Builder + supervisor</span>
+              </div>
+            </motion.div>
+
+            <motion.div className="about-memoji-card" initial={{ opacity: 0, scale: 0.94, rotate: 2 }} whileInView={{ opacity: 1, scale: 1, rotate: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: easeOut }}>
+              <span>ZakaCoding</span>
+              <img src={zakaMemoji} alt="Zaka's memoji smiling behind a sticker-covered laptop" width="1420" height="1781" />
+              <small>Code, coffee, curiosity.</small>
+            </motion.div>
+          </div>
+        </section>
+
+        <section ref={setSlideRef(1)} data-slide="1" className="about-slide about-operations" aria-labelledby="about-operations-title">
+          <div className="about-slide-inner">
+            <motion.div className="about-copy about-copy-wide" {...reveal}>
+              <span className="about-eyebrow">02 / What I actually do</span>
+              <h2 id="about-operations-title">I make busy operations feel <em>quiet.</em></h2>
+              <p className="about-lede">At CKL Cargo, that means connecting the software behind orders, warehouses, transport, fleets, and vendors—not treating them as isolated screens.</p>
+            </motion.div>
+
+            <motion.div className="about-operation-flow" {...reveal} transition={{ ...reveal.transition, delay: 0.12 }}>
+              <div><span>OMS</span><strong>An order changes</strong></div>
+              <i aria-hidden="true">→</i>
+              <div><span>WMS</span><strong>The warehouse knows</strong></div>
+              <i aria-hidden="true">→</i>
+              <div><span>TMS · FMS · VMS</span><strong>The operation adapts</strong></div>
+            </motion.div>
+
+            <p className="about-slide-note">The job is the connection between them.</p>
+          </div>
+        </section>
+
+        <section ref={setSlideRef(2)} data-slide="2" className="about-slide about-thinking" aria-labelledby="about-thinking-title">
+          <div className="about-slide-inner">
+            <motion.div className="about-copy about-copy-wide" {...reveal}>
+              <span className="about-eyebrow">03 / How I think</span>
+              <h2 id="about-thinking-title">Clarity is an engineering <em>feature.</em></h2>
+            </motion.div>
+
+            <div className="about-principles">
+              <motion.article {...reveal} transition={{ ...reveal.transition, delay: 0.08 }}>
+                <span>01</span><strong>Understand first</strong><p>Find the operational truth behind the ticket.</p>
+              </motion.article>
+              <motion.article {...reveal} transition={{ ...reveal.transition, delay: 0.16 }}>
+                <span>02</span><strong>Make it useful</strong><p>Architecture and interface should explain each other.</p>
+              </motion.article>
+              <motion.article {...reveal} transition={{ ...reveal.transition, delay: 0.24 }}>
+                <span>03</span><strong>Own the outcome</strong><p>Ship, observe, repair, and leave the system better.</p>
+              </motion.article>
+            </div>
+          </div>
+        </section>
+
+        <section ref={setSlideRef(3)} data-slide="3" className="about-slide about-toolbox" aria-labelledby="about-toolbox-title">
+          <div className="about-slide-inner about-toolbox-grid">
+            <motion.div className="about-copy" {...reveal}>
+              <span className="about-eyebrow">04 / Working toolbox</span>
+              <h2 id="about-toolbox-title">Tools change. The responsibility <em>doesn’t.</em></h2>
+              <p className="about-lede">I move across product thinking, application code, data, and delivery—choosing what makes the whole system easier to trust.</p>
+            </motion.div>
+
+            <div className="about-tool-cards">
+              {toolGroups.map((group, index) => (
+                <motion.article key={group.number} {...reveal} transition={{ ...reveal.transition, delay: index * 0.08 }}>
+                  <span>{group.number}</span>
+                  <strong>{group.title}</strong>
+                  <p>{group.tools}</p>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section ref={setSlideRef(4)} data-slide="4" className="about-slide about-curiosity" aria-labelledby="about-curiosity-title">
+          <div className="about-slide-inner">
+            <motion.div className="about-copy about-copy-wide" {...reveal}>
+              <span className="about-eyebrow">05 / Beyond the backlog</span>
+              <h2 id="about-curiosity-title">Curiosity is part of the <em>job.</em></h2>
+              <p className="about-lede">The side projects are not a separate identity. They are where I test ideas that make the day job sharper.</p>
+            </motion.div>
+
+            <div className="about-curiosity-grid">
+              <motion.a href="https://zakacoding.github.io/ollama-workspace-agent" target="_blank" rel="noreferrer" {...reveal}>
+                <span>Local AI</span><strong>OwA</strong><p>Can smaller models become useful coding partners without sending the repository to the cloud?</p><BoxArrowUpRight />
+              </motion.a>
+              <motion.a href="https://open-cmap.fly.dev/" target="_blank" rel="noreferrer" {...reveal} transition={{ ...reveal.transition, delay: 0.1 }}>
+                <span>Visual thinking</span><strong>Open CMAP</strong><p>Can a complex thought become easier to examine when its relationships are visible?</p><BoxArrowUpRight />
+              </motion.a>
+              <motion.div className="about-curiosity-small" {...reveal} transition={{ ...reveal.transition, delay: 0.2 }}>
+                <span>Always nearby</span><strong>☕</strong><p>Coffee, documentation, and one more experiment.</p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        <section ref={setSlideRef(5)} data-slide="5" className="about-slide about-contact" aria-labelledby="about-contact-title">
+          <div className="about-slide-inner about-contact-inner">
+            <motion.div className="about-copy about-copy-wide" {...reveal}>
+              <span className="about-eyebrow">06 / Contact</span>
+              <h2 id="about-contact-title">Have a hard problem? <em>Let’s make it clear.</em></h2>
+              <p className="about-lede">For product engineering, system modernization, open-source collaboration, or a good conversation about local AI.</p>
+            </motion.div>
+
+            <motion.div className="about-contact-row" {...reveal} transition={{ ...reveal.transition, delay: 0.12 }}>
+              <a className="about-email" href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id <BoxArrowUpRight /></a>
+              <div className="about-socials" aria-label="Social links">
+                <a href="https://github.com/ZakaCoding" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+                <a href="https://www.linkedin.com/in/zaka-n-693018111" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+                <a href="https://instagram.com/youn8e_" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram /></a>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </div>
+
+      <div className="about-progress" aria-label="About story navigation">
+        <button type="button" onClick={() => goToSlide(Math.max(activeSlide - 1, 0))} disabled={activeSlide === 0} aria-label="Previous chapter"><ArrowLeft /></button>
+        <div className="about-progress-track">
+          {chapterLabels.map((label, index) => (
+            <button
+              type="button"
+              key={label}
+              className={index === activeSlide ? 'active' : ''}
+              onClick={() => goToSlide(index)}
+              aria-label={`Go to ${label}`}
+              aria-current={index === activeSlide ? 'step' : undefined}
+            ><span>{label}</span></button>
+          ))}
+        </div>
+        <span className="about-progress-count">{String(activeSlide + 1).padStart(2, '0')} / 06</span>
+        <button type="button" onClick={() => goToSlide(Math.min(activeSlide + 1, slideCount - 1))} disabled={activeSlide === slideCount - 1} aria-label="Next chapter"><ArrowRight /></button>
+      </div>
+    </main>
+  );
+}
