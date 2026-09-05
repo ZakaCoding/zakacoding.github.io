@@ -1,14 +1,15 @@
 // Static component
 import { Footer } from '../components/Footer';
 import { FunPhysics } from '../components/FunPhysics';
+import { Player } from '@lottiefiles/react-lottie-player';
+import { motion } from 'framer-motion';
 
 // Bootstrap component
 import { Row, Col } from 'react-bootstrap';
 // bootstrap icon
 import {  BoxArrowUpRight } from 'react-bootstrap-icons'
 
-// logo
-import coffeeLogo from '/logo/Open-Doodles-Coffee.png';
+import animoji from '../assets/lottie/memoji.json';
 
 // Image
 import ngefont from '../assets/image/ngefont/ngfont-illustration.png';
@@ -16,36 +17,119 @@ import amogasakti from '../assets/image/amogasakti/amogasakti.png';
 
 export function Welcome () {
 
+    const heroItem = {
+        hidden: { opacity: 0, y: 24 },
+        visible: { opacity: 1, y: 0 }
+    };
+
     return (
         <>
-            <div className='flex justify-center content-center h-screen'>
-                <div className='my-auto'>
-                    <div className='block w-10/12 lg:w-7/12 mb-6 sm:text-center text-left mx-auto relative'>
-                        <h1
-                            className='
-                                sm:text-3xl 
-                                lg:text-5xl 
-                                font-bold
-                                leading-tight
-                                text-transparent 
-                                bg-clip-text 
-                                bg-gradient-to-r 
-                                from-blue-500 
-                                via-purple-500 
-                                to-pink-500
-                                dark:bg-none
-                                dark:text-white
-                            '
-                            >
-                                I read, code, and drink too much{" "}
-                                <span className="coffee-word">
-                                    coffee
-                                    <img src={coffeeLogo} alt="Coffee" className="coffee-floating" />
-                                </span>
-                            </h1>
+            <section className="home-hero" aria-labelledby="home-hero-title">
+                <motion.div
+                    className="hero-bento"
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ staggerChildren: 0.08, delayChildren: 0.1 }}
+                >
+                    <motion.article
+                        className="hero-card hero-intro-card"
+                        variants={heroItem}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        <div className="hero-kicker">
+                            <span className="hero-status-dot" aria-hidden="true"></span>
+                            Full-stack engineer · Indonesia
                         </div>
-                    </div>
+
+                        <h1 id="home-hero-title">
+                            Hey, I’m Zaka.
+                            <span>I build software for real work—and strange ideas.</span>
+                        </h1>
+
+                        <p className="hero-summary">
+                            From logistics systems used every day to local-first AI and visual thinking tools. I work from backend architecture to the interface in people’s hands.
+                        </p>
+
+                        <div className="hero-actions">
+                            <a className="hero-primary-action" href="#experience">
+                                Meet the work <span aria-hidden="true">↓</span>
+                            </a>
+                            <a className="hero-secondary-action" href="https://github.com/ZakaCoding" target="_blank" rel="noreferrer">
+                                GitHub <BoxArrowUpRight aria-hidden="true" />
+                            </a>
+                        </div>
+
+                        <div className="hero-chapters" aria-label="Featured areas">
+                            <span><b>01</b> Local AI</span>
+                            <span><b>02</b> Logistics</span>
+                            <span><b>03</b> Visual thinking</span>
+                        </div>
+                    </motion.article>
+
+                    <motion.article
+                        className="hero-card hero-memoji-card"
+                        variants={heroItem}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        <div className="memoji-caption">
+                            <span>ZakaCoding</span>
+                            <span>GMT+7</span>
+                        </div>
+                        <Player
+                            autoplay
+                            loop
+                            src={animoji}
+                            className="hero-memoji"
+                            aria-label="Animated memoji of Zaka"
+                        />
+                        <p>Code, coffee, curiosity.</p>
+                    </motion.article>
+
+                    <motion.a
+                        className="hero-card hero-story-card hero-owa-card"
+                        href="https://zakacoding.github.io/ollama-workspace-agent"
+                        target="_blank"
+                        rel="noreferrer"
+                        variants={heroItem}
+                        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        <span className="story-label">Building now</span>
+                        <strong>OwA</strong>
+                        <small>Local-first coding agent</small>
+                        <BoxArrowUpRight className="story-arrow" aria-hidden="true" />
+                    </motion.a>
+
+                    <motion.article
+                        className="hero-card hero-story-card hero-logistics-card"
+                        variants={heroItem}
+                        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        <span className="story-label">At work</span>
+                        <strong>Logistics</strong>
+                        <small>Systems behind real operations</small>
+                        <span className="story-count">05 connected products</span>
+                    </motion.article>
+
+                    <motion.a
+                        className="hero-card hero-story-card hero-cmap-card"
+                        href="https://open-cmap.fly.dev/"
+                        target="_blank"
+                        rel="noreferrer"
+                        variants={heroItem}
+                        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        <span className="story-label">For thought</span>
+                        <strong>Open CMAP</strong>
+                        <small>Make complex ideas visible</small>
+                        <BoxArrowUpRight className="story-arrow" aria-hidden="true" />
+                    </motion.a>
+                </motion.div>
+
+                <div className="home-hero-footer" aria-hidden="true">
+                    <span>Portfolio / 2026</span>
+                    <span>Scroll to continue ↓</span>
                 </div>
+            </section>
 
             <section id='experience' className='mb-5'>
                 <div className="container">

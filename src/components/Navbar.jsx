@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 const links = [
   { to: '/', label: 'Home' },
+  { to: '/#experience', label: 'Work', hash: true },
   { to: '/about', label: 'About', icon: true },
   { to: 'https://path.cv/zakanoor', label: 'Resume', external: true },
 ];
@@ -35,7 +36,7 @@ export function Navbar() {
 
   useEffect(() => {
     const activeIndex = links.findIndex(l =>
-      l.external ? false : (l.to === '/' ? location.pathname === '/' : location.pathname.startsWith(l.to))
+      l.external || l.hash ? false : (l.to === '/' ? location.pathname === '/' : location.pathname.startsWith(l.to))
     );
     const el = itemRefs.current[activeIndex];
     const nav = navRef.current;
@@ -50,29 +51,30 @@ export function Navbar() {
 
   return (
     <header
-      className='fixed z-10 top-4 left-0 w-full flex justify-center navbar-header'
+      className='fixed z-50 top-4 left-0 w-full flex justify-center navbar-header px-3'
       style={
         mounted
           ? { transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1)', transform: visible ? 'translateY(0)' : 'translateY(-140%)' }
           : { animation: 'navSlideDown 0.8s cubic-bezier(0.4,0,0.2,1) forwards' }
       }
     >
-      <nav ref={navRef} className='nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full'>
+      <nav ref={navRef} className='nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full' aria-label="Primary navigation">
         {/* sliding pill */}
         <span
-          className='nav-pill absolute top-2 left-0 h-[calc(100%-16px)] rounded-full pointer-events-none'
+          className='nav-pill absolute inset-y-2 left-0 rounded-full pointer-events-none'
           style={{ transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1), width 0.4s cubic-bezier(0.4,0,0.2,1)', ...pillStyle }}
         />
         {links.map((link, i) => (
           <NavLink
             key={link.to}
             to={link.to}
+            end={link.to === '/'}
             target={link.external ? '_blank' : undefined}
             rel={link.external ? 'noreferrer' : undefined}
             ref={el => itemRefs.current[i] = el}
             className={({ isActive }) =>
               `relative z-10 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-300 ${
-                isActive ? 'text-gray-900' : 'text-gray-400 hover:text-gray-200'
+                isActive && !link.hash && !link.external ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
               }`
             }
           >
