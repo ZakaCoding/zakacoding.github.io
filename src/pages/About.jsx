@@ -63,10 +63,10 @@ export default function About() {
     const track = trackRef.current;
     if (!track) return undefined;
 
-    const desktop = window.matchMedia('(min-width: 821px)');
+    const horizontalStory = window.matchMedia('(min-width: 601px)');
 
     const handleWheel = (event) => {
-      if (!desktop.matches || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      if (!horizontalStory.matches || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
       event.preventDefault();
       track.scrollLeft += event.deltaY;
     };
@@ -129,6 +129,11 @@ export default function About() {
 
   return (
     <main className="about-story">
+      <a className="about-brand" href="/" aria-label="ZakaCoding home">
+        <img src="/logo/final-logo.png" alt="" width="1082" height="512" />
+        <span>ZakaCoding</span>
+      </a>
+
       <div
         ref={trackRef}
         className="about-track"
@@ -136,6 +141,7 @@ export default function About() {
         aria-label="About Zaka, a six-part horizontal story. Use the arrow keys or scroll to navigate."
       >
         <section ref={setSlideRef(0)} data-slide="0" className="about-slide about-intro" aria-labelledby="about-intro-title">
+          <span className="about-intro-wordmark" aria-hidden="true">ZakaCoding</span>
           <div className="about-slide-inner about-intro-grid">
             <motion.div className="about-copy" {...reveal}>
               <span className="about-eyebrow">01 / Hello</span>
