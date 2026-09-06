@@ -1,14 +1,27 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
 import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
+import localAiRobot from '../assets/image/local-ai-robot.webp';
 
 const easeOut = [0.22, 1, 0.36, 1];
 
 export function Welcome() {
+  const [coffeeOpen, setCoffeeOpen] = useState(false);
+  const [robotOpen, setRobotOpen] = useState(false);
+  const [robotGaze, setRobotGaze] = useState({ x: 0, y: 0 });
+
   const heroItem = {
     hidden: { opacity: 0, y: 24 },
     visible: { opacity: 1, y: 0 },
+  };
+
+  const moveRobotGaze = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 7;
+    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 5;
+    setRobotGaze({ x, y });
   };
 
   return (
@@ -27,11 +40,67 @@ export function Welcome() {
             </div>
 
             <h1 id="home-hero-title">
-              I Read, Code, and <span className="hero-heading-muted">drink too much <span className="coffee-word" tabIndex="0">coffee<span className="coffee-tooltip" role="tooltip"><span className="coffee-cup" aria-hidden="true">☕</span><span>Freshly brewed</span></span></span>.</span>
+              I Read, Code, and <span className="hero-heading-muted">drink too much{' '}
+                <button
+                  className="coffee-word"
+                  type="button"
+                  aria-expanded={coffeeOpen}
+                  aria-label="Coffee conversation"
+                  onClick={() => setCoffeeOpen(true)}
+                  onMouseEnter={() => setCoffeeOpen(true)}
+                  onMouseLeave={() => setCoffeeOpen(false)}
+                  onFocus={() => setCoffeeOpen(true)}
+                  onBlur={() => setCoffeeOpen(false)}
+                  onKeyDown={(event) => event.key === 'Escape' && setCoffeeOpen(false)}
+                >
+                  coffee
+                  <span className={`coffee-imessage ${coffeeOpen ? 'is-visible' : ''}`} aria-hidden={!coffeeOpen}>
+                    <span className="coffee-message-header">
+                      <span className="coffee-avatar" aria-hidden="true">☕️</span>
+                      <span><b>Coffee</b><small>now</small></span>
+                    </span>
+                    <span className="coffee-bubble coffee-bubble-in">One more cup?</span>
+                    <span className="coffee-bubble coffee-bubble-out">Already brewing.</span>
+                    <span className="coffee-typing" aria-hidden="true"><i /><i /><i /></span>
+                  </span>
+                </button>
+                .
+              </span>
             </h1>
 
             <p className="hero-summary">
-              Between refills, I build logistics platforms that don&apos;t lose track of trucks, a local AI that doesn&apos;t need the cloud&apos;s permission, and the occasional tool to untangle other people&apos;s ideas.
+              Between refills, I build logistics platforms that don&apos;t lose track of trucks, a{' '}
+              <button
+                className="local-ai-word"
+                type="button"
+                aria-expanded={robotOpen}
+                aria-label="Meet the local AI robot"
+                onClick={() => setRobotOpen(true)}
+                onMouseEnter={() => setRobotOpen(true)}
+                onMouseLeave={() => { setRobotOpen(false); setRobotGaze({ x: 0, y: 0 }); }}
+                onMouseMove={moveRobotGaze}
+                onFocus={() => setRobotOpen(true)}
+                onBlur={() => setRobotOpen(false)}
+                onKeyDown={(event) => event.key === 'Escape' && setRobotOpen(false)}
+              >
+                local AI
+                <span
+                  className={`local-ai-popover ${robotOpen ? 'is-visible' : ''}`}
+                  style={{ '--gaze-x': `${robotGaze.x}px`, '--gaze-y': `${robotGaze.y}px` }}
+                  aria-hidden={!robotOpen}
+                >
+                  <span className="robot-halo" aria-hidden="true" />
+                  <span className="robot-character">
+                    <img src={localAiRobot} alt="" width="640" height="640" />
+                    <i className="robot-eye-glow robot-eye-left" aria-hidden="true" />
+                    <i className="robot-eye-glow robot-eye-right" aria-hidden="true" />
+                    <i className="robot-lid robot-lid-left" aria-hidden="true" />
+                    <i className="robot-lid robot-lid-right" aria-hidden="true" />
+                  </span>
+                  <span className="robot-message">Runs here. Stays here.</span>
+                </span>
+              </button>{' '}
+              that doesn&apos;t need the cloud&apos;s permission, and the occasional tool to untangle other people&apos;s ideas.
             </p>
           </motion.article>
 
