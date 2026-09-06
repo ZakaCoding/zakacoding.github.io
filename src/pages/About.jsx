@@ -94,6 +94,7 @@ const About = () => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const mobileLayout = window.matchMedia('(max-width: 700px)');
     const touchLayout = window.matchMedia('(pointer: coarse)');
+    const hasTouchInput = () => navigator.maxTouchPoints > 0 || touchLayout.matches;
     let currentX = 0;
     let targetX = 0;
     let travel = 0;
@@ -114,6 +115,9 @@ const About = () => {
     };
 
     const update = () => {
+      const isTouchStory = hasTouchInput() && !mobileLayout.matches;
+      exhibition.toggleAttribute('data-touch-layout', isTouchStory);
+
       if (mobileLayout.matches) {
         exhibition.style.height = 'auto';
         track.style.transform = 'none';
@@ -122,7 +126,7 @@ const About = () => {
         return;
       }
 
-      if (touchLayout.matches) {
+      if (isTouchStory) {
         travel = Math.max(0, track.scrollWidth - window.innerWidth);
         exhibition.style.height = `${window.innerHeight}px`;
         track.style.transform = 'none';
@@ -369,6 +373,7 @@ const About = () => {
           <span className="about-direction" ref={directionRef} aria-live="polite">
             <span className="about-direction-label">
               <span className="about-direction-keep">Keep scrolling <ArrowRight /></span>
+              <span className="about-direction-swipe">Swipe to explore <ArrowRight /></span>
               <span className="about-direction-thanks">Thanks for stopping by …</span>
             </span>
           </span>

@@ -1552,6 +1552,7 @@ a.hero-story-card:hover {
   gap: 0.6rem;
   color: #96969d;
   font-size: 0.72rem;
+  pointer-events: none;
   transition: color 300ms ease;
 }
 
@@ -1576,6 +1577,12 @@ a.hero-story-card:hover {
   white-space: nowrap;
 }
 
+.about-direction-swipe {
+  display: none !important;
+  opacity: 0;
+  transform: translateY(0.35rem);
+}
+
 .about-direction.is-complete .about-direction-keep {
   opacity: 0;
   transform: translateY(-0.35rem);
@@ -1584,6 +1591,44 @@ a.hero-story-card:hover {
 .about-direction.is-complete .about-direction-thanks {
   opacity: 1;
   transform: translateY(0);
+}
+
+.about-exhibition[data-touch-layout] {
+  height: 100svh;
+  overflow: hidden;
+}
+
+.about-exhibition[data-touch-layout] .about-exhibition-sticky {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  touch-action: pan-x;
+}
+
+.about-exhibition[data-touch-layout] .about-exhibition-sticky::-webkit-scrollbar {
+  display: none;
+}
+
+.about-exhibition[data-touch-layout] .about-exhibition-track {
+  touch-action: pan-x;
+}
+
+.about-exhibition[data-touch-layout] .about-direction-keep {
+  display: none;
+}
+
+.about-exhibition[data-touch-layout] .about-direction-swipe {
+  display: inline-flex !important;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-exhibition[data-touch-layout] .about-direction.is-complete .about-direction-swipe {
+  opacity: 0;
+  transform: translateY(-0.35rem);
 }
 
 @media (max-width: 900px) {
