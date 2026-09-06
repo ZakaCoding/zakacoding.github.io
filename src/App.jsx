@@ -27,12 +27,16 @@ function SmoothScroll() {
   useEffect(() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isHorizontalStory = location.pathname.startsWith('/about');
+    const isTouchDevice = navigator.maxTouchPoints > 0
+      || window.matchMedia('(pointer: coarse)').matches;
 
-    if (reducedMotion || isHorizontalStory) return undefined;
+    // Keep touch devices on native scrolling (especially iPad), but smooth
+    // desktop wheel input so the horizontal story does not step between events.
+    if (reducedMotion || (isHorizontalStory && isTouchDevice)) return undefined;
 
     const lenis = new Lenis({
       autoRaf: true,
-      duration: 1.05,
+      duration: isHorizontalStory ? 0.8 : 1.05,
       smoothWheel: true,
       syncTouch: false,
       anchors: true,
@@ -46,25 +50,6 @@ function SmoothScroll() {
 
 
 function App() {
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-
-    const lenis = new Lenis();
-    let animationFrame;
-
-    const raf = (time) => {
-      lenis.raf(time);
-      animationFrame = window.requestAnimationFrame(raf);
-    };
-
-    animationFrame = window.requestAnimationFrame(raf);
-
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      lenis.destroy();
-    };
-  }, []);
-
   return (
    <div>
     <Router>

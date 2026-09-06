@@ -33,6 +33,7 @@ export default function PillSlider() {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    const container = containerRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -44,13 +45,13 @@ export default function PillSlider() {
       { threshold: 0.5 }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    if (container) {
+      observer.observe(container);
     }
 
     return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
+      if (container) {
+        observer.unobserve(container);
       }
       document.body.classList.remove('hide-navbar');
     };

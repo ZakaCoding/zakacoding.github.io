@@ -61,6 +61,7 @@ const About = () => {
   const exhibitionRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
+  const directionRef = useRef(null);
   const portraitRef = useRef(null);
   const [activeWhoMode, setActiveWhoMode] = useState(whoModes[0]);
 
@@ -92,6 +93,7 @@ const About = () => {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const mobileLayout = window.matchMedia('(max-width: 700px)');
+    const touchLayout = window.matchMedia('(pointer: coarse)');
     let currentX = 0;
     let targetX = 0;
     let travel = 0;
@@ -116,12 +118,24 @@ const About = () => {
         exhibition.style.height = 'auto';
         track.style.transform = 'none';
         progress.style.transform = 'scaleX(0)';
+        directionRef.current?.classList.remove('is-complete');
+        return;
+      }
+
+      if (touchLayout.matches) {
+        travel = Math.max(0, track.scrollWidth - window.innerWidth);
+        exhibition.style.height = `${window.innerHeight}px`;
+        track.style.transform = 'none';
+        targetX = clamp(exhibition.parentElement.scrollLeft, 0, travel);
+        progress.style.transform = `scaleX(${travel ? targetX / travel : 0})`;
+        directionRef.current?.classList.toggle('is-complete', targetX >= travel - 2);
         return;
       }
 
       travel = Math.max(0, track.scrollWidth - window.innerWidth);
       exhibition.style.height = `${travel + window.innerHeight}px`;
       targetX = clamp(window.scrollY - exhibition.offsetTop, 0, travel);
+      directionRef.current?.classList.toggle('is-complete', targetX >= travel - 2);
 
       if (!frame) frame = window.requestAnimationFrame(paint);
     };
@@ -130,16 +144,20 @@ const About = () => {
     resizeObserver.observe(track);
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
+    exhibition.parentElement.addEventListener('scroll', update, { passive: true });
     reducedMotion.addEventListener('change', update);
     mobileLayout.addEventListener('change', update);
+    touchLayout.addEventListener('change', update);
     update();
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      exhibition.parentElement.removeEventListener('scroll', update);
       reducedMotion.removeEventListener('change', update);
       mobileLayout.removeEventListener('change', update);
+      touchLayout.removeEventListener('change', update);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
@@ -348,8 +366,11 @@ const About = () => {
           <div className="about-progress-rail" aria-hidden="true">
             <span className="about-progress-fill" ref={progressRef} />
           </div>
-          <span className="about-direction" aria-hidden="true">
-            Keep scrolling <ArrowRight />
+          <span className="about-direction" ref={directionRef} aria-live="polite">
+            <span className="about-direction-label">
+              <span className="about-direction-keep">Keep scrolling <ArrowRight /></span>
+              <span className="about-direction-thanks">Thanks for stopping by …</span>
+            </span>
           </span>
         </div>
       </section>
