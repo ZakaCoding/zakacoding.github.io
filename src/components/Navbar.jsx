@@ -26,13 +26,17 @@ export function Navbar() {
   useEffect(() => {
     if (!mounted) return;
     const handleScroll = () => {
+      if (location.pathname.startsWith('/about')) {
+        setVisible(true);
+        return;
+      }
       const currentY = window.scrollY;
       setVisible(currentY < lastScrollY.current || currentY < 10);
       lastScrollY.current = currentY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [mounted]);
+  }, [location.pathname, mounted]);
 
   useEffect(() => {
     const activeIndex = links.findIndex(l =>
