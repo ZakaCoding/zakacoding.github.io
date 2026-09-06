@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
+import { Player } from '@lottiefiles/react-lottie-player';
 import { motion } from 'framer-motion';
-import { ArrowDown, ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
+import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
-import classicMemoji from '../assets/image/zaka-memoji-classic.jpg';
+import animoji from '../assets/lottie/memoji.json';
 import ZakaCodingLogo from '../../public/logo/final-logo.png';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -80,52 +81,6 @@ const About = () => {
 
   return (
     <main className="about-page">
-      <section className="about-original-hero" aria-labelledby="about-title">
-        <div className="about-original-intro">
-          <motion.h1
-            id="about-title"
-            initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-          >
-            ZakaCoding
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-          >
-            Hello World! I&apos;m <strong>Zaka</strong>, a full-stack engineer who works
-            across backend architecture, product interfaces, and the systems that keep
-            real operations moving.
-          </motion.p>
-        </div>
-
-        <div className="about-original-identity">
-          <motion.img
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            src={ZakaCodingLogo}
-            className="about-original-logo"
-            alt="ZakaCoding logo"
-          />
-          <motion.img
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            src={memojiImage}
-            className="about-original-memoji memoji-float"
-            alt="Zaka smiling behind a sticker-covered MacBook"
-          />
-        </div>
-
-        <a className="about-scroll-cue" href="#about-exhibition">
-          <span>Scroll to know me</span>
-          <ArrowDown aria-hidden="true" />
-        </a>
-      </section>
-
       <section
         id="about-exhibition"
         className="about-exhibition"
@@ -134,6 +89,52 @@ const About = () => {
       >
         <div className="about-exhibition-sticky">
           <div className="about-exhibition-track" ref={trackRef}>
+            <section className="about-original-hero" aria-labelledby="about-title">
+              <div className="about-original-intro">
+                <motion.h1
+                  id="about-title"
+                  initial={{ opacity: 0, x: -60 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                >
+                  ZakaCoding
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, x: 60 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                >
+                  Hello World! I&apos;m <strong>Zaka</strong>, a full-stack engineer who works
+                  across backend architecture, product interfaces, and the systems that keep
+                  real operations moving.
+                </motion.p>
+              </div>
+
+              <div className="about-original-identity">
+                <motion.img
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="visible"
+                  src={ZakaCodingLogo}
+                  className="about-original-logo"
+                  alt="ZakaCoding logo"
+                />
+                <motion.img
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="visible"
+                  src={memojiImage}
+                  className="about-original-memoji memoji-float"
+                  alt="Zaka smiling behind a sticker-covered MacBook"
+                />
+              </div>
+
+              <div className="about-scroll-cue" aria-hidden="true">
+                <span>Scroll to know me</span>
+                <ArrowRight />
+              </div>
+            </section>
+
             <section className="about-editorial-opening">
               <div className="about-editorial-copy">
                 <span className="about-index">02 / ABOUT</span>
@@ -149,9 +150,11 @@ const About = () => {
 
               <div className="about-editorial-memoji">
                 <span className="about-hand-note about-hand-note-one">Build.<br />Learn.<br />Repeat.</span>
-                <img
-                  src={classicMemoji}
-                  alt="Zaka's original glasses Memoji"
+                <Player
+                  src={animoji}
+                  hover
+                  speed={2.1}
+                  className="about-classic-memoji-player"
                 />
                 <span className="about-hand-note about-hand-note-two">Read.<br />Code.<br />Coffee.</span>
               </div>

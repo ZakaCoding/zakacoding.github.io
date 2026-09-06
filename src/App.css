@@ -802,7 +802,10 @@ a.hero-story-card:hover {
 
 .about-original-hero {
   position: relative;
+  width: 100vw;
+  height: 100svh;
   min-height: 100svh;
+  flex: 0 0 100vw;
   overflow: hidden;
   background: #fff;
 }
@@ -966,12 +969,13 @@ a.hero-story-card:hover {
   place-items: center;
 }
 
-.about-editorial-memoji img {
+.about-classic-memoji-player {
   width: min(100%, 560px);
   height: auto;
   display: block;
   border-radius: 2.5rem;
   box-shadow: 0 32px 70px rgba(38, 49, 65, 0.09);
+  cursor: grab;
 }
 
 .about-hand-note {
@@ -1197,6 +1201,8 @@ a.hero-story-card:hover {
 
 @media (max-width: 700px) {
   .about-original-hero {
+    width: 100%;
+    height: auto;
     min-height: 920px;
   }
 

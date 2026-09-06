@@ -1,5 +1,5 @@
 // React
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,7 +15,8 @@ import { Footer } from "./components/Footer";
 
 // pages
 import { Welcome } from './pages/Welcome';
-import About from './pages/About';
+
+const About = lazy(() => import('./pages/About'));
 
 // Source css
 import './App.css';
@@ -50,10 +51,12 @@ function App() {
     <Router>
       <SmoothScroll />
       <Navbar />
-      <Routes>
-        <Route path='/' Component={Welcome} />
-        <Route path='/about' Component={About} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path='/' Component={Welcome} />
+          <Route path='/about' Component={About} />
+        </Routes>
+      </Suspense>
       {/* <Footer /> */}
     </Router>
    </div>
