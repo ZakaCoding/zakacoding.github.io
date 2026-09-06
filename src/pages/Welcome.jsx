@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
 import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
@@ -34,21 +33,6 @@ export function Welcome() {
             <p className="hero-summary">
               Logistics platforms, developer tools, and local-first AI—engineered from backend architecture to the interface people depend on every day.
             </p>
-
-            <div className="hero-actions">
-              <Link className="hero-primary-action" to="/about">
-                About me <span aria-hidden="true">→</span>
-              </Link>
-              <a className="hero-secondary-action" href="https://github.com/ZakaCoding" target="_blank" rel="noreferrer">
-                GitHub <BoxArrowUpRight aria-hidden="true" />
-              </a>
-            </div>
-
-            <div className="hero-chapters" aria-label="Featured areas">
-              <span><b>01</b> Local AI</span>
-              <span><b>02</b> Logistics</span>
-              <span><b>03</b> Visual thinking</span>
-            </div>
           </motion.article>
 
           <motion.article className="hero-card hero-memoji-card" variants={heroItem} transition={{ duration: 0.7, ease: easeOut }}>
