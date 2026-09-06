@@ -1521,7 +1521,7 @@ a.hero-story-card:hover {
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: x mandatory;
     touch-action: pan-x;
   }
 
@@ -1538,7 +1538,9 @@ a.hero-story-card:hover {
   .about-who,
   .about-chapter,
   .about-contact-panel {
+    box-sizing: border-box;
     scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 }
 
@@ -1604,7 +1606,7 @@ a.hero-story-card:hover {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: x mandatory;
   touch-action: pan-x;
 }
 
@@ -1613,7 +1615,18 @@ a.hero-story-card:hover {
 }
 
 .about-exhibition[data-touch-layout] .about-exhibition-track {
+  box-sizing: border-box;
   touch-action: pan-x;
+}
+
+.about-exhibition[data-touch-layout] .about-original-hero,
+.about-exhibition[data-touch-layout] .about-editorial-opening,
+.about-exhibition[data-touch-layout] .about-who,
+.about-exhibition[data-touch-layout] .about-chapter,
+.about-exhibition[data-touch-layout] .about-contact-panel {
+  box-sizing: border-box;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .about-exhibition[data-touch-layout] .about-direction-keep {
