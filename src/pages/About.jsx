@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowDown, ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
+import classicMemoji from '../assets/image/zaka-memoji-classic.jpg';
 import ZakaCodingLogo from '../../public/logo/final-logo.png';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -149,10 +150,10 @@ const About = () => {
               <div className="about-editorial-memoji">
                 <span className="about-hand-note about-hand-note-one">Build.<br />Learn.<br />Repeat.</span>
                 <img
-                  src={memojiImage}
-                  alt="Zaka smiling behind a sticker-covered MacBook"
+                  src={classicMemoji}
+                  alt="Zaka's original glasses Memoji"
                 />
-                <span className="about-hand-note about-hand-note-two">Same coffee.<br />Bigger systems.</span>
+                <span className="about-hand-note about-hand-note-two">Read.<br />Code.<br />Coffee.</span>
               </div>
             </section>
 

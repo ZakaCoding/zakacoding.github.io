@@ -911,11 +911,11 @@ a.hero-story-card:hover {
 }
 
 .about-editorial-opening {
-  width: clamp(1050px, 92vw, 1500px);
+  width: 100vw;
   height: 100%;
-  flex: 0 0 clamp(1050px, 92vw, 1500px);
+  flex: 0 0 100vw;
   display: grid;
-  grid-template-columns: minmax(460px, 0.95fr) minmax(420px, 0.75fr);
+  grid-template-columns: minmax(480px, 1.05fr) minmax(360px, 0.65fr);
   gap: clamp(2.5rem, 5vw, 6rem);
   align-items: center;
   padding: clamp(7rem, 12vh, 9rem) clamp(3rem, 5vw, 6rem) clamp(6rem, 10vh, 7rem);
@@ -960,26 +960,24 @@ a.hero-story-card:hover {
 .about-editorial-memoji {
   position: relative;
   align-self: center;
-  width: min(42vw, 620px);
-  height: min(72vh, 700px);
-  overflow: hidden;
-  border-radius: 3rem;
-  background: #000;
-  box-shadow: 0 34px 80px rgba(33, 40, 54, 0.13);
+  width: min(37vw, 580px);
+  height: min(68vh, 650px);
+  display: grid;
+  place-items: center;
 }
 
 .about-editorial-memoji img {
-  width: 100%;
-  height: 100%;
+  width: min(100%, 560px);
+  height: auto;
   display: block;
-  object-fit: cover;
-  object-position: center 58%;
+  border-radius: 2.5rem;
+  box-shadow: 0 32px 70px rgba(38, 49, 65, 0.09);
 }
 
 .about-hand-note {
   position: absolute;
   z-index: 2;
-  color: rgba(255, 255, 255, 0.66);
+  color: #8d8d95;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(0.85rem, 1.2vw, 1.05rem);
   font-style: italic;
@@ -988,54 +986,56 @@ a.hero-story-card:hover {
 }
 
 .about-hand-note-one {
-  top: 1.5rem;
-  left: 1.75rem;
+  top: 2rem;
+  left: 0;
 }
 
 .about-hand-note-two {
-  right: 1.5rem;
-  bottom: 1.5rem;
+  right: 0;
+  bottom: 2rem;
   text-align: right;
   transform: rotate(5deg);
 }
 
 .about-chapter {
-  width: clamp(330px, 27vw, 440px);
-  height: calc(100% - clamp(8rem, 16vh, 10rem));
-  flex: 0 0 clamp(330px, 27vw, 440px);
-  align-self: center;
+  width: 100vw;
+  height: 100%;
+  flex: 0 0 100vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1.1rem clamp(1.8rem, 3vw, 3rem) 2rem;
+  padding: clamp(7rem, 13vh, 10rem) clamp(3rem, 9vw, 10rem) clamp(5rem, 9vh, 7rem);
   border-left: 1px solid var(--about-line);
 }
 
 .about-chapter > div {
-  margin-top: clamp(3rem, 12vh, 7rem);
+  max-width: 1120px;
+  margin: auto 0;
 }
 
 .about-chapter h3 {
+  max-width: 1040px;
   margin: 0;
   color: #25252a;
   font-family: 'Mona', system-ui, sans-serif;
-  font-size: clamp(2rem, 3.2vw, 3.4rem);
-  font-weight: 480;
-  line-height: 1.02;
-  letter-spacing: -0.05em;
+  font-size: clamp(4rem, 7.4vw, 8.4rem);
+  font-weight: 440;
+  line-height: 0.94;
+  letter-spacing: -0.065em;
 }
 
 .about-chapter p {
+  max-width: 680px;
   margin: 0;
   color: #a0a0a8;
-  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
   line-height: 1.55;
 }
 
 .about-chapter .about-chapter-lede {
   margin-top: 1rem;
   color: #777780;
-  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  font-size: clamp(1.4rem, 2.4vw, 2.2rem);
   line-height: 1.35;
 }
 
@@ -1056,9 +1056,9 @@ a.hero-story-card:hover {
 }
 
 .about-contact-panel {
-  width: clamp(820px, 76vw, 1260px);
+  width: 100vw;
   height: 100%;
-  flex: 0 0 clamp(820px, 76vw, 1260px);
+  flex: 0 0 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1189,9 +1189,9 @@ a.hero-story-card:hover {
   }
 
   .about-editorial-opening {
-    width: 1180px;
-    flex-basis: 1180px;
-    grid-template-columns: 600px 470px;
+    width: 100vw;
+    flex-basis: 100vw;
+    grid-template-columns: minmax(430px, 1fr) minmax(300px, 0.6fr);
   }
 }
 
