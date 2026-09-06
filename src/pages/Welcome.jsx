@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
@@ -6,6 +6,7 @@ import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
 import localAiRobot from '../assets/image/local-ai-robot.webp';
 
 const easeOut = [0.22, 1, 0.36, 1];
+const LocalAiRobot = lazy(() => import('../components/LocalAiRobot'));
 
 export function Welcome() {
   const [coffeeOpen, setCoffeeOpen] = useState(false);
@@ -86,16 +87,20 @@ export function Welcome() {
                 local AI
                 <span
                   className={`local-ai-popover ${robotOpen ? 'is-visible' : ''}`}
-                  style={{ '--gaze-x': `${robotGaze.x}px`, '--gaze-y': `${robotGaze.y}px` }}
+                  style={{
+                    '--gaze-x': `${robotGaze.x}px`,
+                    '--gaze-y': `${robotGaze.y}px`,
+                    '--head-rotate': `${robotGaze.x * 0.8}deg`,
+                  }}
                   aria-hidden={!robotOpen}
                 >
                   <span className="robot-halo" aria-hidden="true" />
                   <span className="robot-character">
-                    <img src={localAiRobot} alt="" width="640" height="640" />
-                    <i className="robot-eye-glow robot-eye-left" aria-hidden="true" />
-                    <i className="robot-eye-glow robot-eye-right" aria-hidden="true" />
-                    <i className="robot-lid robot-lid-left" aria-hidden="true" />
-                    <i className="robot-lid robot-lid-right" aria-hidden="true" />
+                    {robotOpen && (
+                      <Suspense fallback={<img className="robot-static-fallback" src={localAiRobot} alt="" width="640" height="640" />}>
+                        <LocalAiRobot />
+                      </Suspense>
+                    )}
                   </span>
                   <span className="robot-message">Runs here. Stays here.</span>
                 </span>

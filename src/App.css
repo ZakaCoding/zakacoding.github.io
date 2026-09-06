@@ -388,52 +388,56 @@
   inset: -0.8rem 0.2rem 1.3rem;
   display: block;
   filter: drop-shadow(0 18px 22px rgba(42, 50, 62, 0.18));
-  transform: translate(var(--gaze-x), var(--gaze-y));
-  transition: transform 180ms ease-out;
 }
 
-.robot-character img {
+.robot-lottie-figure,
+.robot-static-fallback,
+.robot-body-layer,
+.robot-head-layer,
+.robot-head-idle {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.robot-static-fallback,
+.robot-body-layer img,
+.robot-head-layer img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  animation: robot-float 3.8s ease-in-out infinite;
 }
 
-.robot-eye-glow,
-.robot-lid {
-  position: absolute;
+.robot-static-fallback { animation: robot-body-float 3.8s ease-in-out infinite; }
+
+.robot-body-layer {
+  clip-path: polygon(0 47%, 100% 47%, 100% 100%, 0 100%);
+  animation: robot-body-float 3.8s ease-in-out infinite;
+}
+
+.robot-head-layer {
   z-index: 2;
-  display: block;
+  clip-path: polygon(0 0, 100% 0, 100% 52%, 0 52%);
+  transform: translate(var(--gaze-x), var(--gaze-y)) rotate(var(--head-rotate, 0deg));
+  transform-origin: 50% 43%;
+  transition: transform 170ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.robot-head-idle {
+  transform-origin: 50% 43%;
+  animation: robot-head-listen 4.4s ease-in-out infinite;
+}
+
+.robot-eye-lottie {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
-.robot-eye-glow {
-  top: 29%;
-  width: 8.5%;
-  height: 14%;
-  border-radius: 50%;
-  background: rgba(105, 255, 211, 0.48);
-  filter: blur(3px);
-  mix-blend-mode: screen;
-  transform: translate(var(--gaze-x), var(--gaze-y));
-  animation: robot-eye-pulse 2.2s ease-in-out infinite;
-}
-
-.robot-eye-left { left: 39%; }
-.robot-eye-right { left: 60%; }
-
-.robot-lid {
-  top: 29%;
-  width: 8.8%;
-  height: 14.5%;
-  border-radius: 50%;
-  background: #131719;
-  transform: scaleY(0);
-  animation: robot-blink 4.6s ease-in-out infinite;
-}
-
-.robot-lid-left { left: 38.8%; }
-.robot-lid-right { left: 59.8%; }
+.robot-eye-lottie svg { width: 100% !important; height: 100% !important; overflow: visible; }
 
 .robot-message {
   position: absolute;
@@ -452,13 +456,17 @@
   white-space: nowrap;
 }
 
-@keyframes robot-float {
-  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
-  50% { transform: translateY(-0.45rem) rotate(2deg); }
+@keyframes robot-body-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.22rem); }
 }
 
-@keyframes robot-eye-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.78; } }
-@keyframes robot-blink { 0%, 43%, 47%, 72%, 76%, 100% { transform: scaleY(0); } 45%, 74% { transform: scaleY(1); } }
+@keyframes robot-head-listen {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  32% { transform: translateY(-0.32rem) rotate(2.2deg); }
+  68% { transform: translateY(-0.12rem) rotate(-2.6deg); }
+}
+
 @keyframes robot-halo { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
 .hero-summary {
@@ -597,13 +605,14 @@ a.hero-story-card:hover {
   .coffee-imessage,
   .local-ai-word,
   .local-ai-popover,
-  .robot-character,
+  .robot-head-layer,
   .robot-halo { transition: none; }
+  .robot-head-layer { transform: none; }
   .coffee-avatar,
   .coffee-typing i,
-  .robot-character img,
-  .robot-eye-glow,
-  .robot-lid,
+  .robot-static-fallback,
+  .robot-body-layer,
+  .robot-head-idle,
   .robot-halo { animation: none !important; }
 }
 
