@@ -1,18 +1,88 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { motion } from 'framer-motion';
 import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
+import zakaPortrait from '../assets/image/sillhouete_zaka.png';
 import animoji from '../assets/lottie/memoji.json';
 import ZakaCodingLogo from '../../public/logo/final-logo.png';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+const whoModes = [
+  {
+    id: 'systems',
+    icon: '⌘',
+    label: 'Systems builder',
+    eyebrow: 'Full-stack engineer',
+    title: 'I build the quiet systems behind busy operations.',
+    body: 'Logistics platforms, backend services, and interfaces people depend on every day.',
+    accent: '#ff6b18',
+    soft: '#fff0e7',
+    pose: '-1deg',
+  },
+  {
+    id: 'modernize',
+    icon: '↻',
+    label: 'Modernizer',
+    eyebrow: 'Legacy → dependable',
+    title: 'Old software deserves a thoughtful next chapter.',
+    body: 'I untangle legacy systems, improve architecture, and ship change without losing what already works.',
+    accent: '#087cff',
+    soft: '#e8f2ff',
+    pose: '1.2deg',
+  },
+  {
+    id: 'lead',
+    icon: '↑',
+    label: 'Engineering lead',
+    eyebrow: 'Builder + supervisor',
+    title: 'Good engineering is also clear direction.',
+    body: 'I help teams turn a hard problem into a shared plan, safer delivery, and software we can own.',
+    accent: '#7c4dff',
+    soft: '#f0ebff',
+    pose: '-0.5deg',
+  },
+  {
+    id: 'maker',
+    icon: '✦',
+    label: 'Indie maker',
+    eyebrow: 'Open source + local AI',
+    title: 'Curiosity keeps the work alive.',
+    body: 'After work, I explore tools like OwA and Open CMAP—small experiments that become useful products.',
+    accent: '#13a46b',
+    soft: '#e5f8ef',
+    pose: '0.8deg',
+  },
+];
+
 const About = () => {
   const exhibitionRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
+  const portraitRef = useRef(null);
+  const [activeWhoMode, setActiveWhoMode] = useState(whoModes[0]);
+
+  const movePortrait = (event) => {
+    const portrait = portraitRef.current;
+    if (!portrait || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    portrait.style.setProperty('--portrait-x', `${x * 22}px`);
+    portrait.style.setProperty('--portrait-y', `${y * 12}px`);
+    portrait.style.setProperty('--portrait-tilt', `${x * 2.4}deg`);
+  };
+
+  const resetPortrait = () => {
+    const portrait = portraitRef.current;
+    if (!portrait) return;
+    portrait.style.setProperty('--portrait-x', '0px');
+    portrait.style.setProperty('--portrait-y', '0px');
+    portrait.style.setProperty('--portrait-tilt', '0deg');
+  };
 
   useEffect(() => {
     const exhibition = exhibitionRef.current;
@@ -161,18 +231,64 @@ const About = () => {
               </div>
             </section>
 
-            <section className="about-chapter" aria-labelledby="who-title">
-              <span className="about-index">03</span>
-              <div>
+            <section
+              className="about-who"
+              aria-labelledby="who-title"
+              style={{
+                '--who-accent': activeWhoMode.accent,
+                '--who-soft': activeWhoMode.soft,
+                '--portrait-pose': activeWhoMode.pose,
+              }}
+              onPointerMove={movePortrait}
+              onPointerLeave={resetPortrait}
+            >
+              <header className="about-who-header">
+                <span className="about-index">03 / WHO I AM</span>
+                <div className="about-who-switcher" aria-label="Explore Zaka's roles">
+                  {whoModes.map((mode) => (
+                    <button
+                      key={mode.id}
+                      type="button"
+                      className={mode.id === activeWhoMode.id ? 'is-active' : ''}
+                      aria-pressed={mode.id === activeWhoMode.id}
+                      aria-label={mode.label}
+                      onClick={() => setActiveWhoMode(mode)}
+                    >
+                      <span aria-hidden="true">{mode.icon}</span>
+                      <strong>{mode.label}</strong>
+                    </button>
+                  ))}
+                </div>
+              </header>
+
+              <div className="about-who-copy">
+                <span className="about-who-eyebrow">{activeWhoMode.eyebrow}</span>
                 <h3 id="who-title">Who I am</h3>
-                <p className="about-chapter-lede">
-                  I&apos;m Zaka, a full-stack engineer based in Indonesia.
-                </p>
+                <motion.div
+                  key={activeWhoMode.id}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.38, ease: 'easeOut' }}
+                  className="about-who-story"
+                >
+                  <p className="about-who-lede">{activeWhoMode.title}</p>
+                  <p>{activeWhoMode.body}</p>
+                </motion.div>
               </div>
-              <p>
-                I care about real problems, useful software, and the people who depend
-                on it every day.
-              </p>
+
+              <div className="about-who-stage">
+                <span className="about-who-halo" aria-hidden="true" />
+                <span className="about-who-word" aria-hidden="true">ZAKA</span>
+                <div className="about-who-portrait" ref={portraitRef}>
+                  <img src={zakaPortrait} alt="Zaka Noor standing in profile" />
+                </div>
+                <span className="about-who-location">Indonesia · GMT+7</span>
+              </div>
+
+              <footer className="about-who-footer">
+                <span>Choose a lens</span>
+                <strong>{activeWhoMode.label}</strong>
+              </footer>
             </section>
 
             <section className="about-chapter" aria-labelledby="outcome-title">

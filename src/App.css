@@ -1077,6 +1077,280 @@ a.hero-story-card:hover {
   line-height: 1.35;
 }
 
+/* Who I am — playful exhibition controls with an Apple-like portrait stage. */
+.about-who {
+  position: relative;
+  isolation: isolate;
+  width: 100vw;
+  height: 100%;
+  flex: 0 0 100vw;
+  display: grid;
+  grid-template-columns: minmax(360px, 0.82fr) minmax(440px, 1.18fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 1.5rem clamp(2rem, 5vw, 6rem);
+  padding: clamp(6.7rem, 11vh, 8rem) clamp(2rem, 5vw, 5rem) 2.8rem;
+  overflow: hidden;
+  border-left: 1px solid var(--about-line);
+  background: #f5f5f7;
+  transition: background-color 420ms ease;
+}
+
+.about-who::before {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  content: '';
+  background:
+    radial-gradient(circle at 72% 55%, var(--who-soft) 0, transparent 33%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.88), transparent 48%);
+  transition: background 420ms ease;
+}
+
+.about-who-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.about-who-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.about-who-switcher button {
+  width: 3.25rem;
+  min-width: 3.25rem;
+  height: 3.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 999px;
+  color: #77777e;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 10px 30px rgba(30, 30, 40, 0.07);
+  backdrop-filter: blur(18px);
+  cursor: pointer;
+  transition: width 380ms cubic-bezier(0.22, 1, 0.36, 1), color 240ms ease,
+    background 240ms ease, transform 240ms ease, box-shadow 240ms ease;
+}
+
+.about-who-switcher button:hover {
+  color: var(--about-ink);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(30, 30, 40, 0.11);
+}
+
+.about-who-switcher button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--who-accent), transparent 65%);
+  outline-offset: 3px;
+}
+
+.about-who-switcher button.is-active {
+  width: clamp(11.5rem, 16vw, 15rem);
+  justify-content: flex-start;
+  padding: 0 1.1rem 0 0.65rem;
+  color: #fff;
+  border-color: transparent;
+  background: var(--who-accent);
+  box-shadow: 0 16px 42px color-mix(in srgb, var(--who-accent), transparent 72%);
+}
+
+.about-who-switcher button > span {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  flex: 0 0 2rem;
+  border-radius: 50%;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.about-who-switcher button.is-active > span {
+  color: var(--who-accent);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.about-who-switcher button strong {
+  min-width: max-content;
+  opacity: 0;
+  font-size: 0.9rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  transition: opacity 180ms ease 60ms;
+}
+
+.about-who-switcher button.is-active strong {
+  opacity: 1;
+}
+
+.about-who-copy {
+  z-index: 2;
+  align-self: center;
+  max-width: 660px;
+}
+
+.about-who-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.72rem;
+  border-radius: 999px;
+  color: var(--who-accent);
+  background: var(--who-soft);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 300ms ease, background 300ms ease;
+}
+
+.about-who-copy h3 {
+  margin: 1rem 0 0;
+  color: #1d1d1f;
+  font-family: var(--about-font);
+  font-size: clamp(4.2rem, 7.2vw, 8.2rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.075em;
+}
+
+.about-who-story {
+  max-width: 610px;
+  margin-top: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+.about-who-story p {
+  max-width: 560px;
+  margin: 1rem 0 0;
+  color: #97979e;
+  font-size: clamp(1rem, 1.3vw, 1.18rem);
+  line-height: 1.5;
+}
+
+.about-who-story .about-who-lede {
+  margin-top: 0;
+  color: #3a3a3f;
+  font-size: clamp(1.45rem, 2.2vw, 2.25rem);
+  font-weight: 520;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.about-who-stage {
+  position: relative;
+  z-index: 1;
+  align-self: stretch;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.about-who-halo {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  width: min(39vw, 590px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--who-accent);
+  box-shadow: 0 38px 80px color-mix(in srgb, var(--who-accent), transparent 76%);
+  opacity: 0.96;
+  transform: translateX(-50%) scale(0.82);
+  transition: background 380ms ease, box-shadow 380ms ease, transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-who:hover .about-who-halo {
+  transform: translateX(-50%) scale(0.87);
+}
+
+.about-who-word {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: clamp(8rem, 16vw, 17rem);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.09em;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+.about-who-portrait {
+  --portrait-x: 0px;
+  --portrait-y: 0px;
+  --portrait-tilt: 0deg;
+  position: relative;
+  z-index: 2;
+  width: min(26vw, 410px);
+  height: min(69vh, 700px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transform: translate3d(var(--portrait-x), var(--portrait-y), 0)
+    rotate(calc(var(--portrait-pose) + var(--portrait-tilt)));
+  transform-origin: center bottom;
+  transition: transform 180ms ease-out;
+  will-change: transform;
+}
+
+.about-who-portrait img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 28px 34px rgba(25, 25, 35, 0.18));
+}
+
+.about-who-location {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 3;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  color: #5d5d64;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.about-who-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(130, 130, 138, 0.22);
+  color: #9a9aa1;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.about-who-footer strong {
+  color: var(--who-accent);
+  font-weight: 700;
+  transition: color 300ms ease;
+}
+
 .about-chapter-blue {
   color: #f5f7ff;
   border-color: rgba(255, 255, 255, 0.22);
@@ -1256,6 +1530,26 @@ a.hero-story-card:hover {
     flex-basis: 100vw;
     grid-template-columns: minmax(430px, 1fr) minmax(300px, 0.6fr);
   }
+
+  .about-who {
+    grid-template-columns: minmax(330px, 0.9fr) minmax(340px, 1.1fr);
+    gap: 1rem 2rem;
+    padding-inline: 2rem;
+  }
+
+  .about-who-switcher button.is-active {
+    width: 3.25rem;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .about-who-switcher button.is-active strong {
+    display: none;
+  }
+
+  .about-who-portrait {
+    width: min(34vw, 350px);
+  }
 }
 
 @media (max-width: 700px) {
@@ -1341,6 +1635,88 @@ a.hero-story-card:hover {
     border-radius: 2rem;
   }
 
+  .about-who {
+    width: 100%;
+    height: auto;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 6.5rem 1rem 1.5rem;
+    border-top: 1px solid var(--about-line);
+    border-left: 0;
+  }
+
+  .about-who-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .about-who-switcher {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 0.25rem 0 0.8rem;
+    scrollbar-width: none;
+  }
+
+  .about-who-switcher::-webkit-scrollbar {
+    display: none;
+  }
+
+  .about-who-switcher button,
+  .about-who-switcher button.is-active {
+    width: auto;
+    min-width: max-content;
+    height: 2.85rem;
+    justify-content: flex-start;
+    padding: 0 0.9rem 0 0.45rem;
+  }
+
+  .about-who-switcher button strong,
+  .about-who-switcher button.is-active strong {
+    display: block;
+    opacity: 1;
+    font-size: 0.78rem;
+  }
+
+  .about-who-switcher button > span {
+    width: 2rem;
+    height: 2rem;
+    flex-basis: 2rem;
+  }
+
+  .about-who-copy h3 {
+    font-size: clamp(4.2rem, 20vw, 6.2rem);
+  }
+
+  .about-who-stage {
+    min-height: 560px;
+  }
+
+  .about-who-halo {
+    width: min(88vw, 520px);
+  }
+
+  .about-who-word {
+    top: 14%;
+    font-size: clamp(7rem, 35vw, 12rem);
+  }
+
+  .about-who-portrait {
+    width: min(66vw, 360px);
+    height: 540px;
+  }
+
+  .about-who-location {
+    right: 0;
+  }
+
+  .about-who-footer {
+    display: none;
+  }
+
   .about-chapter,
   .about-contact-panel {
     width: 100%;
@@ -1380,5 +1756,16 @@ a.hero-story-card:hover {
   .about-progress-rail,
   .about-direction {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-who,
+  .about-who::before,
+  .about-who-switcher button,
+  .about-who-halo,
+  .about-who-portrait,
+  .about-who-footer strong {
+    transition: none;
   }
 }
