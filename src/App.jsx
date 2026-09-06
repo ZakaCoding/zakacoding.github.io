@@ -46,6 +46,25 @@ function SmoothScroll() {
 
 
 function App() {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    const lenis = new Lenis();
+    let animationFrame;
+
+    const raf = (time) => {
+      lenis.raf(time);
+      animationFrame = window.requestAnimationFrame(raf);
+    };
+
+    animationFrame = window.requestAnimationFrame(raf);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      lenis.destroy();
+    };
+  }, []);
+
   return (
    <div>
     <Router>
