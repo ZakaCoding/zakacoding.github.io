@@ -796,6 +796,8 @@ a.hero-story-card:hover {
   --about-muted: #9a9aa1;
   --about-line: #dedee3;
   --about-blue: #1769ff;
+  --about-font: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--about-font);
   color: var(--about-ink);
   background: #f5f5f7;
 }
@@ -811,19 +813,22 @@ a.hero-story-card:hover {
 }
 
 .about-original-intro {
-  width: min(1180px, calc(100% - 3rem));
-  margin: 0 auto;
-  padding-top: clamp(8.5rem, 20vh, 13rem);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.75fr);
-  gap: clamp(2rem, 6vw, 6rem);
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: clamp(7rem, 12vh, 8rem) clamp(1.25rem, 2vw, 2rem) 0;
+  display: flex;
+  gap: clamp(1.75rem, 3vw, 2rem);
   align-items: center;
 }
 
 .about-original-intro h1 {
+  flex: 1 1 auto;
   margin: 0;
   color: #151517;
-  font-family: 'Mona', system-ui, sans-serif;
+  font-family: var(--about-font);
   font-size: clamp(4.5rem, 9vw, 9rem);
   font-weight: 760;
   line-height: 0.86;
@@ -831,6 +836,7 @@ a.hero-story-card:hover {
 }
 
 .about-original-intro p {
+  flex: 1 1 420px;
   max-width: 620px;
   margin: 0;
   color: #8a8a91;
@@ -852,6 +858,8 @@ a.hero-story-card:hover {
   align-items: flex-end;
   justify-content: space-between;
   gap: 2rem;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .about-original-logo {
@@ -941,7 +949,7 @@ a.hero-story-card:hover {
   max-width: 760px;
   margin: 1.5rem 0 0;
   color: #26384a;
-  font-family: 'Mona', system-ui, sans-serif;
+  font-family: var(--about-font);
   font-size: clamp(4rem, 6.9vw, 7.5rem);
   font-weight: 420;
   line-height: 0.94;
@@ -950,6 +958,32 @@ a.hero-story-card:hover {
 
 .about-editorial-copy h2 span {
   color: var(--about-blue);
+}
+
+.about-loading-dots {
+  display: inline-block;
+  width: 1.15em;
+  color: var(--about-blue);
+  text-align: left;
+}
+
+.about-loading-dots::after {
+  content: '';
+  animation: aboutTerminalDots 1.2s steps(1, end) infinite;
+}
+
+@keyframes aboutTerminalDots {
+  0%, 20% { content: ''; }
+  25%, 45% { content: '.'; }
+  50%, 70% { content: '..'; }
+  75%, 100% { content: '...'; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-loading-dots::after {
+    content: '...';
+    animation: none;
+  }
 }
 
 .about-editorial-copy p {
@@ -982,7 +1016,7 @@ a.hero-story-card:hover {
   position: absolute;
   z-index: 2;
   color: #8d8d95;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--about-font);
   font-size: clamp(0.85rem, 1.2vw, 1.05rem);
   font-style: italic;
   line-height: 1.15;
@@ -1021,7 +1055,7 @@ a.hero-story-card:hover {
   max-width: 1040px;
   margin: 0;
   color: #25252a;
-  font-family: 'Mona', system-ui, sans-serif;
+  font-family: var(--about-font);
   font-size: clamp(4rem, 7.4vw, 8.4rem);
   font-weight: 440;
   line-height: 0.94;
@@ -1059,6 +1093,31 @@ a.hero-story-card:hover {
   color: #fff;
 }
 
+/* Final chapters: quieter metadata, expressive display type, and Apple-like spacing. */
+.about-chapter-blue h3,
+.about-contact-panel h2 {
+  font-family: var(--about-font);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+.about-chapter-blue h3 {
+  font-size: clamp(4.2rem, 8vw, 9rem);
+  line-height: 0.92;
+}
+
+.about-chapter-blue .about-chapter-lede {
+  color: rgba(255, 255, 255, 0.86);
+  font-weight: 450;
+  letter-spacing: -0.025em;
+}
+
+.about-chapter-blue > p {
+  color: rgba(255, 255, 255, 0.58);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
 .about-contact-panel {
   width: 100vw;
   height: 100%;
@@ -1078,17 +1137,14 @@ a.hero-story-card:hover {
 .about-contact-panel h2 {
   max-width: 1050px;
   margin: 1.6rem 0 0;
-  font-family: 'Mona', system-ui, sans-serif;
   font-size: clamp(4.2rem, 7.2vw, 8rem);
-  font-weight: 480;
   line-height: 0.94;
-  letter-spacing: -0.065em;
 }
 
 .about-contact-panel h2 em {
-  color: #90aeff;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 400;
+  color: #8fb0ff;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .about-contact-panel > p {
@@ -1096,6 +1152,8 @@ a.hero-story-card:hover {
   margin: 2rem 0 0;
   color: #8e8e95;
   font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
   line-height: 1.55;
 }
 
@@ -1171,7 +1229,7 @@ a.hero-story-card:hover {
 
 @media (max-width: 900px) {
   .about-original-intro {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     align-items: start;
     padding-top: 8rem;
   }
@@ -1185,11 +1243,12 @@ a.hero-story-card:hover {
   }
 
   .about-original-logo {
-    width: min(46vw, 430px);
+    width: min(43vw, 380px);
   }
 
   .about-original-memoji {
-    width: min(38vw, 340px);
+    width: min(30vw, 280px);
+    height: min(42vh, 390px);
   }
 
   .about-editorial-opening {
@@ -1298,6 +1357,10 @@ a.hero-story-card:hover {
 
   .about-chapter h3 {
     font-size: clamp(2.8rem, 14vw, 4.5rem);
+  }
+
+  .about-chapter-blue h3 {
+    font-size: clamp(3.3rem, 16vw, 5.4rem);
   }
 
   .about-contact-panel {

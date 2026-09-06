@@ -139,7 +139,8 @@ const About = () => {
               <div className="about-editorial-copy">
                 <span className="about-index">02 / ABOUT</span>
                 <h2>
-                  I Read, Code, and drink too much coffee<span>...</span>
+                  I Read, Code, and drink too much coffee
+                  <span className="about-loading-dots" aria-label="loading" />
                 </h2>
                 <p>
                   I&apos;m a curious builder and full-stack engineer. I move between
