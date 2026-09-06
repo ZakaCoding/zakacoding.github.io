@@ -11,12 +11,12 @@ import 'lenis/dist/lenis.css';
 
 // static component
 import { Navbar } from './components/Navbar'
-import { Footer } from "./components/Footer";
 
 // pages
 import { Welcome } from './pages/Welcome';
 
 const About = lazy(() => import('./pages/About'));
+const Archive = lazy(() => import('./pages/Archive'));
 
 // Source css
 import './App.css';
@@ -55,9 +55,9 @@ function App() {
         <Routes>
           <Route path='/' Component={Welcome} />
           <Route path='/about' Component={About} />
+          <Route path='/archive' Component={Archive} />
         </Routes>
       </Suspense>
-      {/* <Footer /> */}
     </Router>
    </div>
   );

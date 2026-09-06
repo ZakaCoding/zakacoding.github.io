@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 
 const links = [
   { to: '/', label: 'Home' },
-  { to: '/#experience', label: 'Work', hash: true },
   { to: '/about', label: 'About', icon: true },
   { to: 'https://path.cv/zakanoor', label: 'Resume', external: true },
 ];

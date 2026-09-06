@@ -355,6 +355,7 @@ a.hero-story-card:hover {
   margin-bottom: clamp(3.5rem, 7vw, 7rem);
 }
 
+.work-story-heading h1,
 .work-story-heading h2,
 .outcome-statement h2,
 .contact-story h2 {
@@ -367,6 +368,7 @@ a.hero-story-card:hover {
   letter-spacing: -0.075em;
 }
 
+.work-story-heading h1 em,
 .work-story-heading h2 em,
 .contact-story h2 em {
   font-family: Georgia, 'Times New Roman', serif;
@@ -424,6 +426,7 @@ a.hero-story-card:hover {
   text-transform: uppercase;
 }
 
+.featured-project h2,
 .featured-project h3 {
   margin: 0;
   font-family: 'Mona', system-ui, sans-serif;
@@ -699,7 +702,17 @@ a.hero-story-card:hover {
   margin-top: clamp(5rem, 10vw, 10rem);
 }
 
+.archive-heading h2,
 .archive-heading h3 { max-width: 360px; margin: 1rem 0 0; font-size: clamp(2rem, 3vw, 3.5rem); line-height: 1; letter-spacing: -0.055em; }
+
+.archive-page {
+  min-height: 100svh;
+  background: #f5f5f7;
+}
+
+.archive-work-story {
+  padding-top: clamp(8rem, 13vw, 12rem);
+}
 .archive-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .archive-card { overflow: hidden; border-radius: 1.5rem; color: #1d1d1f; background: #fff; box-shadow: 0 18px 50px rgba(30, 35, 48, 0.07); transition: transform 200ms ease, box-shadow 200ms ease; }
 .archive-card:hover { color: #1d1d1f; transform: translateY(-6px); box-shadow: 0 24px 60px rgba(30, 35, 48, 0.12); }
@@ -749,9 +762,9 @@ a.hero-story-card:hover {
 
 @media (max-width: 760px) {
   .work-story-heading { grid-template-columns: 1fr; }
-  .work-story-heading h2, .outcome-statement h2, .contact-story h2 { font-size: clamp(3.25rem, 14vw, 5.7rem); }
+  .work-story-heading h1, .work-story-heading h2, .outcome-statement h2, .contact-story h2 { font-size: clamp(3.25rem, 14vw, 5.7rem); }
   .featured-project-copy { min-height: 580px; padding: 2.25rem 1.4rem; }
-  .featured-project h3 { font-size: clamp(4.2rem, 20vw, 7rem); }
+  .featured-project h2, .featured-project h3 { font-size: clamp(4.2rem, 20vw, 7rem); }
   .project-meta { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
   .owa-terminal { width: calc(100% - 2rem); transform: none; box-shadow: 12px 14px 0 rgba(28, 30, 19, 0.14); }
   .logistics-map { min-height: 480px; }
