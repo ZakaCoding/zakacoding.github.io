@@ -22,16 +22,16 @@ export function Welcome() {
         >
           <motion.article className="hero-card hero-intro-card" variants={heroItem} transition={{ duration: 0.7, ease: easeOut }}>
             <div className="hero-kicker">
-              <span className="hero-status-dot" aria-hidden="true" />
-              Hey, I’m Zaka · Full-stack engineer
+              <span className="hero-wave" role="img" aria-label="Hello">👋</span>
+              <span>Hey, I’m Zaka · Full-stack engineer</span>
             </div>
 
             <h1 id="home-hero-title">
-              I build the quiet systems behind <span>busy operations.</span>
+              I Read, Code, and <span className="hero-heading-muted">drink too much <span className="coffee-word" tabIndex="0">coffee<span className="coffee-tooltip" role="tooltip"><span className="coffee-cup" aria-hidden="true">☕</span><span>Freshly brewed</span></span></span>.</span>
             </h1>
 
             <p className="hero-summary">
-              Logistics platforms, developer tools, and local-first AI—engineered from backend architecture to the interface people depend on every day.
+              Between refills, I build logistics platforms that don&apos;t lose track of trucks, a local AI that doesn&apos;t need the cloud&apos;s permission, and the occasional tool to untangle other people&apos;s ideas.
             </p>
           </motion.article>
 
