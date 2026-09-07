@@ -38,18 +38,30 @@ export function Navbar() {
   }, [location.pathname, mounted]);
 
   useEffect(() => {
-    const activeIndex = links.findIndex(l =>
-      l.external || l.hash ? false : (l.to === '/' ? location.pathname === '/' : location.pathname.startsWith(l.to))
-    );
-    const el = itemRefs.current[activeIndex];
-    const nav = navRef.current;
-    if (!el || !nav) return;
-    const navRect = nav.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    setPillStyle({
-      width: elRect.width,
-      transform: `translateX(${elRect.left - navRect.left}px)`,
-    });
+    const updatePill = () => {
+      const activeIndex = links.findIndex(l =>
+        !l.external && (l.to === '/' ? location.pathname === '/' : location.pathname.startsWith(l.to))
+      );
+      const el = itemRefs.current[activeIndex];
+      const nav = navRef.current;
+      if (!el || !nav) return;
+
+      const navRect = nav.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      setPillStyle({
+        width: elRect.width,
+        transform: `translateX(${elRect.left - navRect.left}px)`,
+      });
+    };
+
+    updatePill();
+    const observer = new ResizeObserver(updatePill);
+    if (navRef.current) observer.observe(navRef.current);
+    window.addEventListener('resize', updatePill);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updatePill);
+    };
   }, [location.pathname, mounted]);
 
   return (

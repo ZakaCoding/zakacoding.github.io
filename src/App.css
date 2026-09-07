@@ -1463,6 +1463,18 @@ a.hero-story-card:hover {
   box-shadow: 0 14px 34px rgba(30, 30, 40, 0.11);
 }
 
+@media (min-width: 901px) {
+  .about-who-switcher button:not(.is-active):is(:hover, :focus-visible) {
+    width: clamp(10rem, 14vw, 13rem);
+    justify-content: flex-start;
+    padding: 0 1rem 0 0.65rem;
+  }
+
+  .about-who-switcher button:not(.is-active):is(:hover, :focus-visible) strong {
+    opacity: 1;
+  }
+}
+
 .about-who-switcher button:focus {
   outline: none;
 }
@@ -1480,6 +1492,11 @@ a.hero-story-card:hover {
   border-color: transparent;
   background: var(--who-accent);
   box-shadow: 0 16px 42px color-mix(in srgb, var(--who-accent), transparent 72%);
+}
+
+.about-who-switcher button.is-active:hover {
+  color: #fff;
+  transform: translateY(-3px);
 }
 
 .about-who-switcher button > span {

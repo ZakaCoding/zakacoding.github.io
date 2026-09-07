@@ -1,7 +1,7 @@
 import { Player } from '@lottiefiles/react-lottie-player';
 
 import localAiRobot from '../assets/image/local-ai-robot.webp';
-import robotEyes from '../assets/lottie/local-ai-eyes.json';
+import robotEyes from '../assets/lottie/local-ai-eyes.json?url';
 
 export default function LocalAiRobot() {
   const reduceMotion = typeof window !== 'undefined'

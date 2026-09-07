@@ -120,6 +120,7 @@ export function Welcome() {
               alt="Zaka's memoji smiling behind a sticker-covered laptop"
               width="1420"
               height="1781"
+              decoding="async"
             />
             <p>Code, coffee, curiosity.</p>
           </motion.article>

@@ -5,7 +5,7 @@ import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
 import zakaPortrait from '../assets/image/sillhouete_zaka.png';
-import animoji from '../assets/lottie/memoji.json';
+import animoji from '../assets/lottie/memoji.json?url';
 import ZakaCodingLogo from '../../public/logo/final-logo.png';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -63,7 +63,32 @@ const About = () => {
   const progressRef = useRef(null);
   const directionRef = useRef(null);
   const portraitRef = useRef(null);
+  const whoModeRefs = useRef([]);
   const [activeWhoMode, setActiveWhoMode] = useState(whoModes[0]);
+
+  const selectWhoMode = (index) => {
+    setActiveWhoMode(whoModes[index]);
+    whoModeRefs.current[index]?.focus();
+  };
+
+  const handleWhoModeKeyDown = (event, index) => {
+    let nextIndex = null;
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = (index + 1) % whoModes.length;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = (index - 1 + whoModes.length) % whoModes.length;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = whoModes.length - 1;
+    }
+
+    if (nextIndex !== null) {
+      event.preventDefault();
+      selectWhoMode(nextIndex);
+    }
+  };
 
   const movePortrait = (event) => {
     const portrait = portraitRef.current;
@@ -266,15 +291,21 @@ const About = () => {
             >
               <header className="about-who-header">
                 <span className="about-index">03 / WHO I AM</span>
-                <div className="about-who-switcher" aria-label="Explore Zaka's roles">
-                  {whoModes.map((mode) => (
+                <div className="about-who-switcher" role="tablist" aria-label="Explore Zaka's roles">
+                  {whoModes.map((mode, index) => (
                     <button
                       key={mode.id}
                       type="button"
+                      ref={(element) => { whoModeRefs.current[index] = element; }}
+                      role="tab"
+                      id={`who-mode-${mode.id}`}
                       className={mode.id === activeWhoMode.id ? 'is-active' : ''}
-                      aria-pressed={mode.id === activeWhoMode.id}
-                      aria-label={mode.label}
-                      onClick={() => setActiveWhoMode(mode)}
+                      aria-selected={mode.id === activeWhoMode.id}
+                      aria-controls="who-story"
+                      tabIndex={mode.id === activeWhoMode.id ? 0 : -1}
+                      data-label={mode.label}
+                      onClick={() => selectWhoMode(index)}
+                      onKeyDown={(event) => handleWhoModeKeyDown(event, index)}
                     >
                       <span aria-hidden="true">{mode.icon}</span>
                       <strong>{mode.label}</strong>
@@ -292,6 +323,9 @@ const About = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.38, ease: 'easeOut' }}
                   className="about-who-story"
+                  id="who-story"
+                  role="tabpanel"
+                  aria-labelledby={`who-mode-${activeWhoMode.id}`}
                 >
                   <p className="about-who-lede">{activeWhoMode.title}</p>
                   <p>{activeWhoMode.body}</p>
