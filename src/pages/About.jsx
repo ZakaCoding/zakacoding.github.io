@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Player } from '@lottiefiles/react-lottie-player';
 import { motion } from 'framer-motion';
 import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
+import neonMemoji from '../assets/image/zaka-neon-memoji.webp';
 import zakaPortrait from '../assets/image/sillhouete_zaka.png';
-import animoji from '../assets/lottie/memoji.json';
 import ZakaCodingLogo from '../../public/logo/final-logo.png';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -64,7 +63,6 @@ const About = () => {
   const directionRef = useRef(null);
   const editorialRef = useRef(null);
   const editorialMemojiRef = useRef(null);
-  const editorialPlayerRef = useRef(null);
   const portraitRef = useRef(null);
   const [activeWhoMode, setActiveWhoMode] = useState(whoModes[0]);
 
@@ -136,7 +134,6 @@ const About = () => {
         editorialMemoji.style.setProperty('--memoji-scale', `${0.9 + editorialProgress * 0.1}`);
         editorialMemoji.style.setProperty('--memoji-aura-scale', `${0.84 + editorialProgress * 0.16}`);
       }
-      editorialPlayerRef.current?.setSeeker?.(Math.round(editorialProgress * 106), false);
     };
 
     const paint = () => {
@@ -260,7 +257,7 @@ const About = () => {
               <div className="about-editorial-copy">
                 <span className="about-index">02 / ABOUT</span>
                 <h2>
-                  I Read, Code, and drink too much <em>coffee</em>
+                  I Read, Code, and drink too much <span>coffee</span>
                   <span className="about-loading-dots" aria-label="loading" />
                 </h2>
                 <p>
@@ -278,11 +275,10 @@ const About = () => {
                 <div className="about-memoji-orbit" aria-hidden="true">
                   <span>Read</span><span>Code</span><span>Coffee</span>
                 </div>
-                <Player
-                  src={animoji}
-                  ref={editorialPlayerRef}
-                  keepLastFrame
+                <img
+                  src={neonMemoji}
                   className="about-classic-memoji-player"
+                  alt="Zaka's Memoji floating in a glass-lit space"
                 />
                 <span className="about-memoji-caption">Hello, again.</span>
               </div>

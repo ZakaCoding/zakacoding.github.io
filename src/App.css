@@ -1242,9 +1242,8 @@ a.hero-story-card:hover {
   padding: clamp(7rem, 12vh, 9rem) clamp(3rem, 5vw, 6rem) clamp(6rem, 10vh, 7rem);
   color: #f5f5f7;
   background:
-    radial-gradient(circle at 74% 42%, rgba(45, 79, 135, 0.35), transparent 30rem),
-    radial-gradient(circle at 67% 78%, rgba(121, 75, 47, 0.13), transparent 22rem),
-    linear-gradient(118deg, #050506 0%, #0b0d12 48%, #111927 100%);
+    radial-gradient(circle at 66% 28%, rgba(80, 118, 190, 0.32), transparent 23rem),
+    linear-gradient(108deg, #020203 0%, #09090b 38%, #282a30 62%, #f2f3f5 100%);
   isolation: isolate;
 }
 
@@ -1263,7 +1262,10 @@ a.hero-story-card:hover {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, rgba(5, 5, 6, 0.72), transparent 42%, rgba(5, 5, 6, 0.08));
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0) 48%, rgba(255, 255, 255, 0.17) 62%, rgba(255, 255, 255, 0.62) 100%),
+    linear-gradient(90deg, rgba(2, 2, 3, 0.76), transparent 48%);
+  backdrop-filter: blur(1px) saturate(1.08);
   content: '';
   pointer-events: none;
 }
@@ -1298,10 +1300,11 @@ a.hero-story-card:hover {
   letter-spacing: -0.066em;
 }
 
-.about-editorial-copy h2 em {
-  color: #e6b98d;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 400;
+.about-editorial-copy h2 > span:not(.about-loading-dots) {
+  color: #ff6a1a;
+  font-family: inherit;
+  font-style: normal;
+  font-weight: inherit;
 }
 
 .about-editorial-copy h2 span {
@@ -1364,14 +1367,29 @@ a.hero-story-card:hover {
   transition: opacity 120ms linear;
 }
 
+.about-editorial-memoji::before {
+  position: absolute;
+  inset: 6% -4% 3%;
+  z-index: -1;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 48% 52% 42% 58% / 56% 40% 60% 44%;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.045));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 36px 90px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(28px) saturate(1.28);
+  content: '';
+  transform: rotate(-4deg);
+}
+
 .about-classic-memoji-player {
   position: relative;
   z-index: 2;
   width: min(112%, 680px);
-  height: auto;
+  height: min(76vh, 680px);
   display: block;
-  border-radius: 50%;
-  filter: drop-shadow(0 34px 60px rgba(0, 0, 0, 0.48));
+  object-fit: contain;
+  filter: drop-shadow(0 38px 54px rgba(1, 3, 8, 0.38));
   transform:
     rotateY(calc(var(--memoji-turn) + var(--memoji-look-x)))
     rotateX(var(--memoji-look-y))
@@ -1385,7 +1403,10 @@ a.hero-story-card:hover {
   position: absolute;
   inset: 12% 6% 5%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(110, 157, 231, 0.2), rgba(38, 63, 102, 0.05) 48%, transparent 70%);
+  background:
+    radial-gradient(circle at 72% 28%, rgba(90, 135, 255, 0.34), transparent 32%),
+    radial-gradient(circle at 24% 68%, rgba(73, 255, 179, 0.2), transparent 30%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 68%);
   filter: blur(18px);
   transform: scale(var(--memoji-aura-scale));
 }
@@ -1415,11 +1436,12 @@ a.hero-story-card:hover {
   right: 8%;
   bottom: 8%;
   z-index: 4;
-  color: rgba(245, 245, 247, 0.7);
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1rem, 1.4vw, 1.35rem);
-  font-style: italic;
-  transform: rotate(-4deg);
+  color: rgba(20, 20, 22, 0.62);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .about-hand-note {
@@ -2095,8 +2117,8 @@ a.hero-story-card:hover {
     flex-direction: column;
     padding: 7rem 1rem 4rem;
     background:
-      radial-gradient(circle at 50% 69%, rgba(45, 79, 135, 0.34), transparent 22rem),
-      linear-gradient(155deg, #050506 0%, #111927 100%);
+      radial-gradient(circle at 50% 72%, rgba(80, 118, 190, 0.34), transparent 22rem),
+      linear-gradient(170deg, #020203 0%, #111216 56%, #e9ebee 100%);
   }
 
   .about-editorial-copy h2 {
