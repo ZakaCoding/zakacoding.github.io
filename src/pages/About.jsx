@@ -62,6 +62,9 @@ const About = () => {
   const trackRef = useRef(null);
   const progressRef = useRef(null);
   const directionRef = useRef(null);
+  const editorialRef = useRef(null);
+  const editorialMemojiRef = useRef(null);
+  const editorialPlayerRef = useRef(null);
   const portraitRef = useRef(null);
   const [activeWhoMode, setActiveWhoMode] = useState(whoModes[0]);
 
@@ -85,10 +88,30 @@ const About = () => {
     portrait.style.setProperty('--portrait-tilt', '0deg');
   };
 
+  const moveEditorialMemoji = (event) => {
+    const memoji = editorialMemojiRef.current;
+    if (!memoji || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = clamp((event.clientX - bounds.left) / bounds.width - 0.5, -0.5, 0.5);
+    const y = clamp((event.clientY - bounds.top) / bounds.height - 0.5, -0.5, 0.5);
+    memoji.style.setProperty('--memoji-look-x', `${x * 9}deg`);
+    memoji.style.setProperty('--memoji-look-y', `${y * -6}deg`);
+  };
+
+  const resetEditorialMemoji = () => {
+    const memoji = editorialMemojiRef.current;
+    if (!memoji) return;
+    memoji.style.setProperty('--memoji-look-x', '0deg');
+    memoji.style.setProperty('--memoji-look-y', '0deg');
+  };
+
   useEffect(() => {
     const exhibition = exhibitionRef.current;
     const track = trackRef.current;
     const progress = progressRef.current;
+    const editorial = editorialRef.current;
+    const editorialMemoji = editorialMemojiRef.current;
     if (!exhibition || !track || !progress) return undefined;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -100,11 +123,31 @@ const About = () => {
     let travel = 0;
     let frame = 0;
 
+    const updateEditorialMotion = (horizontalPosition) => {
+      const editorialStart = editorial?.offsetLeft || window.innerWidth;
+      const editorialProgress = clamp(
+        (horizontalPosition - editorialStart + window.innerWidth * 0.34) / (window.innerWidth * 0.82),
+        0,
+        1,
+      );
+      if (editorialMemoji) {
+        editorialMemoji.style.setProperty('--memoji-enter-x', `${(1 - editorialProgress) * 80}px`);
+        editorialMemoji.style.setProperty('--memoji-enter-y', `${(1 - editorialProgress) * 48}px`);
+        editorialMemoji.style.setProperty('--memoji-opacity', `${0.28 + editorialProgress * 0.72}`);
+        editorialMemoji.style.setProperty('--memoji-turn', `${-18 + editorialProgress * 18}deg`);
+        editorialMemoji.style.setProperty('--memoji-scale', `${0.9 + editorialProgress * 0.1}`);
+        editorialMemoji.style.setProperty('--memoji-aura-scale', `${0.84 + editorialProgress * 0.16}`);
+      }
+      editorialPlayerRef.current?.setSeeker?.(Math.round(editorialProgress * 106), false);
+    };
+
     const paint = () => {
       const difference = targetX - currentX;
       currentX = reducedMotion.matches ? targetX : currentX + difference * 0.11;
       track.style.transform = `translate3d(${-currentX}px, 0, 0)`;
       progress.style.transform = `scaleX(${travel ? currentX / travel : 0})`;
+
+      updateEditorialMotion(currentX);
 
       if (Math.abs(difference) > 0.15) {
         frame = window.requestAnimationFrame(paint);
@@ -132,6 +175,7 @@ const About = () => {
         track.style.transform = 'none';
         targetX = clamp(exhibition.parentElement.scrollLeft, 0, travel);
         progress.style.transform = `scaleX(${travel ? targetX / travel : 0})`;
+        updateEditorialMotion(targetX);
         directionRef.current?.classList.toggle('is-complete', targetX >= travel - 2);
         return;
       }
@@ -227,29 +271,40 @@ const About = () => {
               </div>
             </section>
 
-            <section className="about-editorial-opening">
+            <section
+              className="about-editorial-opening"
+              ref={editorialRef}
+              onPointerMove={moveEditorialMemoji}
+              onPointerLeave={resetEditorialMemoji}
+            >
               <div className="about-editorial-copy">
                 <span className="about-index">02 / ABOUT</span>
                 <h2>
-                  I Read, Code, and drink too much coffee
+                  I Read, Code, and drink too much <em>coffee</em>
                   <span className="about-loading-dots" aria-label="loading" />
                 </h2>
                 <p>
-                  I&apos;m a curious builder and full-stack engineer. I move between
-                  operational systems, thoughtful interfaces, local AI, and open-source
-                  experiments—always trying to make complicated things feel clear.
+                  Curiosity takes me from operational systems to thoughtful interfaces,
+                  local AI, and open-source experiments—always with one more idea to try.
                 </p>
               </div>
 
-              <div className="about-editorial-memoji">
-                <span className="about-hand-note about-hand-note-one">Build.<br />Learn.<br />Repeat.</span>
+              <div
+                className="about-editorial-memoji"
+                ref={editorialMemojiRef}
+                aria-label="Zaka's animated Memoji turns to greet you"
+              >
+                <span className="about-memoji-aura" aria-hidden="true" />
+                <div className="about-memoji-orbit" aria-hidden="true">
+                  <span>Read</span><span>Code</span><span>Coffee</span>
+                </div>
                 <Player
                   src={animoji}
-                  hover
-                  speed={2.1}
+                  ref={editorialPlayerRef}
+                  keepLastFrame
                   className="about-classic-memoji-player"
                 />
-                <span className="about-hand-note about-hand-note-two">Read.<br />Code.<br />Coffee.</span>
+                <span className="about-memoji-caption">Hello, again.</span>
               </div>
             </section>
 
