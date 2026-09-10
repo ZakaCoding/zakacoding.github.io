@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Player } from '@lottiefiles/react-lottie-player';
 import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
-import neonMemoji from '../assets/image/zaka-neon-memoji.webp';
 import zakaPortrait from '../assets/image/sillhouete_zaka.png';
 import ZakaCodingLogo from '../../public/logo/final-logo.png';
 
@@ -63,6 +63,10 @@ const About = () => {
   const directionRef = useRef(null);
   const editorialRef = useRef(null);
   const editorialMemojiRef = useRef(null);
+  const recordedPlayerRef = useRef(null);
+  const recordedFrameRef = useRef(0);
+  const whoRef = useRef(null);
+  const [loadRecording, setLoadRecording] = useState(false);
   const portraitRef = useRef(null);
   const [activeWhoMode, setActiveWhoMode] = useState(whoModes[0]);
 
@@ -105,6 +109,17 @@ const About = () => {
   };
 
   useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setLoadRecording(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: '100% 100%' });
+    if (editorialRef.current) observer.observe(editorialRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const exhibition = exhibitionRef.current;
     const track = trackRef.current;
     const progress = progressRef.current;
@@ -122,15 +137,25 @@ const About = () => {
     const updateEditorialMotion = (horizontalPosition) => {
       const editorialStart = editorial?.offsetLeft || window.innerWidth;
       const editorialProgress = clamp(
-        (horizontalPosition - editorialStart + window.innerWidth * 0.34) / (window.innerWidth * 0.82),
+        (horizontalPosition - editorialStart + window.innerWidth * 0.65) / (window.innerWidth * 1.3),
         0,
         1,
       );
+      const exit = clamp((horizontalPosition - editorialStart - window.innerWidth * 0.15) / (window.innerWidth * 0.85), 0, 1);
+      const night = reducedMotion.matches ? 0 : 1 - exit * exit * (3 - 2 * exit);
+      editorial?.style.setProperty('--story-night', `${night * 100}%`);
+      whoRef.current?.style.setProperty('--story-night', `${night * 100}%`);
+      whoRef.current?.style.setProperty('--story-day', `${1 - night}`);
+      const nextFrame = reducedMotion.matches ? 22 : Math.round(editorialProgress * 68);
+      if (recordedFrameRef.current !== nextFrame) {
+        recordedFrameRef.current = nextFrame;
+        recordedPlayerRef.current?.setSeeker(nextFrame, false);
+      }
       if (editorialMemoji) {
         editorialMemoji.style.setProperty('--memoji-enter-x', `${(1 - editorialProgress) * 80}px`);
         editorialMemoji.style.setProperty('--memoji-enter-y', `${(1 - editorialProgress) * 48}px`);
         editorialMemoji.style.setProperty('--memoji-opacity', `${0.28 + editorialProgress * 0.72}`);
-        editorialMemoji.style.setProperty('--memoji-turn', `${-18 + editorialProgress * 18}deg`);
+        editorialMemoji.style.setProperty('--memoji-turn', '0deg');
         editorialMemoji.style.setProperty('--memoji-scale', `${0.9 + editorialProgress * 0.1}`);
         editorialMemoji.style.setProperty('--memoji-aura-scale', `${0.84 + editorialProgress * 0.16}`);
       }
@@ -154,10 +179,14 @@ const About = () => {
 
     const update = () => {
       if (mobileLayout.matches) {
+        if (frame) window.cancelAnimationFrame(frame);
+        frame = 0;
         exhibition.style.height = 'auto';
         track.style.transform = 'none';
         progress.style.transform = 'scaleX(0)';
         directionRef.current?.classList.remove('is-complete');
+        const box = editorial.getBoundingClientRect();
+        updateEditorialMotion(editorial.offsetLeft + (0.5 - box.top / window.innerHeight) * window.innerWidth);
         return;
       }
 
@@ -275,17 +304,22 @@ const About = () => {
                 <div className="about-memoji-orbit" aria-hidden="true">
                   <span>Read</span><span>Code</span><span>Coffee</span>
                 </div>
-                <img
-                  src={neonMemoji}
+                {loadRecording && <Player
+                  ref={recordedPlayerRef}
+                  src={`${import.meta.env.BASE_URL}motion/zaka-memoji.json`}
                   className="about-classic-memoji-player"
-                  alt="Zaka's Memoji floating in a glass-lit space"
-                />
+                  renderer="canvas"
+                  onEvent={(event) => {
+                    if (event === 'load') recordedPlayerRef.current?.setSeeker(recordedFrameRef.current, false);
+                  }}
+                />}
                 <span className="about-memoji-caption">Hello, again.</span>
               </div>
             </section>
 
             <section
               className="about-who"
+              ref={whoRef}
               aria-labelledby="who-title"
               style={{
                 '--who-accent': activeWhoMode.accent,
