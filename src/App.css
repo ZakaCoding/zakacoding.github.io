@@ -1925,40 +1925,6 @@ a.hero-story-card:hover {
   will-change: transform;
 }
 
-/* Touch screens use the browser's native horizontal swipe physics. */
-@media (pointer: coarse) and (min-width: 701px) {
-  .about-exhibition {
-    height: 100svh;
-    overflow: hidden;
-  }
-
-  .about-exhibition-sticky {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    touch-action: pan-x;
-  }
-
-  .about-exhibition-sticky::-webkit-scrollbar {
-    display: none;
-  }
-
-  .about-exhibition-track {
-    touch-action: pan-x;
-  }
-
-  .about-original-hero,
-  .about-editorial-opening,
-  .about-who,
-  .about-chapter,
-  .about-contact-panel {
-    box-sizing: border-box;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-}
-
 .about-direction {
   position: absolute;
   right: clamp(1.5rem, 4vw, 4rem);
@@ -2008,55 +1974,6 @@ a.hero-story-card:hover {
 .about-direction.is-complete .about-direction-thanks {
   opacity: 1;
   transform: translateY(0);
-}
-
-.about-exhibition[data-touch-layout] {
-  height: 100svh;
-  overflow: hidden;
-}
-
-.about-exhibition[data-touch-layout] .about-exhibition-sticky {
-  overflow-x: scroll;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-  touch-action: pan-x;
-}
-
-.about-exhibition[data-touch-layout] .about-exhibition-sticky::-webkit-scrollbar {
-  display: none;
-}
-
-.about-exhibition[data-touch-layout] .about-exhibition-track {
-  box-sizing: border-box;
-  touch-action: pan-x;
-}
-
-.about-exhibition[data-touch-layout] .about-original-hero,
-.about-exhibition[data-touch-layout] .about-editorial-opening,
-.about-exhibition[data-touch-layout] .about-who,
-.about-exhibition[data-touch-layout] .about-chapter,
-.about-exhibition[data-touch-layout] .about-contact-panel {
-  box-sizing: border-box;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-
-.about-exhibition[data-touch-layout] .about-direction-keep {
-  display: none;
-}
-
-.about-exhibition[data-touch-layout] .about-direction-swipe {
-  display: inline-flex !important;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.about-exhibition[data-touch-layout] .about-direction.is-complete .about-direction-swipe {
-  opacity: 0;
-  transform: translateY(-0.35rem);
 }
 
 @media (max-width: 900px) {

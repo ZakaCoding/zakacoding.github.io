@@ -116,8 +116,6 @@ const About = () => {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const mobileLayout = window.matchMedia('(max-width: 700px)');
-    const touchLayout = window.matchMedia('(pointer: coarse)');
-    const hasTouchInput = () => navigator.maxTouchPoints > 0 || touchLayout.matches;
     let currentX = 0;
     let targetX = 0;
     let travel = 0;
@@ -158,25 +156,11 @@ const About = () => {
     };
 
     const update = () => {
-      const isTouchStory = hasTouchInput() && !mobileLayout.matches;
-      exhibition.toggleAttribute('data-touch-layout', isTouchStory);
-
       if (mobileLayout.matches) {
         exhibition.style.height = 'auto';
         track.style.transform = 'none';
         progress.style.transform = 'scaleX(0)';
         directionRef.current?.classList.remove('is-complete');
-        return;
-      }
-
-      if (isTouchStory) {
-        travel = Math.max(0, track.scrollWidth - window.innerWidth);
-        exhibition.style.height = `${window.innerHeight}px`;
-        track.style.transform = 'none';
-        targetX = clamp(exhibition.parentElement.scrollLeft, 0, travel);
-        progress.style.transform = `scaleX(${travel ? targetX / travel : 0})`;
-        updateEditorialMotion(targetX);
-        directionRef.current?.classList.toggle('is-complete', targetX >= travel - 2);
         return;
       }
 
@@ -192,20 +176,16 @@ const About = () => {
     resizeObserver.observe(track);
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
-    exhibition.parentElement.addEventListener('scroll', update, { passive: true });
     reducedMotion.addEventListener('change', update);
     mobileLayout.addEventListener('change', update);
-    touchLayout.addEventListener('change', update);
     update();
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
-      exhibition.parentElement.removeEventListener('scroll', update);
       reducedMotion.removeEventListener('change', update);
       mobileLayout.removeEventListener('change', update);
-      touchLayout.removeEventListener('change', update);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
