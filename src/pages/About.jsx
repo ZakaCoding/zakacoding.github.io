@@ -1,59 +1,79 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { motion } from 'framer-motion';
 import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
-import zakaPortrait from '../assets/image/sillhouete_zaka.png';
+import localAiRobot from '../assets/image/local-ai-robot.webp';
 import animoji from '../assets/lottie/memoji.json?url';
 import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const whoModes = [
+const buildSteps = [
   {
-    id: 'systems',
-    icon: '⌘',
-    label: 'Systems builder',
-    eyebrow: 'Full-stack engineer',
-    title: 'I build the quiet systems behind busy operations.',
-    body: 'Logistics platforms, backend services, and interfaces people depend on every day.',
-    accent: '#ff6b18',
-    soft: '#fff0e7',
-    pose: '-1deg',
+    number: '01',
+    label: 'Notice',
+    title: 'Start with the messy part.',
+    body: 'See how the work actually moves before deciding what the software should do.',
   },
   {
-    id: 'modernize',
-    icon: '↻',
-    label: 'Modernizer',
-    eyebrow: 'Legacy → dependable',
-    title: 'Old software deserves a thoughtful next chapter.',
-    body: 'I untangle legacy systems, improve architecture, and ship change without losing what already works.',
-    accent: '#087cff',
-    soft: '#e8f2ff',
-    pose: '1.2deg',
+    number: '02',
+    label: 'Shape',
+    title: 'Find the real constraint.',
+    body: 'Turn a tangled operation into a model the team can understand and improve together.',
   },
   {
-    id: 'lead',
-    icon: '↑',
-    label: 'Engineering lead',
-    eyebrow: 'Builder + supervisor',
-    title: 'Good engineering is also clear direction.',
-    body: 'I help teams turn a hard problem into a shared plan, safer delivery, and software we can own.',
-    accent: '#7c4dff',
-    soft: '#f0ebff',
-    pose: '-0.5deg',
+    number: '03',
+    label: 'Ship',
+    title: 'Make it calm to use.',
+    body: 'Build the backend, interface, and delivery path so the result keeps working after launch.',
+  },
+];
+
+const fieldNotes = [
+  {
+    number: '01',
+    className: 'about-field-note-owa',
+    label: 'Local AI / Developer tooling',
+    title: 'OwA',
+    body: 'A local coding agent that reads the repository before it answers.',
+    visual: (
+      <div className="about-field-note-terminal" aria-hidden="true">
+        <span>$ owa</span>
+        <span>✓ context ready</span>
+        <strong>private · grounded</strong>
+      </div>
+    ),
   },
   {
-    id: 'maker',
-    icon: '✦',
-    label: 'Indie maker',
-    eyebrow: 'Open source + local AI',
-    title: 'Curiosity keeps the work alive.',
-    body: 'After work, I explore tools like OwA and Open CMAP—small experiments that become useful products.',
-    accent: '#13a46b',
-    soft: '#e5f8ef',
-    pose: '0.8deg',
+    number: '02',
+    className: 'about-field-note-logistics',
+    label: 'Operations / System modernization',
+    title: 'DiGILOG',
+    body: 'One operational context connecting orders, warehouses, transport, and teams.',
+    visual: (
+      <div className="about-field-note-network" aria-hidden="true">
+        <i /><i /><i /><i /><i />
+        <strong>operations<br />core</strong>
+      </div>
+    ),
+  },
+  {
+    number: '03',
+    className: 'about-field-note-cmap',
+    label: 'Knowledge tools / Visual thinking',
+    title: 'Open CMAP',
+    body: 'A visual workspace for making complex ideas easier to see, edit, and share.',
+    visual: (
+      <div className="about-field-note-map" aria-hidden="true">
+        <span>idea</span>
+        <i />
+        <span>link</span>
+        <i />
+        <span>understand</span>
+      </div>
+    ),
   },
 ];
 
@@ -68,53 +88,6 @@ const About = () => {
   const logoTrailRef = useRef(null);
   const logoMessageRef = useRef(null);
   const directionRef = useRef(null);
-  const portraitRef = useRef(null);
-  const whoModeRefs = useRef([]);
-  const [activeWhoMode, setActiveWhoMode] = useState(whoModes[0]);
-
-  const selectWhoMode = (index) => {
-    setActiveWhoMode(whoModes[index]);
-    whoModeRefs.current[index]?.focus();
-  };
-
-  const handleWhoModeKeyDown = (event, index) => {
-    let nextIndex = null;
-
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-      nextIndex = (index + 1) % whoModes.length;
-    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-      nextIndex = (index - 1 + whoModes.length) % whoModes.length;
-    } else if (event.key === 'Home') {
-      nextIndex = 0;
-    } else if (event.key === 'End') {
-      nextIndex = whoModes.length - 1;
-    }
-
-    if (nextIndex !== null) {
-      event.preventDefault();
-      selectWhoMode(nextIndex);
-    }
-  };
-
-  const movePortrait = (event) => {
-    const portrait = portraitRef.current;
-    if (!portrait || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-    portrait.style.setProperty('--portrait-x', `${x * 22}px`);
-    portrait.style.setProperty('--portrait-y', `${y * 12}px`);
-    portrait.style.setProperty('--portrait-tilt', `${x * 2.4}deg`);
-  };
-
-  const resetPortrait = () => {
-    const portrait = portraitRef.current;
-    if (!portrait) return;
-    portrait.style.setProperty('--portrait-x', '0px');
-    portrait.style.setProperty('--portrait-y', '0px');
-    portrait.style.setProperty('--portrait-tilt', '0deg');
-  };
 
   useEffect(() => {
     const exhibition = exhibitionRef.current;
@@ -372,111 +345,96 @@ const About = () => {
               </div>
             </section>
 
-            <section
-              className="about-who"
-              aria-labelledby="who-title"
-              style={{
-                '--who-accent': activeWhoMode.accent,
-                '--who-soft': activeWhoMode.soft,
-                '--portrait-pose': activeWhoMode.pose,
-              }}
-              onPointerMove={movePortrait}
-              onPointerLeave={resetPortrait}
-            >
-              <header className="about-who-header">
-                <span className="about-index">03 / WHO I AM</span>
-                <div className="about-who-switcher" role="tablist" aria-label="Explore Zaka's roles">
-                  {whoModes.map((mode, index) => (
-                    <button
-                      key={mode.id}
-                      type="button"
-                      ref={(element) => { whoModeRefs.current[index] = element; }}
-                      role="tab"
-                      id={`who-mode-${mode.id}`}
-                      className={mode.id === activeWhoMode.id ? 'is-active' : ''}
-                      aria-selected={mode.id === activeWhoMode.id}
-                      aria-controls="who-story"
-                      tabIndex={mode.id === activeWhoMode.id ? 0 : -1}
-                      data-label={mode.label}
-                      onClick={() => selectWhoMode(index)}
-                      onKeyDown={(event) => handleWhoModeKeyDown(event, index)}
-                    >
-                      <span aria-hidden="true">{mode.icon}</span>
-                      <strong>{mode.label}</strong>
-                    </button>
-                  ))}
-                </div>
+            <section className="about-method" aria-labelledby="method-title">
+              <div className="about-method-copy">
+                <span className="about-index">03 / THE THREAD</span>
+                <h2 id="method-title">I make complicated systems feel calm.</h2>
+                <p>
+                  The work changes—from logistics to local AI—but the way I approach it stays
+                  familiar: get close to the problem, give it shape, then make it useful.
+                </p>
+              </div>
+
+              <div className="about-method-flow" aria-label="Zaka's working process">
+                <span className="about-method-flow-line" aria-hidden="true" />
+                {buildSteps.map((step) => (
+                  <motion.article
+                    key={step.number}
+                    className="about-method-step"
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.65 }}
+                    transition={{ duration: 0.55, ease: 'easeOut' }}
+                  >
+                    <span className="about-method-step-number">{step.number}</span>
+                    <span className="about-method-step-label">{step.label}</span>
+                    <h3>{step.title}</h3>
+                    <p>{step.body}</p>
+                  </motion.article>
+                ))}
+              </div>
+            </section>
+
+            <section className="about-field-notes" aria-labelledby="field-notes-title">
+              <header className="about-field-notes-heading">
+                <span className="about-index">04 / FIELD NOTES</span>
+                <h2 id="field-notes-title">The work changes. The question stays the same.</h2>
+                <p>Where is the friction, and what would make the next step obvious?</p>
               </header>
 
-              <div className="about-who-copy">
-                <span className="about-who-eyebrow">{activeWhoMode.eyebrow}</span>
-                <h3 id="who-title">Who I am</h3>
-                <motion.div
-                  key={activeWhoMode.id}
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.38, ease: 'easeOut' }}
-                  className="about-who-story"
-                  id="who-story"
-                  role="tabpanel"
-                  aria-labelledby={`who-mode-${activeWhoMode.id}`}
-                >
-                  <p className="about-who-lede">{activeWhoMode.title}</p>
-                  <p>{activeWhoMode.body}</p>
-                </motion.div>
+              <div className="about-field-notes-list">
+                {fieldNotes.map((note) => (
+                  <motion.article
+                    key={note.number}
+                    className={`about-field-note ${note.className}`}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.45 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                  >
+                    {note.visual}
+                    <div className="about-field-note-copy">
+                      <span className="about-field-note-number">{note.number}</span>
+                      <span className="about-field-note-label">{note.label}</span>
+                      <h3>{note.title}</h3>
+                      <p>{note.body}</p>
+                    </div>
+                  </motion.article>
+                ))}
               </div>
 
-              <div className="about-who-stage">
-                <span className="about-who-halo" aria-hidden="true" />
-                <span className="about-who-word" aria-hidden="true">ZAKA</span>
-                <div className="about-who-portrait" ref={portraitRef}>
-                  <img src={zakaPortrait} alt="Zaka Noor standing in profile" />
+              <a className="about-field-notes-link" href="/archive">
+                See the full archive <ArrowRight aria-hidden="true" />
+              </a>
+            </section>
+
+            <section className="about-lab" aria-labelledby="lab-title">
+              <div className="about-lab-copy">
+                <span className="about-index">05 / AFTER HOURS</span>
+                <h2 id="lab-title">When the day ends, I keep exploring.</h2>
+                <p>
+                  OwA, Open CMAP, and the strange little experiments in between start with
+                  curiosity—and become useful when they solve a real problem.
+                </p>
+              </div>
+
+              <div className="about-lab-scene">
+                <div className="about-lab-terminal" aria-label="Local AI experiment preview">
+                  <div className="about-lab-terminal-bar">
+                    <span>local-lab</span>
+                    <span>22:41</span>
+                  </div>
+                  <p><b>›</b> explain this repository</p>
+                  <p className="about-lab-terminal-dim">indexing locally · context ready</p>
+                  <strong>Find the shape.<br />Name the constraint.<br />Make it useful.</strong>
                 </div>
-                <span className="about-who-location">Indonesia · GMT+7</span>
+                <img src={localAiRobot} alt="" className="about-lab-robot" />
+                <span className="about-lab-note">small models, real questions</span>
               </div>
-
-              <footer className="about-who-footer">
-                <span>Choose a lens</span>
-                <strong>{activeWhoMode.label}</strong>
-              </footer>
-            </section>
-
-            <section className="about-chapter" aria-labelledby="outcome-title">
-              <span className="about-index">04</span>
-              <div>
-                <h3 id="outcome-title">Full-stack means owning the whole outcome.</h3>
-              </div>
-              <p>
-                From backend architecture to the interface, deployment, and the team
-                keeping it healthy after launch.
-              </p>
-            </section>
-
-            <section className="about-chapter about-chapter-work" aria-labelledby="work-title">
-              <span className="about-index">05</span>
-              <div>
-                <h3 id="work-title">Understand. Simplify. Build. Improve.</h3>
-              </div>
-              <p>
-                I start with the operation, find the real constraint, and turn it into
-                software that feels calm and dependable.
-              </p>
-            </section>
-
-            <section className="about-chapter about-chapter-blue" aria-labelledby="curious-title">
-              <span className="about-index">06</span>
-              <div>
-                <h3 id="curious-title">Curious after hours.</h3>
-                <p className="about-chapter-lede">Local AI, open source, and strange ideas.</p>
-              </div>
-              <p>
-                OwA started there: an experiment in making small local models genuinely
-                useful for developers.
-              </p>
             </section>
 
             <section className="about-contact-panel">
-              <span className="about-index">07 / SAY HELLO</span>
+              <span className="about-index">06 / SAY HELLO</span>
               <h2>Have a hard problem? <em>Let&apos;s make it clear.</em></h2>
               <p>
                 For product engineering, system modernization, open-source collaboration,
