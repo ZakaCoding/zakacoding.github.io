@@ -61,6 +61,11 @@ const About = () => {
   const exhibitionRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
+  const logoLayerRef = useRef(null);
+  const logoSourceRef = useRef(null);
+  const logoLandingRef = useRef(null);
+  const logoFlightRef = useRef(null);
+  const logoTrailRef = useRef(null);
   const directionRef = useRef(null);
   const portraitRef = useRef(null);
   const whoModeRefs = useRef([]);
@@ -114,7 +119,14 @@ const About = () => {
     const exhibition = exhibitionRef.current;
     const track = trackRef.current;
     const progress = progressRef.current;
-    if (!exhibition || !track || !progress) return undefined;
+    const logoLayer = logoLayerRef.current;
+    const logoSource = logoSourceRef.current;
+    const logoLanding = logoLandingRef.current;
+    const logoFlight = logoFlightRef.current;
+    const logoTrail = logoTrailRef.current;
+    if (!exhibition || !track || !progress || !logoLayer || !logoSource || !logoLanding || !logoFlight || !logoTrail) {
+      return undefined;
+    }
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const mobileLayout = window.matchMedia('(max-width: 700px)');
@@ -125,11 +137,84 @@ const About = () => {
     let travel = 0;
     let frame = 0;
 
+    const paintLogo = (scrollX, isMobile = false) => {
+      const sourceRect = logoSource.getBoundingClientRect();
+      const landingRect = logoLanding.getBoundingClientRect();
+      const layerRect = logoLayer.getBoundingClientRect();
+      const sourcePanel = logoSource.closest('.about-original-hero');
+      const panelWidth = sourcePanel?.getBoundingClientRect().width || window.innerWidth;
+      const sourceWidth = sourceRect.width;
+      const landingWidth = landingRect.width;
+      if (!sourceWidth || !landingWidth) return;
+
+      let progressValue;
+      let startX;
+      let startY;
+      let endX;
+      let endY;
+      let currentX;
+      let currentY;
+
+      if (isMobile) {
+        const layerDocumentX = layerRect.left + window.scrollX;
+        const layerDocumentY = layerRect.top + window.scrollY;
+        const sourceDocumentY = sourceRect.top + window.scrollY;
+        const landingDocumentY = landingRect.top + window.scrollY;
+        const startScroll = Math.max(0, sourceDocumentY - window.innerHeight * 0.34);
+        const endScroll = Math.max(startScroll + 1, landingDocumentY - window.innerHeight * 0.56);
+
+        progressValue = clamp((scrollX - startScroll) / (endScroll - startScroll), 0, 1);
+        startX = sourceRect.left + window.scrollX - layerDocumentX;
+        startY = sourceRect.top + window.scrollY - layerDocumentY;
+        endX = landingRect.left + window.scrollX - layerDocumentX;
+        endY = landingRect.top + window.scrollY - layerDocumentY;
+        currentX = startX + (endX - startX) * progressValue;
+        currentY = startY + (endY - startY) * progressValue;
+      } else {
+        const sourceBaseX = sourceRect.left - layerRect.left + scrollX;
+        const landingBaseX = landingRect.left - layerRect.left + scrollX;
+
+        progressValue = clamp(scrollX / panelWidth, 0, 1);
+        startX = sourceBaseX;
+        startY = sourceRect.top - layerRect.top;
+        endX = landingBaseX - panelWidth;
+        endY = landingRect.top - layerRect.top;
+        currentX = progressValue < 1 ? startX + (endX - startX) * progressValue : landingRect.left - layerRect.left;
+        currentY = progressValue < 1 ? startY + (endY - startY) * progressValue : landingRect.top - layerRect.top;
+      }
+
+      const travelProgress = 1 - ((1 - progressValue) ** 3);
+      const scale = 1 + ((landingWidth / sourceWidth) - 1) * travelProgress;
+      let rotation = 0;
+      if (progressValue < 0.22) {
+        rotation = -3 * (progressValue / 0.22);
+      } else if (progressValue < 0.72) {
+        rotation = -3 + 7 * ((progressValue - 0.22) / 0.5);
+      } else {
+        rotation = 4 * (1 - ((progressValue - 0.72) / 0.28));
+      }
+
+      logoFlight.style.width = `${sourceWidth}px`;
+      logoFlight.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(${scale}) rotate(${rotation}deg)`;
+      logoFlight.style.opacity = '1';
+
+      const trailProgress = clamp((progressValue - 0.12) / 0.56, 0, 1);
+      logoTrail.style.opacity = progressValue > 0.08 && progressValue < 0.9 ? '0.22' : '0';
+      logoTrail.style.strokeDashoffset = `${1.1 - trailProgress * 0.88}`;
+    };
+
     const paint = () => {
+      if (mobileLayout.matches) {
+        paintLogo(window.scrollY, true);
+        frame = 0;
+        return;
+      }
+
       const difference = targetX - currentX;
       currentX = reducedMotion.matches ? targetX : currentX + difference * 0.11;
       track.style.transform = `translate3d(${-currentX}px, 0, 0)`;
       progress.style.transform = `scaleX(${travel ? currentX / travel : 0})`;
+      paintLogo(currentX);
 
       if (Math.abs(difference) > 0.15) {
         frame = window.requestAnimationFrame(paint);
@@ -148,6 +233,7 @@ const About = () => {
         track.style.transform = 'none';
         progress.style.transform = 'scaleX(0)';
         directionRef.current?.classList.remove('is-complete');
+        paintLogo(window.scrollY, true);
         return;
       }
 
@@ -158,6 +244,7 @@ const About = () => {
         targetX = clamp(exhibition.parentElement.scrollLeft, 0, travel);
         progress.style.transform = `scaleX(${travel ? targetX / travel : 0})`;
         directionRef.current?.classList.toggle('is-complete', targetX >= travel - 2);
+        paintLogo(targetX);
         return;
       }
 
@@ -228,13 +315,10 @@ const About = () => {
               </div>
 
               <div className="about-original-identity">
-                <motion.img
-                  variants={fadeUp}
-                  initial="hidden"
-                  animate="visible"
-                  src={ZakaCodingLogo}
-                  className="about-original-logo"
-                  alt="ZakaCoding logo"
+                <div
+                  ref={logoSourceRef}
+                  className="about-original-logo about-original-logo-anchor"
+                  aria-hidden="true"
                 />
                 <motion.img
                   variants={fadeUp}
@@ -253,6 +337,7 @@ const About = () => {
             </section>
 
             <section className="about-editorial-opening">
+              <div ref={logoLandingRef} className="about-logo-landing" aria-hidden="true" />
               <div className="about-editorial-copy">
                 <span className="about-index">02 / ABOUT</span>
                 <h2>
@@ -403,6 +488,18 @@ const About = () => {
 
           <div className="about-progress-rail" aria-hidden="true">
             <span className="about-progress-fill" ref={progressRef} />
+          </div>
+          <div ref={logoLayerRef} className="about-logo-flight-layer" aria-hidden="true">
+            <svg className="about-logo-flight-trail" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path
+                ref={logoTrailRef}
+                d="M 10 76 C 31 72, 47 43, 87 17"
+                pathLength="1"
+              />
+            </svg>
+            <div ref={logoFlightRef} className="about-logo-flight">
+              <img src={ZakaCodingLogo} alt="" />
+            </div>
           </div>
           <span className="about-direction" ref={directionRef} aria-live="polite">
             <span className="about-direction-label">
