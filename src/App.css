@@ -1114,7 +1114,7 @@ a.hero-story-card:hover {
   min-height: 100svh;
   flex: 0 0 100vw;
   overflow: hidden;
-  background: #fff;
+  background: linear-gradient(90deg, #fff 0%, #fff 72%, #f7f8fb 100%);
 }
 
 .about-original-intro {
@@ -1244,6 +1244,7 @@ a.hero-story-card:hover {
   gap: clamp(2.5rem, 5vw, 6rem);
   align-items: center;
   padding: clamp(7rem, 12vh, 9rem) clamp(3rem, 5vw, 6rem) clamp(6rem, 10vh, 7rem);
+  background: linear-gradient(90deg, #f7f8fb 0%, #f5f5f7 25%, #f5f5f7 100%);
 }
 
 .about-logo-landing {
@@ -1267,14 +1268,26 @@ a.hero-story-card:hover {
   position: absolute;
   top: 0;
   left: 0;
+  display: flex;
+  pointer-events: auto;
+  cursor: pointer;
   transform-origin: 0 0;
   will-change: transform;
 }
 
-.about-logo-flight img {
+.about-logo-flight .zaka-coding-logo-mark {
   width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 5.36%;
+}
+
+.about-logo-flight .zaka-coding-logo-mark > svg {
+  width: 47.32%;
   height: auto;
   display: block;
+  flex: 0 0 auto;
+  margin-right: 0;
   filter: drop-shadow(0 18px 18px rgba(22, 32, 51, 0.16));
 }
 
@@ -1293,6 +1306,80 @@ a.hero-story-card:hover {
   stroke-linecap: round;
   stroke-dasharray: 0.018 0.03;
   opacity: 0;
+}
+
+.about-logo-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
+  padding: 0.58rem 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 1.25rem 1.25rem 1.25rem 0.35rem;
+  color: #4b5563;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 28px rgba(30, 35, 48, 0.12), 0 2px 8px rgba(30, 35, 48, 0.06);
+  backdrop-filter: blur(16px) saturate(145%);
+  -webkit-backdrop-filter: blur(16px) saturate(145%);
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  transform-origin: left bottom;
+  will-change: transform, opacity;
+}
+
+.about-logo-message-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
+}
+
+.about-logo-message-typing i {
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 50%;
+  background: var(--about-blue);
+  animation: about-logo-message-dot 900ms ease-in-out infinite;
+}
+
+.about-logo-message-typing i:nth-child(2) { animation-delay: 120ms; }
+.about-logo-message-typing i:nth-child(3) { animation-delay: 240ms; }
+
+.about-logo-message-copy {
+  display: none;
+}
+
+.about-logo-message[data-state='welcome'] .about-logo-message-typing,
+.about-logo-message[data-state='delivered'] .about-logo-message-typing {
+  display: none;
+}
+
+.about-logo-message[data-state='welcome'] .about-logo-message-welcome,
+.about-logo-message[data-state='delivered'] .about-logo-message-delivered {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.about-logo-message-delivered strong {
+  display: grid;
+  width: 1rem;
+  height: 1rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--about-blue);
+  font-size: 0.65rem;
+}
+
+@keyframes about-logo-message-dot {
+  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-0.12rem); }
 }
 
 .about-editorial-copy {
@@ -1406,7 +1493,11 @@ a.hero-story-card:hover {
   flex-direction: column;
   justify-content: space-between;
   padding: clamp(7rem, 13vh, 10rem) clamp(3rem, 9vw, 10rem) clamp(5rem, 9vh, 7rem);
-  border-left: 1px solid var(--about-line);
+  background: linear-gradient(90deg, #f7f8fb 0%, #eef1f7 25%, #eef1f7 100%);
+}
+
+.about-chapter-work {
+  background: linear-gradient(90deg, #eef1f7 0%, #e8edfa 25%, #e8edfa 100%);
 }
 
 .about-chapter > div {
@@ -1453,8 +1544,7 @@ a.hero-story-card:hover {
   gap: 1.5rem clamp(2rem, 5vw, 6rem);
   padding: clamp(6.7rem, 11vh, 8rem) clamp(2rem, 5vw, 5rem) 2.8rem;
   overflow: hidden;
-  border-left: 1px solid var(--about-line);
-  background: #f5f5f7;
+  background: linear-gradient(90deg, #f5f5f7 0%, #f5f5f7 72%, #f7f8fb 100%);
   transition: background-color 420ms ease;
 }
 
@@ -1759,8 +1849,7 @@ a.hero-story-card:hover {
 
 .about-chapter-blue {
   color: #f5f7ff;
-  border-color: rgba(255, 255, 255, 0.22);
-  background: var(--about-blue);
+  background: linear-gradient(90deg, #e8edfa 0%, var(--about-blue) 25%, var(--about-blue) 100%);
 }
 
 .about-chapter-blue .about-index,
@@ -1807,7 +1896,7 @@ a.hero-story-card:hover {
   justify-content: center;
   padding: clamp(6rem, 12vh, 10rem) clamp(4rem, 8vw, 9rem);
   color: #f5f5ef;
-  background: #1b1b1d;
+  background: linear-gradient(90deg, var(--about-blue) 0%, #1b1b1d 25%, #1b1b1d 100%);
 }
 
 .about-contact-panel .about-index {
@@ -1906,7 +1995,6 @@ a.hero-story-card:hover {
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
-    scroll-snap-type: x mandatory;
     touch-action: pan-x;
   }
 
@@ -1924,8 +2012,6 @@ a.hero-story-card:hover {
   .about-chapter,
   .about-contact-panel {
     box-sizing: border-box;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
   }
 }
 
@@ -1991,7 +2077,6 @@ a.hero-story-card:hover {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
-  scroll-snap-type: x mandatory;
   touch-action: pan-x;
 }
 
@@ -2010,8 +2095,6 @@ a.hero-story-card:hover {
 .about-exhibition[data-touch-layout] .about-chapter,
 .about-exhibition[data-touch-layout] .about-contact-panel {
   box-sizing: border-box;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 .about-exhibition[data-touch-layout] .about-direction-keep {
@@ -2085,6 +2168,7 @@ a.hero-story-card:hover {
     width: 100%;
     height: auto;
     min-height: 920px;
+    background: linear-gradient(180deg, #fff 0%, #fff 78%, #f7f8fb 100%);
   }
 
   .about-original-intro {
@@ -2124,6 +2208,12 @@ a.hero-story-card:hover {
     display: none;
   }
 
+  .about-logo-message {
+    min-height: 2.15rem;
+    padding: 0.5rem 0.68rem;
+    font-size: 0.68rem;
+  }
+
   .about-original-memoji {
     width: min(70vw, 330px);
     height: 390px;
@@ -2157,6 +2247,7 @@ a.hero-story-card:hover {
     display: flex;
     flex-direction: column;
     padding: 7rem 1rem 4rem;
+    background: linear-gradient(180deg, #f7f8fb 0%, #f5f5f7 18%, #f5f5f7 100%);
   }
 
   .about-editorial-copy h2 {
@@ -2181,8 +2272,8 @@ a.hero-story-card:hover {
     flex-direction: column;
     gap: 2rem;
     padding: 6.5rem 1rem 1.5rem;
-    border-top: 1px solid var(--about-line);
     border-left: 0;
+    background: linear-gradient(180deg, #f5f5f7 0%, #f5f5f7 80%, #f7f8fb 100%);
   }
 
   .about-who-header {
@@ -2261,8 +2352,23 @@ a.hero-story-card:hover {
     height: auto;
     min-height: 78svh;
     padding: 2rem 1rem;
-    border-top: 1px solid var(--about-line);
     border-left: 0;
+  }
+
+  .about-chapter {
+    background: linear-gradient(180deg, #f7f8fb 0%, #eef1f7 18%, #eef1f7 100%);
+  }
+
+  .about-chapter-work {
+    background: linear-gradient(180deg, #eef1f7 0%, #e8edfa 18%, #e8edfa 100%);
+  }
+
+  .about-chapter-blue {
+    background: linear-gradient(180deg, #e8edfa 0%, var(--about-blue) 18%, var(--about-blue) 100%);
+  }
+
+  .about-contact-panel {
+    background: linear-gradient(180deg, var(--about-blue) 0%, #1b1b1d 18%, #1b1b1d 100%);
   }
 
   .about-chapter > div {

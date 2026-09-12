@@ -6,7 +6,7 @@ import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
 import zakaPortrait from '../assets/image/sillhouete_zaka.png';
 import animoji from '../assets/lottie/memoji.json?url';
-import ZakaCodingLogo from '../../public/logo/final-logo.png';
+import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -66,6 +66,7 @@ const About = () => {
   const logoLandingRef = useRef(null);
   const logoFlightRef = useRef(null);
   const logoTrailRef = useRef(null);
+  const logoMessageRef = useRef(null);
   const directionRef = useRef(null);
   const portraitRef = useRef(null);
   const whoModeRefs = useRef([]);
@@ -124,7 +125,8 @@ const About = () => {
     const logoLanding = logoLandingRef.current;
     const logoFlight = logoFlightRef.current;
     const logoTrail = logoTrailRef.current;
-    if (!exhibition || !track || !progress || !logoLayer || !logoSource || !logoLanding || !logoFlight || !logoTrail) {
+    const logoMessage = logoMessageRef.current;
+    if (!exhibition || !track || !progress || !logoLayer || !logoSource || !logoLanding || !logoFlight || !logoTrail || !logoMessage) {
       return undefined;
     }
 
@@ -197,6 +199,13 @@ const About = () => {
       logoFlight.style.width = `${sourceWidth}px`;
       logoFlight.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(${scale}) rotate(${rotation}deg)`;
       logoFlight.style.opacity = '1';
+
+      const messageX = currentX + sourceWidth * scale * 0.54;
+      const messageY = Math.max(8, currentY - sourceWidth * scale * 0.16);
+      const messageVisible = !reducedMotion.matches && progressValue > 0.08 && progressValue < 0.98;
+      logoMessage.dataset.state = progressValue > 0.84 ? 'delivered' : progressValue > 0.3 ? 'welcome' : 'typing';
+      logoMessage.style.transform = `translate3d(${messageX}px, ${messageY}px, 0)`;
+      logoMessage.style.opacity = messageVisible ? '1' : '0';
 
       const trailProgress = clamp((progressValue - 0.12) / 0.56, 0, 1);
       logoTrail.style.opacity = progressValue > 0.08 && progressValue < 0.9 ? '0.22' : '0';
@@ -443,7 +452,7 @@ const About = () => {
               </p>
             </section>
 
-            <section className="about-chapter" aria-labelledby="work-title">
+            <section className="about-chapter about-chapter-work" aria-labelledby="work-title">
               <span className="about-index">05</span>
               <div>
                 <h3 id="work-title">Understand. Simplify. Build. Improve.</h3>
@@ -497,8 +506,21 @@ const About = () => {
                 pathLength="1"
               />
             </svg>
-            <div ref={logoFlightRef} className="about-logo-flight">
-              <img src={ZakaCodingLogo} alt="" />
+            <div ref={logoFlightRef} className="about-logo-flight group">
+              <ZakaCodingLogo />
+            </div>
+            <div ref={logoMessageRef} className="about-logo-message" aria-hidden="true">
+              <span className="about-logo-message-typing">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className="about-logo-message-copy about-logo-message-welcome">
+                Hey 👋 welcome to my story
+              </span>
+              <span className="about-logo-message-copy about-logo-message-delivered">
+                Message delivered <strong>✓</strong>
+              </span>
             </div>
           </div>
           <span className="about-direction" ref={directionRef} aria-live="polite">
