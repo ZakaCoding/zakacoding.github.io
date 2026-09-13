@@ -1,0 +1,18 @@
+{
+  "name": "Zaka Desk",
+  "short_name": "Desk",
+  "description": "Private operator inbox for ZakaCoding conversations.",
+  "start_url": "/#/operator",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f8",
+  "theme_color": "#f3f4f8",
+  "icons": [
+    {
+      "src": "/logo/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
