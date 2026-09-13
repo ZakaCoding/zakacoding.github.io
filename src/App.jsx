@@ -18,6 +18,7 @@ import { Welcome } from './pages/Welcome';
 
 const About = lazy(() => import('./pages/About'));
 const Archive = lazy(() => import('./pages/Archive'));
+const Operator = lazy(() => import('./pages/Operator'));
 
 // Source css
 import './App.css';
@@ -32,12 +33,13 @@ function SmoothScroll() {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isHorizontalStory = location.pathname.startsWith('/about');
+    const isOperatorDesk = location.pathname.startsWith('/operator');
     const isTouchDevice = navigator.maxTouchPoints > 0
       || window.matchMedia('(pointer: coarse)').matches;
 
     // Keep touch devices on native scrolling (especially iPad), but smooth
     // desktop wheel input so the horizontal story does not step between events.
-    if (reducedMotion || (isHorizontalStory && isTouchDevice)) return undefined;
+    if (isOperatorDesk || reducedMotion || (isHorizontalStory && isTouchDevice)) return undefined;
 
     const lenis = new Lenis({
       autoRaf: true,
@@ -54,20 +56,31 @@ function SmoothScroll() {
   return null;
 }
 
+function AppContent() {
+  const location = useLocation();
+  const isOperatorDesk = location.pathname.startsWith('/operator');
 
-function App() {
   return (
-    <Router>
+    <>
       <SmoothScroll />
-      <Navbar />
+      {!isOperatorDesk && <Navbar />}
       <Suspense fallback={<main className="page-loading" aria-live="polite">Loading page…</main>}>
         <Routes>
           <Route path='/' Component={Welcome} />
           <Route path='/about' Component={About} />
           <Route path='/archive' Component={Archive} />
+          <Route path='/operator' Component={Operator} />
           <Route path='*' element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
