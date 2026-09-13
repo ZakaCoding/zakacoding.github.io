@@ -537,7 +537,7 @@ const About = () => {
 
               <div className="about-closing-fragment about-closing-terminal" aria-hidden="true">
                 <span>zaka@desk ~</span>
-                <strong><i /> currently: building</strong>
+                <strong><i /> currently: tinkering</strong>
               </div>
               <div className="about-closing-fragment about-closing-note" aria-hidden="true">
                 Build.<br />Learn.<br />Repeat.

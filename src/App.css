@@ -2548,14 +2548,31 @@ a.hero-story-card:hover {
   box-shadow: 0 18px 42px rgba(29, 29, 31, 0.07);
   backdrop-filter: blur(20px) saturate(130%);
   opacity: 0;
-  transition: opacity 600ms ease, transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 450ms ease, transform 650ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 450ms ease;
 }
 
 .about-closing-panel.is-arriving .about-closing-fragment {
   opacity: 0.82;
+  transform: translateY(var(--fragment-lift, 0)) rotate(var(--fragment-rotation)) scale(var(--fragment-scale, 1));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-closing-panel.is-arriving .about-closing-fragment:hover {
+    z-index: 4;
+    opacity: 1;
+    box-shadow: 0 24px 48px rgba(29, 29, 31, 0.12);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .about-closing-panel.is-arriving .about-closing-fragment:hover {
+    --fragment-lift: -4px;
+    --fragment-scale: 1.06;
+  }
 }
 
 .about-closing-terminal {
+  --fragment-rotation: 3deg;
   top: 16%;
   right: 5%;
   width: 13.5rem;
@@ -2563,10 +2580,6 @@ a.hero-story-card:hover {
   border-radius: 1.15rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   transform: translate(2rem, -1rem) rotate(3deg);
-}
-
-.about-closing-panel.is-arriving .about-closing-terminal {
-  transform: translate(0, 0) rotate(3deg);
 }
 
 .about-closing-terminal span,
@@ -2589,7 +2602,29 @@ a.hero-story-card:hover {
   font-weight: 600;
 }
 
+.about-closing-terminal strong > i {
+  position: relative;
+  flex-shrink: 0;
+}
+
+@keyframes about-terminal-pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  75%, 100% { transform: scale(2.8); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .about-closing-panel.is-arriving .about-closing-terminal strong > i::after {
+    position: absolute;
+    inset: 0;
+    border: 1px solid #30c967;
+    border-radius: 50%;
+    content: '';
+    animation: about-terminal-pulse 2.4s ease-out infinite;
+  }
+}
+
 .about-closing-note {
+  --fragment-rotation: -6deg;
   left: 3.5%;
   bottom: 20%;
   padding: 1.1rem 1.3rem;
@@ -2602,20 +2637,13 @@ a.hero-story-card:hover {
   transform: translate(-1.5rem, 1rem) rotate(-6deg);
 }
 
-.about-closing-panel.is-arriving .about-closing-note {
-  transform: translate(0, 0) rotate(-6deg);
-}
-
 .about-closing-coffee {
+  --fragment-rotation: -2deg;
   right: 4%;
   bottom: 18%;
   padding: 0.8rem 0.95rem;
   border-radius: 1rem;
   transform: translate(1.5rem, 1rem) rotate(-2deg);
-}
-
-.about-closing-panel.is-arriving .about-closing-coffee {
-  transform: translate(0, 0) rotate(-2deg);
 }
 
 .about-closing-coffee strong {
