@@ -2517,6 +2517,12 @@ a.hero-story-card:hover {
   box-shadow: 0 18px 42px rgba(29, 29, 31, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(24px) saturate(125%);
   -webkit-backdrop-filter: blur(24px) saturate(125%);
+  transition: border-color 260ms ease, box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-conversation:focus-within {
+  border-color: rgba(29, 29, 31, 0.2);
+  box-shadow: 0 22px 48px rgba(29, 29, 31, 0.1), 0 0 0 4px rgba(40, 103, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.76);
 }
 
 .about-contact-panel:has(.about-conversation) {
@@ -2571,6 +2577,34 @@ a.hero-story-card:hover {
   white-space: nowrap;
 }
 
+.about-conversation-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.about-conversation-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(29, 29, 31, 0.12);
+  border-radius: 0.65rem;
+  color: #6e6e73;
+  background: rgba(255, 255, 255, 0.52);
+  font: 500 1.2rem/1 system-ui, sans-serif;
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease, transform 220ms ease;
+}
+
+.about-conversation-close:hover {
+  border-color: rgba(29, 29, 31, 0.24);
+  color: #1d1d1f;
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
 .about-conversation-status i {
   width: 0.4rem;
   height: 0.4rem;
@@ -2594,6 +2628,82 @@ a.hero-story-card:hover {
   scrollbar-color: rgba(29, 29, 31, 0.2) transparent;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 100%);
   mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 100%);
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.about-conversation-minimized {
+  width: min(100%, 680px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.65rem;
+  padding: 0.7rem;
+  border: 1px solid rgba(29, 29, 31, 0.1);
+  border-radius: 1.05rem;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 14px 34px rgba(29, 29, 31, 0.06);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+}
+
+.about-conversation-minimized-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.35rem;
+  color: #66666d;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.about-conversation-minimized-label i {
+  width: 0.42rem;
+  height: 0.42rem;
+  display: inline-block;
+  border-radius: 50%;
+  background: #30c967;
+  box-shadow: 0 0 0 0.2rem rgba(48, 201, 103, 0.12);
+}
+
+.about-conversation-minimized-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.about-conversation-minimized-actions button {
+  min-height: 2.5rem;
+  padding: 0.48rem 0.72rem;
+  border: 1px solid rgba(29, 29, 31, 0.14);
+  border-radius: 0.7rem;
+  color: #fff;
+  background: #1d1d1f;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.about-conversation-minimized-actions button:hover {
+  background: var(--about-blue);
+  transform: translateY(-1px);
+}
+
+.about-conversation-minimized-actions button.is-secondary {
+  color: #56565c;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.about-conversation-minimized-actions button.is-secondary:hover {
+  border-color: rgba(29, 29, 31, 0.28);
+  color: #1d1d1f;
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .conversation-message-row {
@@ -2698,7 +2808,7 @@ a.hero-story-card:hover {
 }
 
 .conversation-quick-replies button {
-  min-height: 2.2rem;
+  min-height: 2.5rem;
   padding: 0.45rem 0.75rem;
   border: 1px solid rgba(29, 29, 31, 0.14);
   border-radius: 0.8rem;
@@ -2729,6 +2839,13 @@ a.hero-story-card:hover {
   border: 1px solid rgba(29, 29, 31, 0.12);
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.62);
+  transition: border-color 260ms ease, box-shadow 320ms ease, background 260ms ease;
+}
+
+.conversation-composer:focus-within {
+  border-color: rgba(40, 103, 255, 0.62);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 0 0 3px rgba(40, 103, 255, 0.12), 0 8px 22px rgba(29, 29, 31, 0.06);
 }
 
 .conversation-composer textarea {
@@ -2745,6 +2862,7 @@ a.hero-story-card:hover {
   font-size: 0.86rem;
   line-height: 1.45;
   overflow-y: auto;
+  caret-color: var(--about-blue);
 }
 
 .conversation-composer textarea::placeholder {
@@ -2752,8 +2870,9 @@ a.hero-story-card:hover {
 }
 
 .conversation-composer button {
-  width: 2.15rem;
-  height: 2.15rem;
+  width: 2.65rem;
+  min-width: 2.65rem;
+  height: 2.65rem;
   display: grid;
   place-items: center;
   padding: 0;
@@ -3604,6 +3723,22 @@ a.hero-story-card:hover {
     padding: 0.65rem;
   }
 
+  .about-conversation-minimized {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+    margin-top: 1.35rem;
+  }
+
+  .about-conversation-minimized-actions {
+    justify-content: stretch;
+  }
+
+  .about-conversation-minimized-actions button {
+    flex: 1 1 11rem;
+  }
+
   .about-conversation-messages {
     max-height: min(28svh, 190px);
   }
@@ -3697,7 +3832,11 @@ a.hero-story-card:hover {
 
   .conversation-message-row,
   .conversation-quick-replies button,
-  .conversation-composer button {
+  .conversation-composer button,
+  .about-conversation,
+  .conversation-composer,
+  .about-conversation-close,
+  .about-conversation-minimized-actions button {
     transition: none;
   }
 }

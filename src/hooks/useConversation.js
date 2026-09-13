@@ -112,6 +112,16 @@ export const useConversation = () => {
     }
   }, [loadStoredConversation]);
 
+  const resetConversation = useCallback(() => {
+    clearConversationSession();
+    setSession(null);
+    setRemoteMessages([]);
+    setPendingMessages([]);
+    setNotice('');
+    setRealtimeStatus('saved');
+    setPhase('idle');
+  }, []);
+
   const sendMessage = useCallback(async (body, temporaryId = null) => {
     const cleanBody = body.trim();
     if (!session || !cleanBody || cleanBody.length > MAX_MESSAGE_LENGTH || isSending) return;
@@ -176,6 +186,7 @@ export const useConversation = () => {
     notice,
     realtimeStatus,
     startConversation,
+    resetConversation,
     sendMessage,
     retryMessage: (message) => sendMessage(message.body, message.id),
     retryLoad: session ? () => loadStoredConversation(session) : null,
