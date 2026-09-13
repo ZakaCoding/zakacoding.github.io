@@ -62,7 +62,7 @@ export const subscribeToConversation = ({ conversationId, token, onMessage, onSt
 
     return () => {
       connection?.unbind('state_change', handleStateChange);
-      echo.leaveChannel(`conversation.${conversationId}`);
+      echo.leave(`conversation.${conversationId}`);
       echo.disconnect();
     };
   } catch {

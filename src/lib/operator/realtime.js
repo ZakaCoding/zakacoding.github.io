@@ -8,15 +8,17 @@ const appKey = import.meta.env.VITE_REVERB_APP_KEY;
 const host = import.meta.env.VITE_REVERB_HOST;
 const port = Number(import.meta.env.VITE_REVERB_PORT || 443);
 const scheme = import.meta.env.VITE_REVERB_SCHEME || 'https';
+const inboxChannelName = import.meta.env.VITE_OPERATOR_REVERB_CHANNEL || 'operator.inbox';
 
 export const subscribeToOperatorConversations = ({
   conversationIds,
   token,
   onMessage,
+  onInboxEvent,
   onStatus,
   onReconnect,
 }) => {
-  if (!appKey || !host || !conversationIds.length) {
+  if (!appKey || !host) {
     onStatus('saved');
     return { disconnect: () => {}, whisperTyping: () => {} };
   }
@@ -42,6 +44,22 @@ export const subscribeToOperatorConversations = ({
           Authorization: `Bearer ${token}`,
         },
       },
+    });
+
+    const inboxChannel = echo.private(inboxChannelName);
+    inboxChannel.listen('ConversationCreated', (payload) => {
+      onInboxEvent('conversation.created', payload?.data || payload);
+    });
+    inboxChannel.listen('ConversationUpdated', (payload) => {
+      onInboxEvent('conversation.updated', payload?.data || payload);
+    });
+    inboxChannel.listen('ConversationStatusChanged', (payload) => {
+      onInboxEvent('conversation.status-changed', payload?.data || payload);
+    });
+    inboxChannel.listen('MessageCreated', (payload) => {
+      const message = normalizeMessage(payload?.data || payload);
+      if (message) onMessage(message);
+      onInboxEvent('message.created', message || payload?.data || payload);
     });
 
     conversationIds.forEach((conversationId) => {
@@ -72,7 +90,8 @@ export const subscribeToOperatorConversations = ({
       },
       disconnect: () => {
         connection?.unbind('state_change', handleStateChange);
-        conversationIds.forEach((id) => echo.leaveChannel(`conversation.${id}`));
+        conversationIds.forEach((id) => echo.leave(`conversation.${id}`));
+        echo.leave(inboxChannelName);
         echo.disconnect();
       },
     };

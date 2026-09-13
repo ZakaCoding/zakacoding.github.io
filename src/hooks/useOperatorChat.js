@@ -41,6 +41,11 @@ export const useOperatorChat = () => {
   const realtimeRef = useRef(null);
   const didBootstrapRef = useRef(false);
   const openRequestRef = useRef(0);
+  const selectedIdRef = useRef(null);
+
+  useEffect(() => {
+    selectedIdRef.current = selectedId;
+  }, [selectedId]);
 
   const expireSession = useCallback(() => {
     clearOperatorSession();
@@ -93,6 +98,22 @@ export const useOperatorChat = () => {
     }
   }, [handleApiError, session?.token]);
 
+  const reconcileSelectedConversation = useCallback(async (token = session?.token) => {
+    const conversationId = selectedIdRef.current;
+    if (!token || !conversationId) return;
+
+    try {
+      const conversation = await loadOperatorConversation({ id: conversationId, token });
+      if (selectedIdRef.current !== conversationId) return;
+      setSelectedConversation((current) => ({
+        ...conversation,
+        messages: mergeMessages(current?.id === conversationId ? current.messages : [], conversation.messages),
+      }));
+    } catch (error) {
+      handleApiError(error, 'Conversation could not be reconciled.');
+    }
+  }, [handleApiError, session?.token]);
+
   useEffect(() => {
     if (didBootstrapRef.current) return;
     didBootstrapRef.current = true;
@@ -131,7 +152,11 @@ export const useOperatorChat = () => {
       conversationIds: ids,
       token: session.token,
       onStatus: setRealtimeStatus,
-      onReconnect: () => refreshInbox({ quiet: true }),
+      onReconnect: () => {
+        refreshInbox({ quiet: true });
+        reconcileSelectedConversation(session.token);
+      },
+      onInboxEvent: () => refreshInbox({ quiet: true }),
       onMessage: (message) => {
         setSelectedConversation((current) => {
           if (!current || current.id !== String(message.conversation_id)) return current;
@@ -146,7 +171,7 @@ export const useOperatorChat = () => {
     });
     realtimeRef.current = realtime;
     return () => realtime.disconnect();
-  }, [conversationIds, phase, refreshInbox, session?.token]);
+  }, [conversationIds, phase, reconcileSelectedConversation, refreshInbox, session?.token]);
 
   const login = useCallback(async ({ email, password }) => {
     setPhase('authenticating');
