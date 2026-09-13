@@ -144,6 +144,8 @@ const About = () => {
     let targetX = 0;
     let travel = 0;
     let frame = 0;
+    let layoutSyncFrame = 0;
+    let layoutSyncUntil = 0;
 
     const paintLogo = (scrollX, isMobile = false) => {
       const sourceRect = logoSource.getBoundingClientRect();
@@ -326,6 +328,24 @@ const About = () => {
       if (!frame) frame = window.requestAnimationFrame(paint);
     };
 
+    const syncConversationLayout = () => {
+      update();
+
+      if (performance.now() < layoutSyncUntil) {
+        layoutSyncFrame = window.requestAnimationFrame(syncConversationLayout);
+      } else {
+        layoutSyncFrame = 0;
+      }
+    };
+
+    const handleConversationLayoutChange = () => {
+      // Follow both the immediate reflow and the closing typography transition.
+      layoutSyncUntil = performance.now() + (reducedMotion.matches ? 80 : 1000);
+      if (!layoutSyncFrame) {
+        layoutSyncFrame = window.requestAnimationFrame(syncConversationLayout);
+      }
+    };
+
     const resizeObserver = new ResizeObserver(update);
     resizeObserver.observe(track);
     window.addEventListener('scroll', update, { passive: true });
@@ -334,6 +354,7 @@ const About = () => {
     reducedMotion.addEventListener('change', update);
     mobileLayout.addEventListener('change', update);
     touchLayout.addEventListener('change', update);
+    window.addEventListener('zakacoding:conversation-layout-change', handleConversationLayoutChange);
     update();
 
     return () => {
@@ -344,7 +365,9 @@ const About = () => {
       reducedMotion.removeEventListener('change', update);
       mobileLayout.removeEventListener('change', update);
       touchLayout.removeEventListener('change', update);
+      window.removeEventListener('zakacoding:conversation-layout-change', handleConversationLayoutChange);
       if (frame) window.cancelAnimationFrame(frame);
+      if (layoutSyncFrame) window.cancelAnimationFrame(layoutSyncFrame);
     };
   }, []);
 
