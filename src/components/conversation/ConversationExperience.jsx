@@ -27,10 +27,14 @@ export const ConversationExperience = () => {
     if (!messagesElement) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    messagesElement.scrollTo({
-      top: messagesElement.scrollHeight,
-      behavior: reducedMotion ? 'auto' : 'smooth',
-    });
+    if (typeof messagesElement.scrollTo === 'function') {
+      messagesElement.scrollTo({
+        top: messagesElement.scrollHeight,
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
+    } else {
+      messagesElement.scrollTop = messagesElement.scrollHeight;
+    }
   }, [conversation.messages.length]);
 
   useEffect(() => {
@@ -51,7 +55,7 @@ export const ConversationExperience = () => {
     };
 
     const bringConversationIntoView = () => {
-      if (window.innerWidth <= 900) {
+      if (window.innerWidth <= 900 && typeof element.scrollIntoView === 'function') {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     };
@@ -74,7 +78,9 @@ export const ConversationExperience = () => {
     const handleViewportResize = () => {
       if (element.contains(document.activeElement)) {
         window.requestAnimationFrame(() => {
-          element.scrollIntoView({ behavior: 'auto', block: 'center' });
+          if (typeof element.scrollIntoView === 'function') {
+            element.scrollIntoView({ behavior: 'auto', block: 'center' });
+          }
         });
       }
     };
@@ -100,7 +106,9 @@ export const ConversationExperience = () => {
     if (window.innerWidth > 900) return undefined;
 
     const bringConversationIntoView = () => {
-      conversationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (typeof conversationRef.current?.scrollIntoView === 'function') {
+        conversationRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     };
     const timer = window.setTimeout(bringConversationIntoView, 180);
     return () => window.clearTimeout(timer);
@@ -135,7 +143,6 @@ export const ConversationExperience = () => {
         <motion.div
           key="cta"
           className="conversation-cta-wrap"
-          layout
           initial={reducedMotion ? false : { opacity: 0, y: 14, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={reducedMotion ? undefined : { opacity: 0, y: -12, scale: 0.98 }}
@@ -185,7 +192,6 @@ export const ConversationExperience = () => {
           key="conversation"
           className="about-conversation"
           aria-label="Conversation with Zaka"
-          layout
           ref={conversationRef}
           initial={reducedMotion ? false : { opacity: 0, y: 28, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
