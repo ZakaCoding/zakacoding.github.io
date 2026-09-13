@@ -2528,7 +2528,12 @@ a.hero-story-card:hover {
 }
 
 .about-contact-panel:has(.about-conversation) .about-closing-center {
-  transform: translateY(-clamp(2.5rem, 5vh, 4.5rem));
+  transform: translateY(-clamp(3.25rem, 6vh, 5.25rem));
+}
+
+#about-exhibition:has(.about-conversation) .about-progress-rail {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .about-contact-panel:has(.about-conversation) .about-closing-footer {
@@ -3581,7 +3586,7 @@ a.hero-story-card:hover {
   }
 
   .about-contact-panel:has(.about-conversation) .about-closing-center {
-    transform: translateY(-2.5rem);
+    transform: translateY(-3.25rem);
   }
 
   .about-contact-panel:has(.about-conversation) .about-closing-footer {
