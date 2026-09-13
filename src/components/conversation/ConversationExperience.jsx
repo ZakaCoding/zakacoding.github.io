@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 import { ArrowRight } from 'react-bootstrap-icons';
@@ -29,30 +30,6 @@ export const ConversationExperience = () => {
     });
   }, [conversation.messages.length]);
 
-  if (conversation.isRestoring) {
-    return <p className="conversation-loading-placeholder" aria-live="polite">Restoring your conversation…</p>;
-  }
-
-  if (!conversation.isStarted) {
-    return (
-      <div className="conversation-cta-wrap">
-        <button
-          type="button"
-          className="about-closing-cta"
-          onClick={conversation.startConversation}
-          disabled={conversation.isStarting}
-        >
-          {conversation.isStarting ? 'Opening…' : 'Start a conversation'}
-          <ArrowRight aria-hidden="true" />
-        </button>
-        {conversation.notice && (
-          <p className="conversation-notice" role="alert">{conversation.notice}</p>
-        )}
-      </div>
-    );
-  }
-
-  const hasVisitorMessage = conversation.messages.some((message) => message.sender.type === 'guest');
   const handleSend = () => {
     const message = draft.trim();
     if (!message) return;
@@ -60,40 +37,91 @@ export const ConversationExperience = () => {
     conversation.sendMessage(message);
   };
 
+  const hasVisitorMessage = conversation.messages.some((message) => message.sender.type === 'guest');
+
   return (
-    <section className="about-conversation" aria-label="Conversation with Zaka">
-      <header className="about-conversation-header">
-        <span className="about-conversation-title">A small space to talk</span>
-        <span className="about-conversation-status"><i /> {statusLabel[conversation.realtimeStatus]}</span>
-      </header>
-
-      {conversation.isLoading && conversation.messages.length === 0 ? (
-        <p className="about-conversation-loading" aria-live="polite">Loading messages…</p>
-      ) : (
-        <ul ref={messagesRef} className="about-conversation-messages" aria-live="polite" aria-relevant="additions text">
-          {conversation.messages.map((message) => (
-            <ConversationMessage key={message.id} message={message} onRetry={conversation.retryMessage} />
-          ))}
-        </ul>
+    <AnimatePresence mode="wait" initial={false}>
+      {conversation.isRestoring && (
+        <motion.p
+          key="restoring"
+          className="conversation-loading-placeholder"
+          aria-live="polite"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+        >
+          Restoring your conversation…
+        </motion.p>
       )}
 
-      {conversation.notice && (
-        <div className="about-conversation-notice" role="status">
-          <span>{conversation.notice}</span>
-          {conversation.retryLoad && <button type="button" onClick={conversation.retryLoad}>Try again</button>}
-        </div>
+      {!conversation.isRestoring && !conversation.isStarted && (
+        <motion.div
+          key="cta"
+          className="conversation-cta-wrap"
+          initial={{ opacity: 0, y: 14, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -12, scale: 0.98 }}
+          transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <button
+            type="button"
+            className="about-closing-cta"
+            onClick={conversation.startConversation}
+            disabled={conversation.isStarting}
+          >
+            Start a conversation <ArrowRight aria-hidden="true" />
+          </button>
+          {conversation.notice && (
+            <p className="conversation-notice" role="alert">{conversation.notice}</p>
+          )}
+        </motion.div>
       )}
 
-      {!hasVisitorMessage && (
-        <QuickReplies onSelect={(reply) => conversation.sendMessage(reply)} disabled={conversation.isSending} />
-      )}
+      {conversation.isStarted && (
+        <motion.section
+          key="conversation"
+          className="about-conversation"
+          aria-label="Conversation with Zaka"
+          initial={{ opacity: 0, y: 28, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -18, scale: 0.98 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <header className="about-conversation-header">
+            <span className="about-conversation-title">A small space to talk</span>
+            <span className="about-conversation-status"><i /> {conversation.isStarting ? 'connecting…' : statusLabel[conversation.realtimeStatus]}</span>
+          </header>
 
-      <ConversationComposer
-        value={draft}
-        onChange={setDraft}
-        onSend={handleSend}
-        disabled={conversation.isSending || conversation.isLoading}
-      />
-    </section>
+          {conversation.isLoading && conversation.messages.length === 0 ? (
+            <p className="about-conversation-loading" aria-live="polite">Loading messages…</p>
+          ) : (
+            <ul ref={messagesRef} className="about-conversation-messages" aria-live="polite" aria-relevant="additions text">
+              {conversation.messages.map((message) => (
+                <ConversationMessage key={message.id} message={message} onRetry={conversation.retryMessage} />
+              ))}
+            </ul>
+          )}
+
+          {conversation.notice && (
+            <div className="about-conversation-notice" role="status">
+              <span>{conversation.notice}</span>
+              {conversation.retryLoad && <button type="button" onClick={conversation.retryLoad}>Try again</button>}
+            </div>
+          )}
+
+          {!hasVisitorMessage && (
+            <QuickReplies onSelect={(reply) => conversation.sendMessage(reply)} disabled={conversation.isSending || conversation.isStarting} />
+          )}
+
+          <ConversationComposer
+            value={draft}
+            onChange={setDraft}
+            onSend={handleSend}
+            disabled={conversation.isSending || conversation.isLoading || conversation.isStarting}
+          />
+        </motion.section>
+      )}
+    </AnimatePresence>
   );
 };

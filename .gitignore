@@ -25,3 +25,6 @@ dist-ssr
 
 .owa/
 graphify-out
+
+.env
+.env.local

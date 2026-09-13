@@ -2312,6 +2312,7 @@ a.hero-story-card:hover {
   align-self: center;
   width: min(1120px, 80vw);
   margin: 0 auto;
+  transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .about-closing-arrival {
@@ -2516,12 +2517,22 @@ a.hero-story-card:hover {
   -webkit-backdrop-filter: blur(24px) saturate(125%);
 }
 
+.about-contact-panel:has(.about-conversation) {
+  padding-bottom: clamp(2.5rem, 5vh, 4rem);
+}
+
 .about-contact-panel:has(.about-conversation) .about-closing-copy > p {
   margin-top: 1.65rem;
 }
 
 .about-contact-panel:has(.about-conversation) .about-closing-center {
   transform: translateY(-clamp(2.5rem, 5vh, 4.5rem));
+}
+
+.about-contact-panel:has(.about-conversation) .about-closing-footer {
+  margin-top: clamp(1.5rem, 3vh, 2.5rem);
+  padding-top: 1.6rem;
+  border-top-color: rgba(29, 29, 31, 0.1);
 }
 
 .about-contact-panel:has(.about-conversation) h2 {
@@ -3560,6 +3571,7 @@ a.hero-story-card:hover {
     height: auto;
     min-height: calc(100svh + 9rem);
     overflow: visible;
+    padding-bottom: 2.5rem;
   }
 
   .about-contact-panel:has(.about-conversation) .about-closing-copy > p {
@@ -3568,6 +3580,11 @@ a.hero-story-card:hover {
 
   .about-contact-panel:has(.about-conversation) .about-closing-center {
     transform: translateY(-2.5rem);
+  }
+
+  .about-contact-panel:has(.about-conversation) .about-closing-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
   }
 
   .about-contact-panel:has(.about-conversation) h2 {
@@ -3659,6 +3676,10 @@ a.hero-story-card:hover {
   .about-closing-cta svg,
   .about-closing-word::after,
   .about-closing-whisper {
+    transition: none;
+  }
+
+  .about-closing-center {
     transition: none;
   }
 

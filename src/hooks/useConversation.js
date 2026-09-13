@@ -94,6 +94,7 @@ export const useConversation = () => {
 
   const startConversation = useCallback(async () => {
     setNotice('');
+    setRealtimeStatus('connecting');
     setPhase('starting');
     try {
       const newSession = await createConversation();
