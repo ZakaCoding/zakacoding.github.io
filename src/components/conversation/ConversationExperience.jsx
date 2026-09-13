@@ -1,11 +1,10 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
-import { ArrowDown, ArrowRight, ArrowsFullscreen, FullscreenExit } from 'react-bootstrap-icons';
+import { ArrowDown, ArrowRight } from 'react-bootstrap-icons';
 
 import {
   INITIAL_MESSAGES,
-  MAX_MESSAGE_LENGTH,
 } from '../../lib/conversation/types';
 
 import { useConversation } from '../../hooks/useConversation';
