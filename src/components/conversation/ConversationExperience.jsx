@@ -40,7 +40,7 @@ export const ConversationExperience = () => {
   const hasVisitorMessage = conversation.messages.some((message) => message.sender.type === 'guest');
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence initial={false}>
       {conversation.isRestoring && (
         <motion.p
           key="restoring"
@@ -59,6 +59,7 @@ export const ConversationExperience = () => {
         <motion.div
           key="cta"
           className="conversation-cta-wrap"
+          layout
           initial={{ opacity: 0, y: 14, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -12, scale: 0.98 }}
@@ -83,6 +84,7 @@ export const ConversationExperience = () => {
           key="conversation"
           className="about-conversation"
           aria-label="Conversation with Zaka"
+          layout
           initial={{ opacity: 0, y: 28, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -18, scale: 0.98 }}

@@ -2312,7 +2312,7 @@ a.hero-story-card:hover {
   align-self: center;
   width: min(1120px, 80vw);
   margin: 0 auto;
-  transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .about-closing-arrival {
@@ -2361,6 +2361,7 @@ a.hero-story-card:hover {
   line-height: 0.78;
   letter-spacing: -0.082em;
   white-space: nowrap;
+  transition: font-size 760ms cubic-bezier(0.16, 1, 0.3, 1), line-height 760ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .about-closing-word {
@@ -2451,6 +2452,7 @@ a.hero-story-card:hover {
   font-weight: 450;
   letter-spacing: -0.025em;
   line-height: 1.42;
+  transition: margin-top 760ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .about-closing-cta {
@@ -3680,6 +3682,11 @@ a.hero-story-card:hover {
   }
 
   .about-closing-center {
+    transition: none;
+  }
+
+  .about-contact-panel h2,
+  .about-closing-copy > p {
     transition: none;
   }
 
