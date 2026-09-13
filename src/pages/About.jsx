@@ -7,6 +7,7 @@ import memojiImage from '../assets/image/zaka-memoji.jpeg';
 import localAiRobot from '../assets/image/local-ai-robot.webp';
 import animoji from '../assets/lottie/memoji.json?url';
 import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
+import { ConversationExperience } from '../components/conversation/ConversationExperience';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -566,9 +567,7 @@ const About = () => {
                     Systems, tools, and strange little ideas<br />
                     that make complicated things feel clear.
                   </p>
-                  <a className="about-closing-cta" href="mailto:zakanoor@outlook.co.id">
-                    Start a conversation <ArrowRight aria-hidden="true" />
-                  </a>
+                  <ConversationExperience />
                 </div>
               </div>
 
