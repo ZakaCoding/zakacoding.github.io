@@ -33,6 +33,12 @@ export const ConversationExperience = () => {
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
+    // The closing copy reflows when the conversation opens or minimizes.
+    // Ask the scroll-driven logo layer to follow its moved landing anchor.
+    window.dispatchEvent(new CustomEvent('zakacoding:conversation-layout-change'));
+  }, [conversation.isStarted, isMinimized, isExpanded]);
+
+  useEffect(() => {
     const messagesElement = messagesRef.current;
     if (!messagesElement) return;
 
