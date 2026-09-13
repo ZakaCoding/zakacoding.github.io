@@ -2509,7 +2509,7 @@ a.hero-story-card:hover {
 
 .about-conversation {
   width: min(100%, 680px);
-  margin-top: 1.55rem;
+  margin-top: clamp(0.75rem, 1.6vh, 1.2rem);
   padding: 0.8rem;
   border: 1px solid rgba(29, 29, 31, 0.1);
   border-radius: 1.25rem;
@@ -2519,22 +2519,40 @@ a.hero-story-card:hover {
   -webkit-backdrop-filter: blur(24px) saturate(125%);
 }
 
-.about-contact-panel:has(.about-conversation),
+.about-contact-panel:has(.about-conversation) {
+  overflow: hidden;
+  padding-top: clamp(4.5rem, 8vh, 6.5rem);
+  padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+}
+
 .about-contact-panel:has(.about-conversation-minimized) {
   overflow: hidden;
   padding-bottom: clamp(2.5rem, 5vh, 4rem);
 }
 
-.about-contact-panel:has(.about-conversation) .about-closing-copy > p,
+.about-contact-panel:has(.about-conversation) .about-closing-copy > p {
+  margin-top: clamp(0.75rem, 1.8vh, 1.25rem);
+}
+
 .about-contact-panel:has(.about-conversation-minimized) .about-closing-copy > p {
   margin-top: 1.25rem;
 }
 
-.about-contact-panel:has(.about-conversation) .about-closing-center,
+.about-contact-panel:has(.about-conversation) .about-closing-center {
+  transform: none;
+  align-self: start;
+  padding-top: clamp(0.75rem, 2vh, 1.5rem);
+}
+
 .about-contact-panel:has(.about-conversation-minimized) .about-closing-center {
   transform: none;
   align-self: start;
   padding-top: clamp(3rem, 6vh, 5rem);
+}
+
+.about-contact-panel:has(.about-conversation) .about-closing-arrival {
+  min-height: clamp(3.25rem, 7vh, 5rem);
+  margin-bottom: clamp(0.65rem, 1.5vh, 1rem);
 }
 
 #about-exhibition:has(.about-conversation) .about-progress-rail,
@@ -2543,14 +2561,23 @@ a.hero-story-card:hover {
   pointer-events: none;
 }
 
-.about-contact-panel:has(.about-conversation) .about-closing-footer,
+.about-contact-panel:has(.about-conversation) .about-closing-footer {
+  margin-top: clamp(0.75rem, 1.5vh, 1.25rem);
+  padding-top: 1rem;
+  border-top-color: rgba(29, 29, 31, 0.1);
+}
+
 .about-contact-panel:has(.about-conversation-minimized) .about-closing-footer {
   margin-top: clamp(1.5rem, 3vh, 2.5rem);
   padding-top: 1.6rem;
   border-top-color: rgba(29, 29, 31, 0.1);
 }
 
-.about-contact-panel:has(.about-conversation) h2,
+.about-contact-panel:has(.about-conversation) h2 {
+  font-size: clamp(3.8rem, 6.4vw, 6.5rem);
+  line-height: 0.82;
+}
+
 .about-contact-panel:has(.about-conversation-minimized) h2 {
   font-size: clamp(4.2rem, 7.5vw, 8rem);
 }
@@ -2625,7 +2652,7 @@ a.hero-story-card:hover {
   display: flex;
   flex-direction: column;
   gap: 0.58rem;
-  max-height: min(26vh, 240px);
+  max-height: min(21vh, 210px);
   min-height: 4.4rem;
   overflow-y: auto;
   margin: 0;
