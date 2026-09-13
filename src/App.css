@@ -2542,6 +2542,13 @@ a.hero-story-card:hover {
   transform: none;
   align-self: start;
   padding-top: clamp(0.75rem, 2vh, 1.5rem);
+  animation: about-conversation-rise 880ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes about-conversation-rise {
+  0% { transform: translateY(clamp(2.75rem, 7vh, 4.75rem)); }
+  72% { transform: translateY(-0.3rem); }
+  100% { transform: translateY(0); }
 }
 
 .about-contact-panel:has(.about-conversation-minimized) .about-closing-center {
@@ -3957,6 +3964,10 @@ a.hero-story-card:hover {
 
   .about-closing-center {
     transition: none;
+  }
+
+  .about-contact-panel:has(.about-conversation) .about-closing-center {
+    animation: none;
   }
 
   .about-contact-panel h2,
