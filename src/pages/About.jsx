@@ -67,6 +67,7 @@ const About = () => {
   const logoFlightRef = useRef(null);
   const logoTrailRef = useRef(null);
   const logoMessageRef = useRef(null);
+  const closingPanelRef = useRef(null);
   const directionRef = useRef(null);
   const portraitRef = useRef(null);
   const whoModeRefs = useRef([]);
@@ -119,6 +120,7 @@ const About = () => {
   useEffect(() => {
     const exhibition = exhibitionRef.current;
     const track = trackRef.current;
+    const sticky = track?.parentElement;
     const progress = progressRef.current;
     const logoLayer = logoLayerRef.current;
     const logoSource = logoSourceRef.current;
@@ -126,7 +128,8 @@ const About = () => {
     const logoFlight = logoFlightRef.current;
     const logoTrail = logoTrailRef.current;
     const logoMessage = logoMessageRef.current;
-    if (!exhibition || !track || !progress || !logoLayer || !logoSource || !logoLanding || !logoFlight || !logoTrail || !logoMessage) {
+    const closingPanel = closingPanelRef.current;
+    if (!exhibition || !track || !sticky || !progress || !logoLayer || !logoSource || !logoLanding || !logoFlight || !logoTrail || !logoMessage || !closingPanel) {
       return undefined;
     }
 
@@ -143,8 +146,6 @@ const About = () => {
       const sourceRect = logoSource.getBoundingClientRect();
       const landingRect = logoLanding.getBoundingClientRect();
       const layerRect = logoLayer.getBoundingClientRect();
-      const sourcePanel = logoSource.closest('.about-original-hero');
-      const panelWidth = sourcePanel?.getBoundingClientRect().width || window.innerWidth;
       const sourceWidth = sourceRect.width;
       const landingWidth = landingRect.width;
       if (!sourceWidth || !landingWidth) return;
@@ -176,16 +177,16 @@ const About = () => {
         const sourceBaseX = sourceRect.left - layerRect.left + scrollX;
         const landingBaseX = landingRect.left - layerRect.left + scrollX;
 
-        progressValue = clamp(scrollX / panelWidth, 0, 1);
+        progressValue = clamp(scrollX / Math.max(travel, 1), 0, 1);
         startX = sourceBaseX;
         startY = sourceRect.top - layerRect.top;
-        endX = landingBaseX - panelWidth;
+        endX = landingBaseX - travel;
         endY = landingRect.top - layerRect.top;
         currentX = progressValue < 1 ? startX + (endX - startX) * progressValue : landingRect.left - layerRect.left;
         currentY = progressValue < 1 ? startY + (endY - startY) * progressValue : landingRect.top - layerRect.top;
       }
 
-      const travelProgress = 1 - ((1 - progressValue) ** 3);
+      const travelProgress = 1 - ((1 - progressValue) ** 4);
       const scale = 1 + ((landingWidth / sourceWidth) - 1) * travelProgress;
       let rotation = 0;
       if (progressValue < 0.22) {
@@ -202,10 +203,14 @@ const About = () => {
 
       const messageX = currentX + sourceWidth * scale * 0.54;
       const messageY = Math.max(8, currentY - sourceWidth * scale * 0.16);
-      const messageVisible = !reducedMotion.matches && progressValue > 0.08 && progressValue < 0.98;
-      logoMessage.dataset.state = progressValue > 0.84 ? 'delivered' : progressValue > 0.3 ? 'welcome' : 'typing';
+      const messageVisible = !reducedMotion.matches && progressValue > 0.035;
+      logoMessage.dataset.state = progressValue > 0.84 ? 'delivered' : progressValue > 0.14 ? 'welcome' : 'typing';
       logoMessage.style.transform = `translate3d(${messageX}px, ${messageY}px, 0)`;
       logoMessage.style.opacity = messageVisible ? '1' : '0';
+
+      closingPanel.style.setProperty('--closing-progress', progressValue);
+      closingPanel.classList.toggle('is-arriving', progressValue > 0.82);
+      closingPanel.classList.toggle('is-complete', progressValue > 0.985);
 
       const trailProgress = clamp((progressValue - 0.12) / 0.56, 0, 1);
       logoTrail.style.opacity = progressValue > 0.08 && progressValue < 0.9 ? '0.22' : '0';
@@ -250,7 +255,7 @@ const About = () => {
         travel = Math.max(0, track.scrollWidth - window.innerWidth);
         exhibition.style.height = `${window.innerHeight}px`;
         track.style.transform = 'none';
-        targetX = clamp(exhibition.parentElement.scrollLeft, 0, travel);
+        targetX = clamp(sticky.scrollLeft, 0, travel);
         progress.style.transform = `scaleX(${travel ? targetX / travel : 0})`;
         directionRef.current?.classList.toggle('is-complete', targetX >= travel - 2);
         paintLogo(targetX);
@@ -269,7 +274,7 @@ const About = () => {
     resizeObserver.observe(track);
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
-    exhibition.parentElement.addEventListener('scroll', update, { passive: true });
+    sticky.addEventListener('scroll', update, { passive: true });
     reducedMotion.addEventListener('change', update);
     mobileLayout.addEventListener('change', update);
     touchLayout.addEventListener('change', update);
@@ -279,7 +284,7 @@ const About = () => {
       resizeObserver.disconnect();
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
-      exhibition.parentElement.removeEventListener('scroll', update);
+      sticky.removeEventListener('scroll', update);
       reducedMotion.removeEventListener('change', update);
       mobileLayout.removeEventListener('change', update);
       touchLayout.removeEventListener('change', update);
@@ -346,7 +351,6 @@ const About = () => {
             </section>
 
             <section className="about-editorial-opening">
-              <div ref={logoLandingRef} className="about-logo-landing" aria-hidden="true" />
               <div className="about-editorial-copy">
                 <span className="about-index">02 / ABOUT</span>
                 <h2>
@@ -475,23 +479,55 @@ const About = () => {
               </p>
             </section>
 
-            <section className="about-contact-panel">
-              <span className="about-index">07 / SAY HELLO</span>
-              <h2>Have a hard problem? <em>Let&apos;s make it clear.</em></h2>
-              <p>
-                For product engineering, system modernization, open-source collaboration,
-                or a good conversation about local AI.
-              </p>
-              <div className="about-contact-links">
-                <a href="mailto:zakanoor@outlook.co.id">
-                  zakanoor@outlook.co.id <ArrowRight aria-hidden="true" />
-                </a>
+            <section className="about-contact-panel about-closing-panel" ref={closingPanelRef}>
+              <span className="about-index">07 / STILL HERE</span>
+
+              <div className="about-closing-fragment about-closing-terminal" aria-hidden="true">
+                <span>zaka@desk ~</span>
+                <strong><i /> currently: building</strong>
+              </div>
+              <div className="about-closing-fragment about-closing-note" aria-hidden="true">
+                Build.<br />Learn.<br />Repeat.
+              </div>
+              <div className="about-closing-fragment about-closing-coffee" aria-hidden="true">
+                <span>coffee status</span>
+                <strong>still warm <i>☕</i></strong>
+              </div>
+
+              <div className="about-closing-center">
+                <div className="about-closing-arrival" aria-hidden="true">
+                  <div ref={logoLandingRef} className="about-logo-landing" />
+                  <span className="about-closing-return">Back at the desk.</span>
+                </div>
+
+                <div className="about-closing-copy">
+                  <h2>
+                    Still{' '}
+                    <span className="about-closing-word" tabIndex="0">
+                      building
+                      <span className="about-closing-whisper">probably with coffee.</span>
+                    </span>
+                    <span className="about-closing-period">.</span>
+                  </h2>
+                  <p>
+                    Systems, tools, and strange little ideas<br />
+                    that make complicated things feel clear.
+                  </p>
+                  <a className="about-closing-cta" href="mailto:zakanoor@outlook.co.id">
+                    Start a conversation <ArrowRight aria-hidden="true" />
+                  </a>
+                </div>
+              </div>
+
+              <footer className="about-closing-footer">
+                <span className="about-closing-status"><i /> currently: curious</span>
+                <span>Indonesia · GMT+7</span>
                 <div>
                   <a href="https://github.com/ZakaCoding" aria-label="GitHub"><Github /></a>
                   <a href="https://www.linkedin.com/in/zaka-n-693018111" aria-label="LinkedIn"><Linkedin /></a>
                   <a href="https://instagram.com/youn8e_" aria-label="Instagram"><Instagram /></a>
                 </div>
-              </div>
+              </footer>
             </section>
           </div>
 
