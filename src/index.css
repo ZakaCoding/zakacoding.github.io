@@ -26,10 +26,14 @@ body {
   background: #f5f5f7;
 }
 
-html.conversation-scroll-lock,
-body.conversation-scroll-lock {
+html {
+  scrollbar-gutter: stable;
+}
+
+html.conversation-scroll-lock {
   overflow: hidden;
   overscroll-behavior: none;
+  padding-right: var(--scrollbar-width, 0px);
 }
 
 :root {

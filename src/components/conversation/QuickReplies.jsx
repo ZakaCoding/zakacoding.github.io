@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-const QUICK_REPLIES = ['Work together', 'Ask about my work', 'Just saying hi'];
+const QUICK_REPLIES = ['Let’s work together', 'Tell me about OwA', 'What’s your stack?', 'Just saying hi 👋'];
 
 export const QuickReplies = ({ onSelect, disabled }) => (
   <div className="conversation-quick-replies" aria-label="Quick replies">

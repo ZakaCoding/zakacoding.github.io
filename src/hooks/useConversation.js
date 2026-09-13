@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   ConversationApiError,
@@ -39,6 +39,8 @@ export const useConversation = () => {
   const [isSending, setIsSending] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [realtimeStatus, setRealtimeStatus] = useState('saved');
+  const [isOperatorTyping, setIsOperatorTyping] = useState(false);
+  const typingTimerRef = useRef(null);
   const loadStoredConversation = useCallback(async (conversationSession, showError = true) => {
     setIsLoading(true);
     try {
@@ -87,10 +89,18 @@ export const useConversation = () => {
       },
       onStatus: setRealtimeStatus,
       onReconnect: () => loadStoredConversation(session, false),
+      onTyping: () => {
+        setIsOperatorTyping(true);
+        clearTimeout(typingTimerRef.current);
+        typingTimerRef.current = setTimeout(() => setIsOperatorTyping(false), 3000);
+      },
     });
 
-    return unsubscribe;
-  }, [loadStoredConversation, phase, session]);
+    return () => {
+      unsubscribe();
+      clearTimeout(typingTimerRef.current);
+    };
+  }, [session, phase, loadStoredConversation]);
 
   const startConversation = useCallback(async () => {
     setNotice('');
@@ -177,6 +187,7 @@ export const useConversation = () => {
   }, [pendingMessages, remoteMessages]);
 
   return {
+    isOperatorTyping,
     isRestoring: phase === 'restoring',
     isStarting: phase === 'starting',
     isLoading,

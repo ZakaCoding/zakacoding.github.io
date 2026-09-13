@@ -9,7 +9,7 @@ const host = import.meta.env.VITE_REVERB_HOST;
 const port = Number(import.meta.env.VITE_REVERB_PORT || 443);
 const scheme = import.meta.env.VITE_REVERB_SCHEME || 'https';
 
-export const subscribeToConversation = ({ conversationId, token, onMessage, onStatus, onReconnect }) => {
+export const subscribeToConversation = ({ conversationId, token, onMessage, onStatus, onReconnect, onTyping }) => {
   if (!appKey || !host) {
     onStatus('saved');
     return () => {};
@@ -40,6 +40,10 @@ export const subscribeToConversation = ({ conversationId, token, onMessage, onSt
     channel.listen('MessageCreated', (payload) => {
       const message = normalizeMessage(payload?.data || payload);
       if (message) onMessage(message);
+    });
+
+    channel.listenForWhisper('typing', (payload) => {
+      if (onTyping && payload?.sender === 'operator') onTyping(true);
     });
 
     const connection = echo.connector?.pusher?.connection;

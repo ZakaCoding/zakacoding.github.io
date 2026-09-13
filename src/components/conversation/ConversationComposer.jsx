@@ -4,9 +4,13 @@ import { useEffect, useRef } from 'react';
 
 import { MAX_MESSAGE_LENGTH } from '../../lib/conversation/types';
 
+const CHAR_WARN_THRESHOLD = 100;
+
 export const ConversationComposer = ({ value, onChange, onSend, disabled }) => {
   const textareaRef = useRef(null);
   const canSend = value.trim().length > 0 && !disabled;
+  const remaining = MAX_MESSAGE_LENGTH - value.length;
+  const showCounter = remaining <= CHAR_WARN_THRESHOLD;
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -47,6 +51,11 @@ export const ConversationComposer = ({ value, onChange, onSend, disabled }) => {
       <span id="conversation-composer-hint" className="conversation-composer-hint">
         Enter to send · Shift + Enter for a new line
       </span>
+      {showCounter && (
+        <span className={`conversation-composer-counter${remaining <= 20 ? ' is-critical' : ''}`} aria-live="polite">
+          {remaining}
+        </span>
+      )}
     </form>
   );
 };
