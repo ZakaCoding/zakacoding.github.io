@@ -10,6 +10,9 @@ import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+// Frame 24 is the wink with the head tilted, before the clip returns to neutral.
+const MEMOJI_WINK_FRAME = 24;
+
 const buildSteps = [
   {
     number: '01',
@@ -90,6 +93,30 @@ const About = () => {
   const logoMessageRef = useRef(null);
   const closingPanelRef = useRef(null);
   const directionRef = useRef(null);
+  const memojiRef = useRef(null);
+  const memojiHoveredRef = useRef(false);
+
+  const playMemojiWink = () => {
+    memojiHoveredRef.current = true;
+    const animation = memojiRef.current;
+    if (!animation) return;
+
+    animation.setSegment(0, MEMOJI_WINK_FRAME + 1);
+    animation.setDirection(1);
+    animation.setSpeed(2.1);
+    animation.play();
+  };
+
+  const releaseMemojiWink = () => {
+    memojiHoveredRef.current = false;
+    const animation = memojiRef.current;
+    if (!animation) return;
+
+    // Retrace the current pose more gently, including interrupted hovers.
+    animation.setDirection(-1);
+    animation.setSpeed(1.25);
+    animation.play();
+  };
 
   useEffect(() => {
     const exhibition = exhibitionRef.current;
@@ -395,12 +422,24 @@ const About = () => {
 
               <div className="about-editorial-memoji">
                 <span className="about-hand-note about-hand-note-one">Build.<br />Learn.<br />Repeat.</span>
-                <Player
-                  src={animoji}
-                  hover
-                  speed={2.1}
+                <div
                   className="about-classic-memoji-player"
-                />
+                  onMouseEnter={playMemojiWink}
+                  onMouseLeave={releaseMemojiWink}
+                >
+                  <Player
+                    src={animoji}
+                    keepLastFrame
+                    speed={2.1}
+                    style={{ width: '100%', height: 'auto' }}
+                    lottieRef={(animation) => {
+                      memojiRef.current = animation;
+                      if (memojiHoveredRef.current) {
+                        playMemojiWink();
+                      }
+                    }}
+                  />
+                </div>
                 <span className="about-hand-note about-hand-note-two">Read.<br />Code.<br />Coffee.</span>
               </div>
             </section>
