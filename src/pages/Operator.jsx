@@ -36,10 +36,17 @@ export default function Operator() {
     document.title = 'Zaka Desk';
     document.body.classList.add('operator-page-active');
 
-    const manifest = document.createElement('link');
-    manifest.rel = 'manifest';
-    manifest.href = '/operator.webmanifest';
-    document.head.appendChild(manifest);
+    // Safari only considers the first manifest link when creating a Home
+    // Screen shortcut. Reuse the site's existing link instead of appending a
+    // second manifest, otherwise it may install the portfolio shortcut.
+    const manifest = document.querySelector('#site-manifest, link[rel="manifest"]');
+    const createdManifest = !manifest;
+    const previousManifestHref = manifest?.getAttribute('href');
+    const operatorManifest = manifest || document.createElement('link');
+    operatorManifest.id = operatorManifest.id || 'site-manifest';
+    operatorManifest.rel = 'manifest';
+    operatorManifest.href = '/operator.webmanifest';
+    if (createdManifest) document.head.appendChild(operatorManifest);
     const restoreCapable = ensureMeta('apple-mobile-web-app-capable', 'yes');
     const restoreTitle = ensureMeta('apple-mobile-web-app-title', 'Zaka Desk');
     const restoreStatusBar = ensureMeta('apple-mobile-web-app-status-bar-style', 'black-translucent');
@@ -47,7 +54,8 @@ export default function Operator() {
     return () => {
       document.title = previousTitle;
       document.body.classList.remove('operator-page-active');
-      manifest.remove();
+      if (createdManifest) operatorManifest.remove();
+      else if (previousManifestHref) operatorManifest.href = previousManifestHref;
       restoreCapable();
       restoreTitle();
       restoreStatusBar();
