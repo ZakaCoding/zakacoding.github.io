@@ -9,7 +9,26 @@
     <meta name="description" content="Zaka Noor — full-stack engineer building dependable systems, local AI tools, and thoughtful product experiences." />
     <title>Hello World · Zaka Noor</title>
     <link rel="canonical" href="https://zakacoding.github.io/" />
-    <link id="site-manifest" rel="manifest" href="/portfolio.webmanifest" />
+    <script>
+      // Safari can inspect the manifest before React mounts. Select the
+      // operator manifest synchronously so Add to Home Screen installs Desk.
+      (() => {
+        const route = `${window.location.pathname}${window.location.hash}`;
+        const isOperatorRoute = route.includes('#/operator') || route.startsWith('/operator');
+        const manifest = document.createElement('link');
+        manifest.id = 'site-manifest';
+        manifest.rel = 'manifest';
+        manifest.href = isOperatorRoute ? '/operator.webmanifest' : '/portfolio.webmanifest';
+        document.head.appendChild(manifest);
+
+        if (isOperatorRoute) {
+          const title = document.createElement('meta');
+          title.name = 'apple-mobile-web-app-title';
+          title.content = 'Zaka Desk';
+          document.head.appendChild(title);
+        }
+      })();
+    </script>
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Zaka Noor — Systems, tools, and useful ideas" />
     <meta property="og:description" content="Full-stack engineering across logistics, local AI, and visual thinking. Explore the work and start a conversation." />
@@ -19,7 +38,7 @@
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Zaka Noor","alternateName":"ZakaCoding","url":"https://zakacoding.github.io/","jobTitle":"Full-stack engineer","sameAs":["https://github.com/ZakaCoding","https://www.linkedin.com/in/zaka-n-693018111"]}</script>
-    <script type="module" crossorigin src="/assets/index-1e5a857a.js"></script>
+    <script type="module" crossorigin src="/assets/index-59cbac8a.js"></script>
     <link rel="stylesheet" href="/assets/index-12c296b8.css">
   </head>
   <body>
