@@ -6,9 +6,9 @@ import { MAX_MESSAGE_LENGTH } from '../../lib/conversation/types';
 
 const CHAR_WARN_THRESHOLD = 100;
 
-export const ConversationComposer = ({ value, onChange, onSend, disabled }) => {
+export const ConversationComposer = ({ value, onChange, onSend, disabled, isSending }) => {
   const textareaRef = useRef(null);
-  const canSend = value.trim().length > 0 && !disabled;
+  const canSend = value.trim().length > 0 && !disabled && !isSending;
   const remaining = MAX_MESSAGE_LENGTH - value.length;
   const showCounter = remaining <= CHAR_WARN_THRESHOLD;
 
@@ -26,7 +26,7 @@ export const ConversationComposer = ({ value, onChange, onSend, disabled }) => {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
       event.preventDefault();
       if (canSend) onSend();
     }

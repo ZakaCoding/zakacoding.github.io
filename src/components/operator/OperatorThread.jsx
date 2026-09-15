@@ -64,7 +64,7 @@ export function OperatorThread({
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
       event.preventDefault();
       event.currentTarget.form?.requestSubmit();
     }
@@ -92,6 +92,7 @@ export function OperatorThread({
         <div>
           <h2>{conversationName(conversation)}</h2>
           <p><i /> {conversation?.status === 'closed' ? 'Conversation closed' : 'Portfolio visitor'}</p>
+          {conversation?.contactEmail && <a href={`mailto:${conversation.contactEmail}`}>Email {conversation.contactEmail}</a>}
         </div>
       </header>
 

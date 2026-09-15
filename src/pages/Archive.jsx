@@ -3,9 +3,9 @@ import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
 import { Footer } from '../components/Footer';
 
-import ngefont from '../assets/image/ngefont/ngfont-illustration.png';
-import amogasakti from '../assets/image/amogasakti/amogasakti.png';
-import takeit from '../assets/image/takeit/1.png';
+import ngefont from '../assets/image/ngefont/ngfont-illustration.webp';
+import amogasakti from '../assets/image/amogasakti/amogasakti.webp';
+import takeit from '../assets/image/takeit/1.webp';
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -41,6 +41,7 @@ const Archive = () => (
                   <li>Python</li><li>Ollama</li><li>Hybrid search</li><li>CLI</li>
                 </ul>
                 <div className="project-actions">
+                  <a href="/work/owa/">Engineering story <BoxArrowUpRight /></a>
                   <a href="https://zakacoding.github.io/ollama-workspace-agent" target="_blank" rel="noreferrer">Visit OwA <BoxArrowUpRight /></a>
                   <a href="https://github.com/ZakaCoding/ollama-workspace-agent" target="_blank" rel="noreferrer">Source <BoxArrowUpRight /></a>
                 </div>
@@ -71,6 +72,7 @@ const Archive = () => (
                 <ul className="project-tags" aria-label="Logistics platform technologies">
                   <li>Laravel</li><li>React</li><li>Docker</li><li>PostgreSQL</li><li>Redis</li>
                 </ul>
+                <div className="project-actions"><a href="/work/logistics/">Engineering story <BoxArrowUpRight /></a></div>
               </div>
 
               <div className="logistics-map" aria-label="DiGILOG connected product ecosystem">
@@ -99,6 +101,7 @@ const Archive = () => (
                   <li>Concept mapping</li><li>Visual tools</li><li>Open source</li>
                 </ul>
                 <div className="project-actions">
+                  <a href="/work/open-cmap/">Engineering story <BoxArrowUpRight /></a>
                   <a href="https://open-cmap.fly.dev/" target="_blank" rel="noreferrer">Open the canvas <BoxArrowUpRight /></a>
                   <a href="https://open-cmap.fly.dev/presentation" target="_blank" rel="noreferrer">Read the story <BoxArrowUpRight /></a>
                 </div>
@@ -182,6 +185,8 @@ const Archive = () => (
         </div>
       </section>
     </main>
+
+    <section className="portfolio-contact-strip" aria-label="Contact Zaka"><h2>Have a related problem?</h2><a href="/#/about?chat=1">Start a conversation →</a><a href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a></section>
 
     <Footer />
   </>

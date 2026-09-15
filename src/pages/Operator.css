@@ -589,3 +589,6 @@
   .is-spinning { animation: none !important; }
   .operator-thread-messages { scroll-behavior: auto; }
 }
+.operator-push-settings { padding: 10px 20px; background: #f5f7fb; border-bottom: 1px solid #e4e7ed; }
+.operator-push-settings p { font-size: 12px; line-height: 1.5; margin: 4px 0; color: #5d6572; }
+.operator-push-settings button { border: 0; background: transparent; color: #1769ff; padding: 8px 0; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }

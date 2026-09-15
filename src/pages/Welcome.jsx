@@ -107,6 +107,10 @@ export function Welcome() {
               </button>{' '}
               that doesn&apos;t need the cloud&apos;s permission, and the occasional tool to untangle other people&apos;s ideas.
             </p>
+            <div className="hero-primary-actions">
+              <a href="/work/">Explore my work <span aria-hidden="true">↗</span></a>
+              <a href="/#/about?chat=1">Let’s talk <span aria-hidden="true">→</span></a>
+            </div>
           </motion.article>
 
           <motion.article className="hero-card hero-memoji-card" variants={heroItem} transition={{ duration: 0.7, ease: easeOut }}>
@@ -144,6 +148,7 @@ export function Welcome() {
             <strong>Logistics</strong>
             <small>Systems behind real operations</small>
             <span className="story-count">05 connected products</span>
+            <a className="story-case-link" href="/work/logistics/">Read the engineering story ↗</a>
           </motion.article>
 
           <motion.a

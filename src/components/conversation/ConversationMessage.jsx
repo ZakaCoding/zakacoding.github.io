@@ -7,6 +7,7 @@ export const ConversationMessage = ({ message, onRetry }) => {
   const isOperator = message.sender.type === 'operator';
   const isFailed = message.status === 'failed';
   const isSending = message.status === 'sending';
+  const isInitial = message.id.startsWith('initial-');
 
   return (
     <motion.li
@@ -18,6 +19,7 @@ export const ConversationMessage = ({ message, onRetry }) => {
     >
       <article className="conversation-message">
         <p>{message.body}</p>
+        {!isInitial && !isFailed && !isSending && <span className="conversation-message-meta"><time dateTime={message.created_at} title={new Date(message.created_at).toLocaleString()}>{new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>{!isOperator && ' · Sent'}</span>}
         {isSending && <span className="conversation-message-meta">Sending…</span>}
         {isFailed && (
           <button type="button" className="conversation-message-retry" onClick={() => onRetry(message)}>

@@ -3985,3 +3985,28 @@ a.hero-story-card:hover {
     transition: none;
   }
 }
+/* Contact and conversation improvements */
+.hero-primary-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.hero-primary-actions a { display: inline-flex; align-items: center; gap: 22px; border-radius: 999px; padding: 12px 20px; background: #24262c; color: white; text-decoration: none; font-size: 14px; }
+.hero-primary-actions a + a { background: #eaebef; color: #24262c; }
+.story-case-link { display: block; margin-top: 12px; color: inherit; font-size: 12px; text-underline-offset: 3px; }
+.portfolio-contact-strip { max-width: 1120px; margin: 0 auto 70px; padding: 32px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.portfolio-contact-strip h2 { flex-basis: 100%; letter-spacing: -.035em; }
+.portfolio-contact-strip a, .about-direct-email { color: #424951; font-size: 14px; text-underline-offset: 4px; }
+.about-direct-email { display: inline-block; margin-top: 14px; }
+.skip-to-content { position: fixed; top: -120px; left: 20px; z-index: 1000; padding: 12px 20px; border-radius: 8px; background: white; color: #202125; }
+.skip-to-content:focus { top: 12px; }
+.conversation-availability { margin: 8px 0; font-size: 12px; color: #656b73; line-height: 1.5; }
+.conversation-email-link { display: inline-block; padding: 10px 0 0; font-size: 12px; color: #465166; text-underline-offset: 3px; }
+.conversation-follow-up { margin-top: 12px; border-top: 1px solid #e0e3e8; padding-top: 10px; text-align: left; }
+.conversation-follow-up summary { cursor: pointer; font-size: 12px; font-weight: 600; padding: 4px 0; }
+.conversation-follow-up p, .conversation-follow-up small { font-size: 12px; line-height: 1.5; color: #656b73; margin: 10px 0; }
+.conversation-follow-up form { margin: 12px 0; }
+.conversation-follow-up label { display: block; margin-bottom: 6px; font-size: 12px; }
+.conversation-follow-up form > div, .conversation-follow-up-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.conversation-follow-up input { min-width: 0; flex: 1; border: 1px solid #c9ced6; border-radius: 8px; padding: 9px 12px; font-size: 16px; background: white; color: #202125; }
+.conversation-follow-up button { border: 1px solid #c9ced6; border-radius: 8px; padding: 9px 12px; background: #f5f6f8; color: #202125; font-size: 12px; }
+.conversation-follow-up button:disabled { opacity: .55; }
+.conversation-follow-up small { display: block; }
+.about-conversation:has(.conversation-follow-up[open]) { max-height: min(80dvh, 740px); overflow-y: auto; }
+@media (prefers-reduced-motion: reduce) { .conversation-typing-indicator i { animation: none !important; } }

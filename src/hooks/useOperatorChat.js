@@ -10,6 +10,7 @@ import {
   logoutOperator,
   sendOperatorMessage,
 } from '../lib/operator/api';
+import { usePushNotifications } from './usePushNotifications';
 import { subscribeToOperatorConversations } from '../lib/operator/realtime';
 import {
   clearOperatorSession,
@@ -38,14 +39,22 @@ export const useOperatorChat = () => {
   const [isLoadingThread, setIsLoadingThread] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [realtimeStatus, setRealtimeStatus] = useState('saved');
+  const pushNotifications = usePushNotifications(session, true);
   const realtimeRef = useRef(null);
   const didBootstrapRef = useRef(false);
   const openRequestRef = useRef(0);
   const selectedIdRef = useRef(null);
+  const conversationsRef = useRef(conversations);
+  const unreadCountsRef = useRef(new Map());
+  const deliveredMessageIdsRef = useRef(new Set());
 
   useEffect(() => {
     selectedIdRef.current = selectedId;
   }, [selectedId]);
+
+  useEffect(() => {
+    conversationsRef.current = conversations;
+  }, [conversations]);
 
   const expireSession = useCallback(() => {
     clearOperatorSession();
@@ -53,6 +62,8 @@ export const useOperatorChat = () => {
     setSession(null);
     setOperator(null);
     setConversations([]);
+    unreadCountsRef.current.clear();
+    deliveredMessageIdsRef.current.clear();
     setSelectedId(null);
     setSelectedConversation(null);
     setPhase('login');
@@ -72,7 +83,10 @@ export const useOperatorChat = () => {
     if (!quiet) setIsLoadingInbox(true);
     try {
       const result = await loadOperatorConversations({ token });
-      setConversations(sortConversations(result.conversations));
+      setConversations(sortConversations(result.conversations.map((conversation) => ({
+        ...conversation,
+        unreadCount: unreadCountsRef.current.get(conversation.id) ?? conversation.unreadCount,
+      }))));
       setNotice('');
     } catch (error) {
       handleApiError(error, 'Inbox could not be refreshed.');
@@ -84,6 +98,12 @@ export const useOperatorChat = () => {
   const openConversation = useCallback(async (conversationId) => {
     if (!session?.token) return;
     const requestId = ++openRequestRef.current;
+    unreadCountsRef.current.delete(String(conversationId));
+    setConversations((current) => current.map((conversation) => (
+      conversation.id === String(conversationId)
+        ? { ...conversation, unreadCount: 0 }
+        : conversation
+    )));
     setSelectedId(conversationId);
     setSelectedConversation((current) => current?.id === conversationId ? current : null);
     setIsLoadingThread(true);
@@ -156,15 +176,44 @@ export const useOperatorChat = () => {
         refreshInbox({ quiet: true });
         reconcileSelectedConversation(session.token);
       },
-      onInboxEvent: () => refreshInbox({ quiet: true }),
+      onInboxEvent: (message) => {
+        const incomingConversationId = String(message?.conversation_id || '');
+        const isKnownConversation = conversationsRef.current.some(
+          (conversation) => conversation.id === incomingConversationId,
+        );
+        if (!isKnownConversation) refreshInbox({ quiet: true });
+      },
       onMessage: (message) => {
+        const messageId = String(message.id);
+        const isFirstDelivery = !deliveredMessageIdsRef.current.has(messageId);
+        deliveredMessageIdsRef.current.add(messageId);
+        if (deliveredMessageIdsRef.current.size > 500) {
+          deliveredMessageIdsRef.current.delete(deliveredMessageIdsRef.current.values().next().value);
+        }
+
+        const incomingConversationId = String(message.conversation_id);
+        const isUnread = message.sender.type === 'guest'
+          && selectedIdRef.current !== incomingConversationId;
+        if (isUnread) {
+          const unreadCount = (unreadCountsRef.current.get(incomingConversationId) || 0)
+            + (isFirstDelivery ? 1 : 0);
+          unreadCountsRef.current.set(incomingConversationId, unreadCount);
+
+
+        }
+
         setSelectedConversation((current) => {
-          if (!current || current.id !== String(message.conversation_id)) return current;
+          if (!current || current.id !== incomingConversationId) return current;
           return { ...current, messages: mergeMessages(current.messages, [message]) };
         });
         setConversations((current) => sortConversations(current.map((conversation) => (
-          conversation.id === String(message.conversation_id)
-            ? { ...conversation, lastMessage: message, lastMessageAt: message.created_at }
+          conversation.id === incomingConversationId
+            ? {
+              ...conversation,
+              lastMessage: message,
+              lastMessageAt: message.created_at,
+              unreadCount: unreadCountsRef.current.get(incomingConversationId) ?? conversation.unreadCount,
+            }
             : conversation
         ))));
       },
@@ -267,6 +316,7 @@ export const useOperatorChat = () => {
     notice,
     openConversation,
     operator,
+    pushNotifications,
     realtimeStatus,
     refreshInbox,
     selectedConversation,

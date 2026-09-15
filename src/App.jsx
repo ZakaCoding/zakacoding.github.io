@@ -8,6 +8,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import Lenis from 'lenis';
+import { MotionConfig } from 'framer-motion';
 import 'lenis/dist/lenis.css';
 
 // static component
@@ -59,10 +60,16 @@ function SmoothScroll() {
 function AppContent() {
   const location = useLocation();
   const isOperatorDesk = location.pathname.startsWith('/operator');
+  useEffect(() => {
+    if (isOperatorDesk) return;
+    const page = location.pathname === '/about' ? 'About Zaka Noor' : location.pathname === '/archive' ? 'Project archive · Zaka Noor' : 'Hello World · Zaka Noor';
+    document.title = page;
+  }, [location.pathname, isOperatorDesk]);
 
   return (
     <>
       <SmoothScroll />
+      {!isOperatorDesk && <a className="skip-to-content" href="#main-content" onClick={(event) => { event.preventDefault(); const main = document.querySelector('main'); main?.setAttribute('tabindex', '-1'); main?.focus(); }}>Skip to content</a>}
       {!isOperatorDesk && <Navbar />}
       <Suspense fallback={<main className="page-loading" aria-live="polite">Loading page…</main>}>
         <Routes>
@@ -79,9 +86,9 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
+    <MotionConfig reducedMotion="user"><Router>
       <AppContent />
-    </Router>
+    </Router></MotionConfig>
   );
 }
 

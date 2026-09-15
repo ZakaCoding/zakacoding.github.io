@@ -64,6 +64,7 @@ export const normalizeOperatorConversation = (conversation) => {
     id: String(conversation.id),
     status: conversation.status || 'open',
     displayName: participantName(conversation),
+    contactEmail: conversation.contact_email || null,
     createdAt: conversation.created_at || null,
     lastMessageAt: conversation.last_message_at || lastMessage?.created_at || conversation.updated_at || null,
     lastMessage,
@@ -114,11 +115,11 @@ export const loadOperatorConversation = async ({ id, token }) => {
   return conversation;
 };
 
-export const sendOperatorMessage = async ({ id, token, body }) => {
+export const sendOperatorMessage = async ({ id, token, body, clientMessageId }) => {
   const data = unwrapData(await request(`/api/operator/conversations/${encodeURIComponent(id)}/messages`, {
     method: 'POST',
     token,
-    body: JSON.stringify({ body }),
+    body: JSON.stringify({ body, client_message_id: clientMessageId }),
   }));
   const message = normalizeMessage(data);
   if (!message) throw new OperatorApiError('Message response is invalid.');

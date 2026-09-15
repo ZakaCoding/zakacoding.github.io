@@ -47,24 +47,15 @@ export const subscribeToOperatorConversations = ({
     });
 
     const inboxChannel = echo.private(inboxChannelName);
-    inboxChannel.listen('ConversationCreated', (payload) => {
-      onInboxEvent('conversation.created', payload?.data || payload);
-    });
-    inboxChannel.listen('ConversationUpdated', (payload) => {
-      onInboxEvent('conversation.updated', payload?.data || payload);
-    });
-    inboxChannel.listen('ConversationStatusChanged', (payload) => {
-      onInboxEvent('conversation.status-changed', payload?.data || payload);
-    });
-    inboxChannel.listen('MessageCreated', (payload) => {
+    inboxChannel.listen('.message.created', (payload) => {
       const message = normalizeMessage(payload?.data || payload);
       if (message) onMessage(message);
-      onInboxEvent('message.created', message || payload?.data || payload);
+      if (message && onInboxEvent) onInboxEvent(message);
     });
 
     conversationIds.forEach((conversationId) => {
       const channel = echo.private(`conversation.${conversationId}`);
-      channel.listen('MessageCreated', (payload) => {
+      channel.listen('.message.created', (payload) => {
         const message = normalizeMessage(payload?.data || payload);
         if (message) onMessage(message);
       });

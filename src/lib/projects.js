@@ -1,0 +1,45 @@
+export const projects = [
+  {
+    slug: 'owa', name: 'OwA', category: 'Local AI / Developer tooling', role: 'Independent project · Zaka Noor',
+    summary: 'A coding agent built around local models, repository context, and a developer’s own machine.',
+    problem: 'A useful coding assistant needs to understand the repository it is working in. For a local tool, that understanding also has to fit the constraints of smaller models and local hardware.',
+    approach: 'OwA brings repository search and tool use into a command-line workflow built for Ollama. The portfolio’s implementation focus is grounding answers in relevant code while keeping the workspace on the developer’s machine.',
+    decisions: [
+      ['Local execution', 'Build around Ollama so the developer controls where models run and where source code stays. The trade-off is that model quality and response speed depend on the local setup.'],
+      ['Repository context', 'Use hybrid search to find relevant code before answering. This makes retrieval a core part of the workflow, alongside the model itself.'],
+      ['A focused interface', 'Use a CLI that fits the development workflow, with explicit tools for working with repository context.'],
+    ],
+    outcome: 'An open-source local coding tool, with the implementation available for inspection. The repository is the place to check current capabilities, setup instructions, and limitations.',
+    technologies: ['Python', 'Ollama', 'Hybrid search', 'CLI'],
+    links: [['Visit OwA', 'https://zakacoding.github.io/ollama-workspace-agent'], ['Read the source', 'https://github.com/ZakaCoding/ollama-workspace-agent']],
+    visual: 'owa',
+  },
+  {
+    slug: 'logistics', name: 'Logistics ecosystem', category: 'Operations / System modernization', role: 'Production work · CKL Cargo',
+    summary: 'Connected software for order, warehouse, transport, fleet, and vendor operations.',
+    problem: 'An operational workflow crosses product boundaries. An order connects to warehouse activity, transport planning, fleet resources, and vendor coordination. Those handoffs need a shared operational context.',
+    approach: 'My work spans a connected logistics ecosystem, bringing backend systems, web interfaces, and delivery infrastructure together around the workflows people use to run operations.',
+    decisions: [
+      ['Follow the operation', 'Represent five connected product areas—OMS, WMS, TMS, FMS, and VMS—as parts of the same workflow. Clear handoffs matter as much as individual screens.'],
+      ['Connect interface and service', 'Use Laravel and React across the application stack, with PostgreSQL and Redis supporting the underlying services.'],
+      ['Make delivery part of the work', 'Include Docker-based infrastructure and safer delivery in the modernization effort, alongside feature development.'],
+    ],
+    outcome: 'Production engineering across five connected product areas. The diagram below describes that scope; customer data and internal application screens remain private.',
+    technologies: ['Laravel', 'React', 'Docker', 'PostgreSQL', 'Redis'],
+    links: [['Discuss similar work', '/#/about?chat=1']], visual: 'logistics',
+  },
+  {
+    slug: 'open-cmap', name: 'Open CMAP', category: 'Knowledge tools / Visual thinking', role: 'Independent project · Zaka Noor',
+    summary: 'A visual workspace for organizing concepts and the relationships between them.',
+    problem: 'A list can capture individual ideas but leave their relationships implicit. Concept mapping gives those connections a place on the page so people can inspect and discuss them.',
+    approach: 'Open CMAP provides a visual canvas for organizing concepts and relationships, with editing and sharing as part of the workspace.',
+    decisions: [
+      ['Start with relationships', 'Make concepts and their connections the central elements of the interface. The structure of the map carries the explanation.'],
+      ['Keep the workspace editable', 'Support arranging and refining a map as understanding changes. A visual thinking tool needs to accommodate unfinished ideas.'],
+      ['Make ideas shareable', 'Include sharing and export in the product experience so a map can become part of a wider discussion.'],
+    ],
+    outcome: 'A publicly accessible visual workspace, with a live canvas and a separate product presentation to explore.',
+    technologies: ['Concept mapping', 'Visual tools', 'Open source'],
+    links: [['Open the canvas', 'https://open-cmap.fly.dev/'], ['Read the presentation', 'https://open-cmap.fly.dev/presentation']], visual: 'cmap',
+  },
+];

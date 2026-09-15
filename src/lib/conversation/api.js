@@ -1,6 +1,6 @@
 import { normalizeMessage } from './types';
 
-const API_URL = (import.meta.env.VITE_CHAT_API_URL || 'https://ws-chat-zakacoding.fly.dev').replace(/\/$/, '');
+const API_URL = import.meta.env.DEV ? '/chat-api' : (import.meta.env.VITE_CHAT_API_URL || 'https://ws-chat-zakacoding.fly.dev').replace(/\/$/, '');
 
 export class ConversationApiError extends Error {
   constructor(message, status) {
@@ -18,7 +18,7 @@ const request = async (path, { token, ...options } = {}) => {
 
   let response;
   try {
-    response = await fetch(`${API_URL}${path}`, { ...options, headers });
+      response = await fetch(`${API_URL}${path}`, { ...options, headers, signal: AbortSignal.timeout(15000) });
   } catch {
     throw new ConversationApiError('network');
   }
@@ -49,14 +49,15 @@ export const loadConversation = async ({ id, token }) => {
     id: String(data.id),
     status: data.status || 'open',
     messages: data.messages.map(normalizeMessage).filter(Boolean),
+    contactEmail: data.contact_email || '',
   };
 };
 
-export const sendConversationMessage = async ({ id, token, body }) => {
+export const sendConversationMessage = async ({ id, token, body, clientMessageId }) => {
   const message = normalizeMessage((await request(`/api/conversations/${encodeURIComponent(id)}/messages`, {
     method: 'POST',
     token,
-    body: JSON.stringify({ body }),
+    body: JSON.stringify({ body, client_message_id: clientMessageId }),
   }))?.data);
   if (!message) throw new ConversationApiError('invalid-response');
 
@@ -64,3 +65,7 @@ export const sendConversationMessage = async ({ id, token, body }) => {
 };
 
 export { API_URL };
+
+export const saveConversationContact = async ({ id, token, email }) => request(`/api/conversations/${encodeURIComponent(id)}/contact`, {
+  token, method: 'PATCH', body: JSON.stringify({ email: email || null }),
+});

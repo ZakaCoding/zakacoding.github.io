@@ -10,22 +10,27 @@ import {
 import { useConversation } from '../../hooks/useConversation';
 import { ConversationComposer } from './ConversationComposer';
 import { ConversationMessage } from './ConversationMessage';
+import { ConversationOpening } from './ConversationOpening';
 import { QuickReplies } from './QuickReplies';
-
-const DRAFT_KEY = 'conversation-draft';
+import { ConversationFollowUp } from './ConversationFollowUp';
+import { readDraft, saveDraft } from '../../lib/conversation/storage';
+import { disablePushSubscription } from '../../lib/conversation/push';
 
 const statusLabel = {
-  live: 'live',
+  live: 'connected',
   connecting: 'connecting…',
-  saved: 'offline · messages saved',
+  saved: 'reconnecting',
 };
 
 export const ConversationExperience = () => {
-  const [draft, setDraft] = useState(() => sessionStorage.getItem(DRAFT_KEY) || '');
+  const [draft, setDraft] = useState(readDraft);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showOpening, setShowOpening] = useState(false);
+  const [resetNotice, setResetNotice] = useState('');
+  const [isPageVisible, setIsPageVisible] = useState(!document.hidden);
   const prevMessageCountRef = useRef(0);
   const messagesRef = useRef(null);
   const conversationRef = useRef(null);
@@ -40,7 +45,7 @@ export const ConversationExperience = () => {
 
   useEffect(() => {
     const messagesElement = messagesRef.current;
-    if (!messagesElement) return;
+    if (!messagesElement || (!isAtBottom && conversation.messages.at(-1)?.sender.type !== 'guest')) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (typeof messagesElement.scrollTo === 'function') {
@@ -51,7 +56,15 @@ export const ConversationExperience = () => {
     } else {
       messagesElement.scrollTop = messagesElement.scrollHeight;
     }
-  }, [conversation.messages.length, conversation.isOperatorTyping]);
+  // Only new content or reopening the chat should trigger scrolling.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversation.messages.length, conversation.isOperatorTyping, showOpening, isMinimized]);
+
+  useEffect(() => {
+    const handleVisibility = () => setIsPageVisible(!document.hidden);
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, []);
 
   useEffect(() => {
     if (!conversation.isStarted || isMinimized) return undefined;
@@ -153,7 +166,7 @@ export const ConversationExperience = () => {
 
   const handleDraftChange = (value) => {
     setDraft(value);
-    sessionStorage.setItem(DRAFT_KEY, value);
+    saveDraft(value);
   };
 
   useEffect(() => {
@@ -172,15 +185,15 @@ export const ConversationExperience = () => {
   useEffect(() => {
     const newCount = conversation.messages.length;
     const prevCount = prevMessageCountRef.current;
-    if (newCount > prevCount && !isAtBottom && isMinimized === false) {
+    if (newCount > prevCount && (!isAtBottom || isMinimized || !isPageVisible) && !conversation.isLoading) {
       const newOperatorMessages = conversation.messages
         .slice(prevCount)
-        .filter((m) => m.sender.type === 'operator').length;
+        .filter((m) => m.sender.type === 'operator' && !INITIAL_MESSAGES.some((initial) => initial.id === m.id)).length;
       if (newOperatorMessages > 0) setUnreadCount((c) => c + newOperatorMessages);
     }
-    if (isAtBottom) setUnreadCount(0);
+    if (isAtBottom && !isMinimized && isPageVisible) setUnreadCount(0);
     prevMessageCountRef.current = newCount;
-  }, [conversation.messages, isAtBottom, isMinimized]);
+  }, [conversation.messages, conversation.isLoading, isAtBottom, isMinimized, isPageVisible]);
 
   const scrollToBottom = () => {
     const el = messagesRef.current;
@@ -191,12 +204,22 @@ export const ConversationExperience = () => {
 
   const handleSend = () => {
     const message = draft.trim();
-    if (!message) return;
+    if (!message || conversation.isSending || conversation.isStarting || conversation.isLoading) return;
+    setShowOpening(false);
     handleDraftChange('');
     conversation.sendMessage(message);
   };
 
-  const hasNewMessages = conversation.messages.length > INITIAL_MESSAGES.length;
+  const hasNewMessages = conversation.messages.some((message) => !INITIAL_MESSAGES.some((initial) => initial.id === message.id));
+  const hasRealOperatorMessage = conversation.messages.some((message) => (
+    message.sender.type === 'operator' && !INITIAL_MESSAGES.some((initial) => initial.id === message.id)
+  ));
+  const isShowingOpening = showOpening && !hasNewMessages && !hasRealOperatorMessage && !conversation.isStarting && !conversation.isLoading;
+
+  const handleStartConversation = () => {
+    setShowOpening(true);
+    conversation.startConversation();
+  };
 
   return (
     <AnimatePresence initial={false}>
@@ -226,7 +249,7 @@ export const ConversationExperience = () => {
           <button
             type="button"
             className="about-closing-cta"
-            onClick={conversation.startConversation}
+            onClick={handleStartConversation}
             disabled={conversation.isStarting}
           >
             Start a conversation <ArrowRight aria-hidden="true" />
@@ -246,21 +269,30 @@ export const ConversationExperience = () => {
           exit={reducedMotion ? undefined : { opacity: 0, y: -12, scale: 0.98 }}
           transition={reducedMotion ? { duration: 0 } : { duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="about-conversation-minimized-label"><i /> Conversation saved</span>
+          <span className="about-conversation-minimized-label"><i /> {unreadCount ? `${unreadCount} new ${unreadCount === 1 ? 'reply' : 'replies'}` : 'Your conversation'}</span>
           <div className="about-conversation-minimized-actions">
             <button type="button" onClick={() => setIsMinimized(false)}>Continue session</button>
             <button
               type="button"
               className="is-secondary"
-              onClick={() => {
+              onClick={async () => {
+                if (conversation.messages.some((message) => message.status === 'failed' || message.status === 'sending')) {
+                  setResetNotice('You have unsent messages. Continue the session to retry them before starting again.');
+                  return;
+                }
+                try { if (conversation.session) await disablePushSubscription(conversation.session); }
+                catch { setResetNotice('Couldn’t turn off notifications for this conversation. Please try again.'); return; }
                 conversation.resetConversation();
+                setShowOpening(false);
                 setIsMinimized(false);
-                setDraft('');
+                handleDraftChange('');
+                setResetNotice('');
               }}
             >
               Start new conversation
             </button>
           </div>
+          {resetNotice && <p role="status">{resetNotice}</p>}
         </motion.div>
       ) : (
         <motion.section
@@ -280,16 +312,17 @@ export const ConversationExperience = () => {
               <button type="button" className="about-conversation-close" onClick={() => setIsMinimized(true)} aria-label="Minimize conversation">−</button>
             </div>
           </header>
+          <p className="conversation-availability">Leave a message—I’ll reply when I’m back at my desk.</p>
 
-          {conversation.isLoading && conversation.messages.length === 0 ? (
+          {(showOpening && (conversation.isStarting || conversation.isLoading)) || (conversation.isLoading && conversation.messages.length === 0) ? (
             <p className="about-conversation-loading" aria-live="polite">Loading messages…</p>
           ) : (
             <div className="about-conversation-messages-wrap">
-              <ul ref={messagesRef} className="about-conversation-messages" aria-live="polite" aria-relevant="additions text">
-              {conversation.messages.map((message) => (
+              <ul ref={messagesRef} className="about-conversation-messages" aria-live={isShowingOpening ? 'off' : 'polite'} aria-relevant="additions text">
+              {isShowingOpening ? <ConversationOpening onComplete={setShowOpening} /> : conversation.messages.map((message) => (
                 <ConversationMessage key={message.id} message={message} onRetry={conversation.retryMessage} />
               ))}
-              {conversation.isOperatorTyping && (
+              {conversation.isOperatorTyping && !isShowingOpening && (
                 <li className="conversation-message-row is-operator" aria-live="polite" aria-label="Zaka is typing">
                   <article className="conversation-message">
                     <span className="conversation-typing-indicator" aria-hidden="true"><i /><i /><i /></span>
@@ -319,15 +352,18 @@ export const ConversationExperience = () => {
           )}
 
           {!hasNewMessages && (
-            <QuickReplies onSelect={(reply) => conversation.sendMessage(reply)} disabled={conversation.isSending || conversation.isStarting} />
+            <QuickReplies onSelect={(reply) => { setShowOpening(false); conversation.sendMessage(reply); }} disabled={conversation.isSending || conversation.isStarting || conversation.isLoading} />
           )}
 
           <ConversationComposer
             value={draft}
             onChange={handleDraftChange}
             onSend={handleSend}
-            disabled={conversation.isSending || conversation.isLoading || conversation.isStarting}
+            disabled={conversation.isLoading || conversation.isStarting}
+            isSending={conversation.isSending}
           />
+          {hasNewMessages && conversation.session && <ConversationFollowUp key={conversation.contactEmail} session={conversation.session} contactEmail={conversation.contactEmail} onContactSaved={conversation.setContactEmail} />}
+          <a className="conversation-email-link" href="mailto:zakanoor@outlook.co.id">Email me directly</a>
         </motion.section>
       ))}
     </AnimatePresence>

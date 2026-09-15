@@ -29,6 +29,7 @@ export const normalizeMessage = (message) => {
     },
     body: message.body,
     created_at: message.created_at || new Date(0).toISOString(),
+    client_message_id: message.client_message_id || null,
     ...(message.status ? { status: message.status } : {}),
   };
 };
@@ -65,7 +66,11 @@ export const removePendingMatch = (pendingMessages, persistedMessage) => {
       return false;
     }
 
-    if (!matched && message.body === normalized.body && message.sender.type === 'guest') {
+    if (normalized.client_message_id && message.client_message_id === normalized.client_message_id) {
+      return false;
+    }
+
+    if (!normalized.client_message_id && !message.client_message_id && !matched && message.body === normalized.body && message.sender.type === 'guest') {
       matched = true;
       return false;
     }

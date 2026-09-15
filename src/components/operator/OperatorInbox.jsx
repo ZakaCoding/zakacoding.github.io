@@ -1,6 +1,13 @@
 /* eslint-disable react/prop-types */
 
-import { ArrowClockwise, BoxArrowRight, ChatDots, ChevronRight } from 'react-bootstrap-icons';
+import {
+  ArrowClockwise,
+  Bell,
+  BellFill,
+  BoxArrowRight,
+  ChatDots,
+  ChevronRight,
+} from 'react-bootstrap-icons';
 
 const relativeTime = (value) => {
   const timestamp = Date.parse(value);
@@ -25,10 +32,12 @@ export function OperatorInbox({
   onLogout,
   onOpen,
   onRefresh,
+  pushNotifications,
   operator,
   realtimeStatus,
   selectedId,
 }) {
+  const notificationPermission = pushNotifications.state;
   return (
     <aside className={`operator-inbox ${selectedId ? 'has-mobile-selection' : ''}`} aria-label="Conversation inbox">
       <header className="operator-inbox-header">
@@ -37,12 +46,32 @@ export function OperatorInbox({
           <h1>Conversations</h1>
         </div>
         <div className="operator-inbox-actions">
+          {notificationPermission !== 'unsupported' && (
+            <button
+              aria-label={notificationPermission === 'enabled' ? 'Turn off notifications' : 'Enable notifications'}
+              disabled={notificationPermission === 'denied' || notificationPermission === 'saving'}
+              onClick={notificationPermission === 'enabled' ? pushNotifications.disable : pushNotifications.enable}
+              title={notificationPermission === 'denied'
+                ? 'Notifications are blocked in browser settings'
+                : notificationPermission === 'enabled' ? 'Turn off notifications' : 'Enable notifications'}
+              type="button"
+            >
+              {notificationPermission === 'enabled'
+                ? <BellFill aria-hidden="true" />
+                : <Bell aria-hidden="true" />}
+            </button>
+          )}
           <button aria-label="Refresh conversations" disabled={isLoading} onClick={() => onRefresh()} type="button">
             <ArrowClockwise className={isLoading ? 'is-spinning' : ''} aria-hidden="true" />
           </button>
           <button aria-label="Sign out" onClick={onLogout} type="button"><BoxArrowRight aria-hidden="true" /></button>
         </div>
       </header>
+      <div className="operator-push-settings">
+        <p>{notificationPermission === 'enabled' ? 'Push is enabled for this device—even with the desk closed.' : notificationPermission === 'unsupported' ? 'On iPhone or iPad, add Zaka Desk to your Home Screen, open it there, then enable notifications.' : notificationPermission === 'denied' ? 'Notifications are blocked. Allow them in your browser’s site settings.' : 'Enable notifications to hear about new visitors when you’re away.'}</p>
+        {notificationPermission === 'enabled' && <button type="button" onClick={pushNotifications.test}>Send a test notification</button>}
+        {pushNotifications.notice && <p role="status">{pushNotifications.notice}</p>}
+      </div>
 
       <div className="operator-presence-row">
         <span className={`operator-live-dot is-${realtimeStatus}`} />

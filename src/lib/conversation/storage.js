@@ -1,5 +1,29 @@
 const STORAGE_KEY = 'zakacoding.conversation.v1';
 
+export const readDraft = () => {
+  try { return sessionStorage.getItem('conversation-draft') || ''; } catch { return ''; }
+};
+
+export const saveDraft = (value) => {
+  try { sessionStorage.setItem('conversation-draft', value); } catch { /* In-memory composing still works. */ }
+};
+
+export const readOutbox = (id) => {
+  try {
+    const messages = JSON.parse(localStorage.getItem(`zakacoding.outbox.${id}`) || '[]');
+    return Array.isArray(messages) ? messages.filter((message) => message.conversation_id === id && typeof message.body === 'string' && message.client_message_id)
+      .map((message) => ({ ...message, status: 'failed' })) : [];
+  } catch { return []; }
+};
+
+export const saveOutbox = (id, messages) => {
+  try {
+    if (messages.length) localStorage.setItem(`zakacoding.outbox.${id}`, JSON.stringify(messages));
+    else localStorage.removeItem(`zakacoding.outbox.${id}`);
+    return true;
+  } catch { return false; }
+};
+
 const isValidSession = (session) => (
   Boolean(session)
   && typeof session.id === 'string'

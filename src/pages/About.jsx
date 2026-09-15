@@ -1,18 +1,17 @@
 import { useEffect, useRef } from 'react';
-import { Player } from '@lottiefiles/react-lottie-player';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
 import localAiRobot from '../assets/image/local-ai-robot.webp';
-import animoji from '../assets/lottie/memoji.json?url';
+import { MemojiWink } from '../components/MemojiWink';
 import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
 import { ConversationExperience } from '../components/conversation/ConversationExperience';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 // Frame 24 is the wink with the head tilted, before the clip returns to neutral.
-const MEMOJI_WINK_FRAME = 24;
 
 const buildSteps = [
   {
@@ -82,6 +81,7 @@ const fieldNotes = [
 ];
 
 const About = () => {
+  const location = useLocation();
   const exhibitionRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
@@ -94,30 +94,19 @@ const About = () => {
   const logoMessageRef = useRef(null);
   const closingPanelRef = useRef(null);
   const directionRef = useRef(null);
-  const memojiRef = useRef(null);
-  const memojiHoveredRef = useRef(false);
 
-  const playMemojiWink = () => {
-    memojiHoveredRef.current = true;
-    const animation = memojiRef.current;
-    if (!animation) return;
-
-    animation.setSegment(0, MEMOJI_WINK_FRAME + 1);
-    animation.setDirection(1);
-    animation.setSpeed(2.1);
-    animation.play();
-  };
-
-  const releaseMemojiWink = () => {
-    memojiHoveredRef.current = false;
-    const animation = memojiRef.current;
-    if (!animation) return;
-
-    // Retrace the current pose more gently, including interrupted hovers.
-    animation.setDirection(-1);
-    animation.setSpeed(1.25);
-    animation.play();
-  };
+  useEffect(() => {
+    if (new URLSearchParams(location.search).get('chat') !== '1') return undefined;
+    const timer = window.setTimeout(() => {
+      const track = trackRef.current;
+      const exhibition = exhibitionRef.current;
+      if (!track || !exhibition) return;
+      if (window.innerWidth <= 700) closingPanelRef.current?.scrollIntoView({ block: 'start', behavior: 'auto' });
+      else if (navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches) track.parentElement.scrollTo({ left: track.scrollWidth - window.innerWidth, behavior: 'auto' });
+      else window.scrollTo({ top: exhibition.offsetTop + track.scrollWidth - window.innerWidth, behavior: 'instant' });
+    }, 150);
+    return () => window.clearTimeout(timer);
+  }, [location.search]);
 
   useEffect(() => {
     const exhibition = exhibitionRef.current;
@@ -446,24 +435,7 @@ const About = () => {
 
               <div className="about-editorial-memoji">
                 <span className="about-hand-note about-hand-note-one">Build.<br />Learn.<br />Repeat.</span>
-                <div
-                  className="about-classic-memoji-player"
-                  onMouseEnter={playMemojiWink}
-                  onMouseLeave={releaseMemojiWink}
-                >
-                  <Player
-                    src={animoji}
-                    keepLastFrame
-                    speed={2.1}
-                    style={{ width: '100%', height: 'auto' }}
-                    lottieRef={(animation) => {
-                      memojiRef.current = animation;
-                      if (memojiHoveredRef.current) {
-                        playMemojiWink();
-                      }
-                    }}
-                  />
-                </div>
+                <MemojiWink />
                 <span className="about-hand-note about-hand-note-two">Read.<br />Code.<br />Coffee.</span>
               </div>
             </section>
@@ -526,7 +498,7 @@ const About = () => {
                 ))}
               </div>
 
-              <a className="about-field-notes-link" href="/archive">
+              <a className="about-field-notes-link" href="/#/archive">
                 See the full archive <ArrowRight aria-hidden="true" />
               </a>
             </section>
@@ -591,6 +563,7 @@ const About = () => {
                     that make complicated things feel clear.
                   </p>
                   <ConversationExperience />
+                  <a className="about-direct-email" href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a>
                 </div>
               </div>
 

@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { OperatorInbox } from '../components/operator/OperatorInbox';
 import { OperatorLogin } from '../components/operator/OperatorLogin';
@@ -20,6 +21,15 @@ const ensureMeta = (name, content) => {
 
 export default function Operator() {
   const chat = useOperatorChat();
+  const location = useLocation();
+  const openedFromPush = useRef(null);
+  const notificationConversation = new URLSearchParams(location.search).get('conversation');
+  useEffect(() => {
+    if (chat.isReady && notificationConversation && openedFromPush.current !== notificationConversation) {
+      openedFromPush.current = notificationConversation;
+      chat.openConversation(notificationConversation);
+    }
+  }, [chat, notificationConversation]);
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -61,6 +71,7 @@ export default function Operator() {
           onLogout={chat.logout}
           onOpen={chat.openConversation}
           onRefresh={chat.refreshInbox}
+          pushNotifications={chat.pushNotifications}
           operator={chat.operator}
           realtimeStatus={chat.realtimeStatus}
           selectedId={chat.selectedId}

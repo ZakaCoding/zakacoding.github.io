@@ -37,13 +37,16 @@ export const subscribeToConversation = ({ conversationId, token, onMessage, onSt
     });
 
     const channel = echo.private(`conversation.${conversationId}`);
-    channel.listen('MessageCreated', (payload) => {
+    // MessageCreated::broadcastAs() publishes the custom event name
+    // `message.created`; the leading dot tells Echo not to prepend
+    // its default App.Events namespace.
+    channel.listen('.message.created', (payload) => {
       const message = normalizeMessage(payload?.data || payload);
       if (message) onMessage(message);
     });
 
     channel.listenForWhisper('typing', (payload) => {
-      if (onTyping && payload?.sender === 'operator') onTyping(true);
+      if (onTyping && payload?.sender === 'operator') onTyping(payload.typing !== false);
     });
 
     const connection = echo.connector?.pusher?.connection;
