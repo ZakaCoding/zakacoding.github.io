@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
-import { ArrowDown, ArrowRight } from 'react-bootstrap-icons';
+import { ArrowDown, ArrowRight, VolumeMuteFill, VolumeUpFill } from 'react-bootstrap-icons';
 
 import {
   INITIAL_MESSAGES,
@@ -15,6 +15,12 @@ import { QuickReplies } from './QuickReplies';
 import { ConversationFollowUp } from './ConversationFollowUp';
 import { readDraft, saveDraft } from '../../lib/conversation/storage';
 import { disablePushSubscription } from '../../lib/conversation/push';
+import {
+  playChatSound,
+  primeChatSounds,
+  readChatSoundEnabled,
+  saveChatSoundEnabled,
+} from '../../lib/conversation/sounds';
 
 const statusLabel = {
   live: 'connected',
@@ -30,8 +36,10 @@ export const ConversationExperience = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showOpening, setShowOpening] = useState(false);
   const [resetNotice, setResetNotice] = useState('');
+  const [soundEnabled, setSoundEnabled] = useState(readChatSoundEnabled);
   const [isPageVisible, setIsPageVisible] = useState(!document.hidden);
   const prevMessageCountRef = useRef(0);
+  const seenOperatorMessageIdsRef = useRef(null);
   const messagesRef = useRef(null);
   const conversationRef = useRef(null);
   const conversation = useConversation();
@@ -195,6 +203,28 @@ export const ConversationExperience = () => {
     prevMessageCountRef.current = newCount;
   }, [conversation.messages, conversation.isLoading, isAtBottom, isMinimized, isPageVisible]);
 
+  useEffect(() => {
+    const operatorMessages = conversation.messages.filter((message) => (
+      message.sender.type === 'operator'
+      && !INITIAL_MESSAGES.some((initial) => initial.id === message.id)
+      && message.status !== 'failed'
+    ));
+    const currentIds = new Set(operatorMessages.map((message) => message.id));
+
+    // Establish the baseline from restored history without playing sounds.
+    if (!seenOperatorMessageIdsRef.current) {
+      seenOperatorMessageIdsRef.current = currentIds;
+      return;
+    }
+
+    const hasNewOperatorMessage = operatorMessages.some((message) => (
+      !seenOperatorMessageIdsRef.current.has(message.id)
+    ));
+    seenOperatorMessageIdsRef.current = currentIds;
+
+    if (hasNewOperatorMessage && isPageVisible) playChatSound('receive');
+  }, [conversation.messages, isPageVisible]);
+
   const scrollToBottom = () => {
     const el = messagesRef.current;
     if (!el) return;
@@ -202,12 +232,14 @@ export const ConversationExperience = () => {
     setUnreadCount(0);
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const message = draft.trim();
     if (!message || conversation.isSending || conversation.isStarting || conversation.isLoading) return;
+    primeChatSounds();
     setShowOpening(false);
     handleDraftChange('');
-    conversation.sendMessage(message);
+    const sent = await conversation.sendMessage(message);
+    if (sent) playChatSound('send');
   };
 
   const hasNewMessages = conversation.messages.some((message) => !INITIAL_MESSAGES.some((initial) => initial.id === message.id));
@@ -217,8 +249,16 @@ export const ConversationExperience = () => {
   const isShowingOpening = showOpening && !hasNewMessages && !hasRealOperatorMessage && !conversation.isStarting && !conversation.isLoading;
 
   const handleStartConversation = () => {
+    primeChatSounds();
     setShowOpening(true);
     conversation.startConversation();
+  };
+
+  const handleSoundToggle = () => {
+    const enabled = !soundEnabled;
+    setSoundEnabled(enabled);
+    saveChatSoundEnabled(enabled);
+    if (enabled) primeChatSounds();
   };
 
   return (
@@ -309,6 +349,15 @@ export const ConversationExperience = () => {
             <span className="about-conversation-title">A small space to talk</span>
             <div className="about-conversation-header-actions">
               <span className="about-conversation-status"><i /> {conversation.isStarting ? 'connecting…' : statusLabel[conversation.realtimeStatus]}</span>
+              <button
+                type="button"
+                className="about-conversation-sound"
+                onClick={handleSoundToggle}
+                aria-label={soundEnabled ? 'Mute chat sounds' : 'Enable chat sounds'}
+                title={soundEnabled ? 'Mute chat sounds' : 'Enable chat sounds'}
+              >
+                {soundEnabled ? <VolumeUpFill aria-hidden="true" /> : <VolumeMuteFill aria-hidden="true" />}
+              </button>
               <button type="button" className="about-conversation-close" onClick={() => setIsMinimized(true)} aria-label="Minimize conversation">−</button>
             </div>
           </header>
@@ -352,7 +401,12 @@ export const ConversationExperience = () => {
           )}
 
           {!hasNewMessages && (
-            <QuickReplies onSelect={(reply) => { setShowOpening(false); conversation.sendMessage(reply); }} disabled={conversation.isSending || conversation.isStarting || conversation.isLoading} />
+            <QuickReplies onSelect={async (reply) => {
+              primeChatSounds();
+              setShowOpening(false);
+              const sent = await conversation.sendMessage(reply);
+              if (sent) playChatSound('send');
+            }} disabled={conversation.isSending || conversation.isStarting || conversation.isLoading} />
           )}
 
           <ConversationComposer
