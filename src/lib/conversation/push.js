@@ -10,7 +10,7 @@ const pushRequest = async (path, token, options = {}) => {
     ...options, signal: AbortSignal.timeout(15000),
     headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
   });
-  if (!response.ok) throw new Error(response.status === 503 || response.status === 404
+  if (!response.ok) throw new Error(path === '/api/push/config' && (response.status === 503 || response.status === 404)
     ? 'Push notifications are not configured on the server yet. You can still leave a message.'
     : 'Couldn’t save notification settings. Please try again.');
   return response.status === 204 ? null : response.json();

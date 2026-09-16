@@ -320,8 +320,9 @@ export const ConversationExperience = () => {
                   setResetNotice('You have unsent messages. Continue the session to retry them before starting again.');
                   return;
                 }
-                try { if (conversation.session) await disablePushSubscription(conversation.session); }
-                catch { setResetNotice('Couldn’t turn off notifications for this conversation. Please try again.'); return; }
+                // Push cleanup is best effort. A stale or unavailable push route
+                // must never prevent the visitor from starting a fresh conversation.
+                try { if (conversation.session) await disablePushSubscription(conversation.session); } catch { /* Continue with local reset. */ }
                 conversation.resetConversation();
                 setShowOpening(false);
                 setIsMinimized(false);
