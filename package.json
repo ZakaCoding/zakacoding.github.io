@@ -5,7 +5,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "release": "npm run build && npm run deploy",
+    "release": "npm run release:check && npm run build && npm run deploy",
+    "release:check": "node scripts/check-release-env.mjs",
     "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build && node scripts/build-project-pages.mjs",
