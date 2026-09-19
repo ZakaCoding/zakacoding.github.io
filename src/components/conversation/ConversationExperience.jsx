@@ -90,52 +90,9 @@ export const ConversationExperience = () => {
   }, [conversation.isStarted, isMinimized, isExpanded]);
 
   useEffect(() => {
-    const unlockDocumentScroll = () => {
-      document.documentElement.classList.remove('conversation-scroll-lock');
-    };
-
     const element = conversationRef.current;
-    if (!element || !conversation.isStarted || isMinimized) {
-      unlockDocumentScroll();
-      return undefined;
-    }
+    if (!element || !conversation.isStarted || isMinimized) return undefined;
 
-    // Measure scrollbar width once and store as CSS var so the lock
-    // padding-right compensation doesn't cause a layout shift.
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
-
-    const lockDocumentScroll = () => {
-      document.documentElement.classList.add('conversation-scroll-lock');
-    };
-
-    const pointerInsideRef = { current: false };
-    const focusInsideRef = { current: false };
-
-    const syncDocumentScroll = () => {
-      if (pointerInsideRef.current || focusInsideRef.current) {
-        lockDocumentScroll();
-      } else {
-        unlockDocumentScroll();
-      }
-    };
-
-    const handlePointerEnter = () => { pointerInsideRef.current = true; lockDocumentScroll(); };
-    const handlePointerLeave = () => { pointerInsideRef.current = false; syncDocumentScroll(); };
-    const handleFocusIn = () => { focusInsideRef.current = true; lockDocumentScroll(); };
-    const handleFocusOut = () => {
-      window.requestAnimationFrame(() => {
-        focusInsideRef.current = element.contains(document.activeElement);
-        syncDocumentScroll();
-      });
-    };
-    const handleDocumentPointerDown = (event) => {
-      if (!element.contains(event.target)) {
-        pointerInsideRef.current = false;
-        focusInsideRef.current = false;
-        unlockDocumentScroll();
-      }
-    };
     const handleViewportResize = () => {
       if (window.innerWidth <= 900 && element.contains(document.activeElement)) {
         window.requestAnimationFrame(() => {
@@ -144,21 +101,10 @@ export const ConversationExperience = () => {
       }
     };
 
-    element.addEventListener('pointerenter', handlePointerEnter);
-    element.addEventListener('pointerleave', handlePointerLeave);
-    element.addEventListener('focusin', handleFocusIn);
-    element.addEventListener('focusout', handleFocusOut);
-    document.addEventListener('pointerdown', handleDocumentPointerDown);
     window.visualViewport?.addEventListener('resize', handleViewportResize);
 
     return () => {
-      element.removeEventListener('pointerenter', handlePointerEnter);
-      element.removeEventListener('pointerleave', handlePointerLeave);
-      element.removeEventListener('focusin', handleFocusIn);
-      element.removeEventListener('focusout', handleFocusOut);
-      document.removeEventListener('pointerdown', handleDocumentPointerDown);
       window.visualViewport?.removeEventListener('resize', handleViewportResize);
-      unlockDocumentScroll();
     };
   }, [conversation.isStarted, isMinimized]);
 

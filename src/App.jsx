@@ -48,7 +48,7 @@ function SmoothScroll() {
       smoothWheel: true,
       syncTouch: false,
       anchors: true,
-      prevent: (node) => node.closest?.('.about-conversation') !== null,
+      prevent: (node) => Boolean(node.closest?.('.about-conversation, .about-contact-panel:has(.about-conversation)')),
     });
 
     return () => lenis.destroy();

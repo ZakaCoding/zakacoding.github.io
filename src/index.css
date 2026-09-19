@@ -30,12 +30,6 @@ html {
   scrollbar-gutter: stable;
 }
 
-html.conversation-scroll-lock {
-  overflow: hidden;
-  overscroll-behavior: none;
-  padding-right: var(--scrollbar-width, 0px);
-}
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

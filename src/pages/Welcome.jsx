@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BoxArrowUpRight, ChatDots } from 'react-bootstrap-icons';
+import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
 import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
 import localAiRobot from '../assets/image/local-ai-robot.webp';
@@ -110,28 +110,26 @@ export function Welcome() {
             <div className="hero-primary-actions" aria-label="Portfolio actions">
               <motion.a
                 className="hero-action hero-action-work"
+                aria-label="Explore my work"
                 href="/work/"
                 whileTap={{ scale: 0.985 }}
                 transition={{ type: 'spring', stiffness: 520, damping: 32 }}
               >
                 <span className="hero-action-badge" aria-hidden="true">
-                  <span className="hero-action-badge-inner">
-                    <span className="hero-action-badge-face hero-action-badge-logo">Za</span>
-                    <span className="hero-action-badge-face hero-action-badge-coffee">
-                      <svg
-                        className="hero-action-coffee-icon"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M.5 6a.5.5 0 0 0-.488.608l1.652 7.434A2.5 2.5 0 0 0 4.104 16h5.792a2.5 2.5 0 0 0 2.44-1.958l.131-.59a3 3 0 0 0 1.3-5.854l.221-.99A.5.5 0 0 0 13.5 6zM13 12.5a2 2 0 0 1-.316-.025l.867-3.898A2.001 2.001 0 0 1 13 12.5"
-                        />
-                        <path d="m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8" />
-                      </svg>
-                    </span>
-                  </span>
+                  <svg className="hero-project-stack" viewBox="0 0 40 40" fill="none">
+                    <g className="hero-project-card hero-project-card-back">
+                      <rect x="10" y="8" width="23" height="26" rx="5" fill="#bcd0ff" />
+                    </g>
+                    <g className="hero-project-card hero-project-card-middle">
+                      <rect x="7" y="8" width="23" height="26" rx="5" fill="#ffd6c7" />
+                    </g>
+                    <g className="hero-project-card hero-project-card-front">
+                      <rect x="5" y="7" width="24" height="27" rx="5" fill="#dfff76" />
+                      <path d="M9 13h5m3 0h2" stroke="#65783a" strokeWidth="1.5" strokeLinecap="round" />
+                      <path d="m13 19-4 4 4 4m8-8 4 4-4 4m-3-9-2 10" stroke="#24262c" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                    </g>
+                    <path className="hero-project-spark" d="M33 3v6m-3-3h6" stroke="#dfff76" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
                 </span>
                 <span className="hero-action-copy">
                   <span className="hero-action-copy-default">Explore my work</span>
@@ -142,13 +140,21 @@ export function Welcome() {
 
               <motion.a
                 className="hero-action hero-action-chat"
+                aria-label="Let’s talk"
                 href="/#/about?chat=1"
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: 'spring', stiffness: 520, damping: 32 }}
               >
                 <span className="hero-action-chat-mark" aria-hidden="true">
-                  <ChatDots className="hero-action-chat-icon" />
-                  <span className="hero-action-chat-wave">👋</span>
+                  <svg className="hero-conversation-icon" viewBox="0 0 32 32" fill="none">
+                    <path className="hero-conversation-echo" d="M13 8h10a5 5 0 0 1 5 5v6l-4-2h-9" fill="#bcd0ff" stroke="#24262c" strokeWidth="1.4" strokeLinejoin="round" />
+                    <path d="M4 13a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v5a5 5 0 0 1-5 5h-7l-6 4v-5a5 5 0 0 1-2-4z" fill="#fff" stroke="#24262c" strokeWidth="1.4" strokeLinejoin="round" />
+                    <g fill="#24262c">
+                      <circle className="hero-conversation-dot" cx="9" cy="16" r="1.3" />
+                      <circle className="hero-conversation-dot" cx="14" cy="16" r="1.3" />
+                      <circle className="hero-conversation-dot" cx="19" cy="16" r="1.3" />
+                    </g>
+                  </svg>
                 </span>
                 <span className="hero-action-copy">
                   <span className="hero-action-copy-default">Let’s talk</span>
