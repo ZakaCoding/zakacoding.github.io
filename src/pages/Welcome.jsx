@@ -111,18 +111,88 @@ export function Welcome() {
               <motion.a
                 className="hero-action hero-action-work"
                 href="/work/"
-                whileTap={{ scale: 0.985 }}
+                initial="rest"
+                animate="rest"
+                whileHover="hover"
+                whileFocus="hover"
+                whileTap="tap"
+                variants={{
+                  rest: { y: 0, scale: 1 },
+                  hover: { y: -1, scale: 1.008 },
+                  tap: { y: 0, scale: 0.985 },
+                }}
                 transition={{ type: 'spring', stiffness: 560, damping: 34 }}
               >
-                <span className="hero-action-badge" aria-hidden="true">
-                  <span className="hero-action-badge-shadow hero-action-badge-shadow-back" />
-                  <span className="hero-action-badge-shadow hero-action-badge-shadow-mid" />
-                  <span className="hero-action-badge-main">
-                    <img src="/logo/zaka.svg" alt="" width="28" height="28" />
-                  </span>
-                </span>
-                <span className="hero-action-work-label">Selected Work</span>
-                <span className="hero-action-arrow" aria-hidden="true">↗</span>
+                <svg
+                  className="hero-action-work-shape"
+                  viewBox="0 0 228 56"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <motion.path
+                    variants={{
+                      rest: {
+                        d: 'M28 4 C15 4 6 14 6 28 C6 42 15 52 28 52 C35 52 40 48 47 48 C53 48 58 52 68 52 L198 52 C212 52 220 43 220 28 C220 13 212 4 198 4 L68 4 C58 4 53 8 47 8 C40 8 35 4 28 4 Z',
+                      },
+                      hover: {
+                        d: 'M30 1 C16 1 6 11 6 25 C6 41 16 52 30 52 C38 52 43 47 49 47 C55 47 59 52 68 52 L198 52 C212 52 220 43 220 28 C220 13 212 4 198 4 L68 4 C58 4 54 7 49 7 C43 7 38 1 30 1 Z',
+                      },
+                      tap: {
+                        d: 'M29 3 C16 3 7 13 7 28 C7 42 16 51 29 51 C36 51 41 47 48 47 C54 47 59 51 68 51 L198 51 C211 51 219 42 219 28 C219 14 211 5 198 5 L68 5 C59 5 54 9 48 9 C41 9 36 3 29 3 Z',
+                      },
+                    }}
+                    transition={{ duration: 0.34, ease: easeOut }}
+                  />
+                </svg>
+
+                <motion.span
+                  className="hero-action-badge"
+                  aria-hidden="true"
+                  variants={{
+                    rest: { x: 0, y: 0, scale: 1, rotate: 0 },
+                    hover: { x: 2, y: -5, scale: 1.08, rotate: -4 },
+                    tap: { x: 1, y: 0, scale: 0.96, rotate: 0 },
+                  }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 26 }}
+                >
+                  <motion.img
+                    src="/logo/zaka.svg"
+                    alt=""
+                    width="34"
+                    height="34"
+                    variants={{
+                      rest: { filter: 'invert(1)' },
+                      hover: { filter: 'invert(1)' },
+                      tap: { filter: 'invert(0)' },
+                    }}
+                    transition={{ duration: 0.14 }}
+                  />
+                </motion.span>
+
+                <motion.span
+                  className="hero-action-work-label"
+                  variants={{
+                    rest: { x: 0 },
+                    hover: { x: 2 },
+                    tap: { x: 0 },
+                  }}
+                  transition={{ type: 'spring', stiffness: 520, damping: 32 }}
+                >
+                  Selected Work
+                </motion.span>
+
+                <motion.span
+                  className="hero-action-arrow"
+                  aria-hidden="true"
+                  variants={{
+                    rest: { x: 0, y: 0 },
+                    hover: { x: 3, y: -2 },
+                    tap: { x: 1, y: 0 },
+                  }}
+                  transition={{ type: 'spring', stiffness: 520, damping: 30 }}
+                >
+                  ↗
+                </motion.span>
               </motion.a>
 
               <motion.a
