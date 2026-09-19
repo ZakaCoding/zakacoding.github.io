@@ -9,6 +9,7 @@ export const MemojiWink = () => {
   const container = useRef(null);
   const animation = useRef(null);
   const hovered = useRef(false);
+  const releaseTimer = useRef(null);
   const [nearby, setNearby] = useState(false);
   const reducedMotion = useReducedMotion();
   useEffect(() => {
@@ -18,23 +19,30 @@ export const MemojiWink = () => {
     if (container.current) observer.observe(container.current);
     return () => observer.disconnect();
   }, []);
+  useEffect(() => () => window.clearTimeout(releaseTimer.current), []);
+
   const play = () => {
+    window.clearTimeout(releaseTimer.current);
     hovered.current = true;
     if (!animation.current || reducedMotion) return;
-    animation.current.setSegment(0, 25);
     animation.current.setDirection(1);
-    animation.current.setSpeed(2.1);
+    animation.current.setSpeed(1.4);
     animation.current.play();
   };
   const release = () => {
     hovered.current = false;
-    if (!animation.current) return;
-    animation.current.setDirection(-1);
-    animation.current.setSpeed(1.25);
-    animation.current.play();
+    window.clearTimeout(releaseTimer.current);
+    if (!animation.current || reducedMotion) return;
+    // A short pause avoids a twitch when the pointer crosses the edge.
+    releaseTimer.current = window.setTimeout(() => {
+      if (!animation.current || hovered.current) return;
+      animation.current.setDirection(-1);
+      animation.current.setSpeed(1.1);
+      animation.current.play();
+    }, 120);
   };
   const fallback = <img src={poster} width="586" height="586" alt="Zaka’s Memoji" />;
   return <div className="about-classic-memoji-player" ref={container} onMouseEnter={play} onMouseLeave={release}>
-    {nearby && !reducedMotion ? <Suspense fallback={fallback}><Player src={animationUrl} keepLastFrame speed={2.1} style={{ width: '100%', height: 'auto' }} lottieRef={(instance) => { animation.current = instance; if (hovered.current) play(); }} /></Suspense> : fallback}
+    {nearby && !reducedMotion ? <Suspense fallback={fallback}><Player src={animationUrl} keepLastFrame speed={1.4} style={{ width: '100%', height: 'auto' }} lottieRef={(instance) => { animation.current = instance; instance.setSubframe(true); if (hovered.current) play(); }} /></Suspense> : fallback}
   </div>;
 };
