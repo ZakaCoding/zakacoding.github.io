@@ -4091,101 +4091,158 @@ a.hero-story-card:hover {
   transition: transform 320ms var(--action-ease);
 }
 
-/* Primary: the ZakaCoding badge flips from the monogram into coffee. */
+/* Primary: branded Selected Work button with a lifted, layered logo badge. */
 .hero-action-work {
-  --copy-width: 7.8rem;
-  padding: 6px 18px 6px 6px;
+  isolation: isolate;
+  padding: 6px 18px 6px 7px;
   color: #fff;
-  background: #24262c;
+  background: linear-gradient(180deg, #26282e 0%, #202126 100%);
   border-color: rgba(255, 255, 255, 0.08);
   box-shadow:
     0 8px 20px rgba(29, 29, 31, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.hero-action-work .hero-action-copy {
-  width: var(--copy-width);
+.hero-action-work::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 1.85rem 50%, rgba(255, 255, 255, 0.28) 0 0.18rem, rgba(255, 255, 255, 0.09) 0.2rem 1.8rem, transparent 3.8rem);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.72);
+  transition: opacity 160ms ease, transform 320ms var(--action-ease);
+}
+
+.hero-action-work > * {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-action-work-label {
+  min-width: 7rem;
+  white-space: nowrap;
 }
 
 .hero-action-work:hover,
 .hero-action-work:focus-visible {
   color: #fff;
-  background: #1d1e22;
-  transform: translateY(-2px) scale(1.018);
+  background: linear-gradient(180deg, #24262b 0%, #1c1d21 100%);
+  transform: translateY(-2px);
   box-shadow:
-    0 16px 30px rgba(29, 29, 31, 0.2),
+    0 16px 32px rgba(29, 29, 31, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .hero-action-badge {
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
-  border-radius: 50%;
-  perspective: 520px;
-  filter: drop-shadow(0 3px 7px rgba(0, 0, 0, 0.16));
-  transition:
-    transform 360ms var(--action-ease),
-    filter 360ms var(--action-ease);
-}
-
-.hero-action-badge-inner {
   position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 520ms var(--action-ease);
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  margin-left: -2px;
 }
 
-.hero-action-badge-face {
+.hero-action-badge-shadow,
+.hero-action-badge-main {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  transition:
+    transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 260ms ease,
+    background-color 260ms ease,
+    box-shadow 320ms var(--action-ease);
 }
 
-.hero-action-badge-logo {
-  color: #1d1d1f;
+.hero-action-badge-shadow {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+
+.hero-action-badge-shadow-back {
+  opacity: 0.34;
+  transform: translateX(-1px) scale(0.94);
+}
+
+.hero-action-badge-shadow-mid {
+  opacity: 0.52;
+  transform: translateX(-0.5px) scale(0.97);
+}
+
+.hero-action-badge-main {
+  overflow: hidden;
+  padding: 6px;
+  border: 1px solid rgba(29, 29, 31, 0.08);
   background: #fff;
-  font-size: 1rem;
-  font-weight: 760;
-  letter-spacing: -0.06em;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-.hero-action-badge-coffee {
-  background: linear-gradient(145deg, #fffaf2, #ead9c6);
-  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
-  font-size: 1.15rem;
-  transform: rotateY(180deg);
+.hero-action-badge-main img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
 }
 
-.hero-action-work:hover .hero-action-badge,
-.hero-action-work:focus-visible .hero-action-badge {
-  transform: translate(-4px, -2px) rotate(-5deg) scale(1.08);
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+.hero-action-work:hover .hero-action-badge-main,
+.hero-action-work:focus-visible .hero-action-badge-main {
+  transform: translate(-2px, -4px) rotate(-4deg) scale(1.08);
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
 }
 
-.hero-action-work:hover .hero-action-badge-inner,
-.hero-action-work:focus-visible .hero-action-badge-inner {
-  transform: rotateY(180deg);
+.hero-action-work:hover .hero-action-badge-shadow-mid,
+.hero-action-work:focus-visible .hero-action-badge-shadow-mid {
+  opacity: 0.64;
+  transform: translate(-7px, 1px) scale(1.02);
+}
+
+.hero-action-work:hover .hero-action-badge-shadow-back,
+.hero-action-work:focus-visible .hero-action-badge-shadow-back {
+  opacity: 0.42;
+  transform: translate(-12px, 2px) scale(0.96);
 }
 
 .hero-action-work:hover .hero-action-arrow,
 .hero-action-work:focus-visible .hero-action-arrow {
-  transform: translate(3px, -2px) rotate(45deg);
+  transform: translate(3px, -2px);
 }
 
 .hero-action-work:active {
   transform: translateY(0) scale(0.985);
-  box-shadow: 0 5px 12px rgba(29, 29, 31, 0.14);
+  box-shadow:
+    0 4px 10px rgba(29, 29, 31, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.hero-action-work:active .hero-action-badge {
-  transform: translateX(1px) scale(0.96);
+.hero-action-work:active::after {
+  opacity: 1;
+  transform: scale(1.08);
+  transition-duration: 90ms;
+}
+
+.hero-action-work:active .hero-action-badge-main {
+  transform: translate(0, 0) scale(0.94);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+
+.hero-action-work:active .hero-action-badge-shadow-mid {
+  opacity: 0.35;
+  transform: translate(-2px, 0) scale(0.94);
+}
+
+.hero-action-work:active .hero-action-badge-shadow-back {
+  opacity: 0.2;
+  transform: translate(-3px, 0) scale(0.9);
 }
 
 /* Secondary: chat turns into a tiny wave while the label answers back. */
@@ -4291,9 +4348,6 @@ a.hero-story-card:hover {
     font-size: 13px;
   }
 
-  .hero-action-work {
-    --copy-width: 7.25rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4301,7 +4355,8 @@ a.hero-story-card:hover {
   .hero-action-copy > span,
   .hero-action-arrow,
   .hero-action-badge,
-  .hero-action-badge-inner,
+  .hero-action-badge-shadow,
+  .hero-action-badge-main,
   .hero-action-chat-mark,
   .hero-action-chat-icon,
   .hero-action-chat-wave {
@@ -4311,10 +4366,17 @@ a.hero-story-card:hover {
   .hero-action:hover,
   .hero-action:focus-visible,
   .hero-action:active,
-  .hero-action-work:hover .hero-action-badge,
-  .hero-action-work:focus-visible .hero-action-badge,
-  .hero-action-work:active .hero-action-badge {
+  .hero-action-work:hover .hero-action-badge-main,
+  .hero-action-work:focus-visible .hero-action-badge-main,
+  .hero-action-work:active .hero-action-badge-main,
+  .hero-action-work:hover .hero-action-badge-shadow,
+  .hero-action-work:focus-visible .hero-action-badge-shadow,
+  .hero-action-work:active .hero-action-badge-shadow {
     transform: none;
+  }
+
+  .hero-action-work::after {
+    display: none;
   }
 }
 .story-case-link { display: block; margin-top: 12px; color: inherit; font-size: 12px; text-underline-offset: 3px; }
