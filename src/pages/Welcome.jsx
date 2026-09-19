@@ -112,18 +112,16 @@ export function Welcome() {
                 className="hero-action hero-action-work"
                 href="/work/"
                 whileTap={{ scale: 0.985 }}
-                transition={{ type: 'spring', stiffness: 520, damping: 32 }}
+                transition={{ type: 'spring', stiffness: 560, damping: 34 }}
               >
                 <span className="hero-action-badge" aria-hidden="true">
-                  <span className="hero-action-badge-inner">
-                    <span className="hero-action-badge-face hero-action-badge-logo">Za</span>
-                    <span className="hero-action-badge-face hero-action-badge-coffee">☕️</span>
+                  <span className="hero-action-badge-shadow hero-action-badge-shadow-back" />
+                  <span className="hero-action-badge-shadow hero-action-badge-shadow-mid" />
+                  <span className="hero-action-badge-main">
+                    <img src="/logo/zaka.svg" alt="" width="28" height="28" />
                   </span>
                 </span>
-                <span className="hero-action-copy">
-                  <span className="hero-action-copy-default">Explore my work</span>
-                  <span className="hero-action-copy-hover">See what I’ve built</span>
-                </span>
+                <span className="hero-action-work-label">Selected Work</span>
                 <span className="hero-action-arrow" aria-hidden="true">↗</span>
               </motion.a>
 
