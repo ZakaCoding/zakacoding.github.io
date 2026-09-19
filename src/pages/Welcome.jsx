@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BoxArrowUpRight } from 'react-bootstrap-icons';
+import { BoxArrowUpRight, ChatDots } from 'react-bootstrap-icons';
 
 import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
 import localAiRobot from '../assets/image/local-ai-robot.webp';
@@ -107,9 +107,42 @@ export function Welcome() {
               </button>{' '}
               that doesn&apos;t need the cloud&apos;s permission, and the occasional tool to untangle other people&apos;s ideas.
             </p>
-            <div className="hero-primary-actions">
-              <a href="/work/">Explore my work <span aria-hidden="true">↗</span></a>
-              <a href="/#/about?chat=1">Let’s talk <span aria-hidden="true">→</span></a>
+            <div className="hero-primary-actions" aria-label="Portfolio actions">
+              <motion.a
+                className="hero-action hero-action-work"
+                href="/work/"
+                whileTap={{ scale: 0.985 }}
+                transition={{ type: 'spring', stiffness: 520, damping: 32 }}
+              >
+                <span className="hero-action-badge" aria-hidden="true">
+                  <span className="hero-action-badge-inner">
+                    <span className="hero-action-badge-face hero-action-badge-logo">Za</span>
+                    <span className="hero-action-badge-face hero-action-badge-coffee">☕️</span>
+                  </span>
+                </span>
+                <span className="hero-action-copy">
+                  <span className="hero-action-copy-default">Explore my work</span>
+                  <span className="hero-action-copy-hover">See what I’ve built</span>
+                </span>
+                <span className="hero-action-arrow" aria-hidden="true">↗</span>
+              </motion.a>
+
+              <motion.a
+                className="hero-action hero-action-chat"
+                href="/#/about?chat=1"
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 520, damping: 32 }}
+              >
+                <span className="hero-action-chat-mark" aria-hidden="true">
+                  <ChatDots className="hero-action-chat-icon" />
+                  <span className="hero-action-chat-wave">👋</span>
+                </span>
+                <span className="hero-action-copy">
+                  <span className="hero-action-copy-default">Let’s talk</span>
+                  <span className="hero-action-copy-hover">Say hi</span>
+                </span>
+                <span className="hero-action-arrow" aria-hidden="true">→</span>
+              </motion.a>
             </div>
           </motion.article>
 
