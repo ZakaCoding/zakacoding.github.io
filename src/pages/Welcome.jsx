@@ -2,8 +2,8 @@ import { lazy, Suspense, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
-import zakaMemoji from '../assets/image/zaka-memoji.jpeg';
 import localAiRobot from '../assets/image/local-ai-robot.webp';
+import zakaMemoji from '../assets/image/zaka-memoji-screenlit.webp';
 
 const easeOut = [0.22, 1, 0.36, 1];
 const LocalAiRobot = lazy(() => import('../components/LocalAiRobot'));
@@ -165,7 +165,11 @@ export function Welcome() {
             </div>
           </motion.article>
 
-          <motion.article className="hero-card hero-memoji-card" variants={heroItem} transition={{ duration: 0.7, ease: easeOut }}>
+          <motion.article
+            className="hero-card hero-memoji-card"
+            variants={heroItem}
+            transition={{ duration: 0.7, ease: easeOut }}
+          >
             <div className="memoji-caption">
               <span>ZakaCoding</span>
               <span>GMT+7</span>
@@ -173,9 +177,9 @@ export function Welcome() {
             <img
               src={zakaMemoji}
               className="hero-memoji"
-              alt="Zaka's memoji smiling behind a sticker-covered laptop"
-              width="1420"
-              height="1781"
+              alt="Zaka's Memoji smiling behind a sticker-covered laptop, lit by its screen"
+              width="1120"
+              height="1404"
               decoding="async"
             />
             <p>Code, coffee, curiosity.</p>
