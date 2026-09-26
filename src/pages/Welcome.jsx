@@ -7,6 +7,7 @@ import zakaMemoji from '../assets/image/zaka-memoji-screenlit.webp';
 
 const easeOut = [0.22, 1, 0.36, 1];
 const LocalAiRobot = lazy(() => import('../components/LocalAiRobot'));
+const HeroMemojiScene = lazy(() => import('../components/HeroMemojiScene'));
 
 export function Welcome() {
   const [coffeeOpen, setCoffeeOpen] = useState(false);
@@ -176,12 +177,13 @@ export function Welcome() {
             </div>
             <img
               src={zakaMemoji}
-              className="hero-memoji"
+              className="hero-memoji hero-memoji-poster"
               alt="Zaka's Memoji smiling behind a sticker-covered laptop, lit by its screen"
               width="1120"
               height="1404"
               decoding="async"
             />
+            <Suspense fallback={null}><HeroMemojiScene /></Suspense>
             <p>Code, coffee, curiosity.</p>
           </motion.article>
 
