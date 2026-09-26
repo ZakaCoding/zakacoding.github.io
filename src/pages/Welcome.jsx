@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { BoxArrowUpRight } from 'react-bootstrap-icons';
 
 import localAiRobot from '../assets/image/local-ai-robot.webp';
-import zakaMemoji from '../assets/image/zaka-memoji-screenlit.webp';
+import { HeroMemoji3D } from '../components/HeroMemoji3D';
 
 const easeOut = [0.22, 1, 0.36, 1];
 const LocalAiRobot = lazy(() => import('../components/LocalAiRobot'));
@@ -174,14 +174,7 @@ export function Welcome() {
               <span>ZakaCoding</span>
               <span>GMT+7</span>
             </div>
-            <img
-              src={zakaMemoji}
-              className="hero-memoji"
-              alt="Zaka's Memoji smiling behind a sticker-covered laptop, lit by its screen"
-              width="1120"
-              height="1404"
-              decoding="async"
-            />
+            <HeroMemoji3D />
             <p>Code, coffee, curiosity.</p>
           </motion.article>
 
