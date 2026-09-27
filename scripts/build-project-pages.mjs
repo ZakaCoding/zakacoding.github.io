@@ -1,5 +1,6 @@
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { projects } from '../src/lib/projects.js';
+import { renderOwaStory } from './owa-story.mjs';
 
 const origin = 'https://zakacoding.github.io';
 const escape = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
@@ -13,6 +14,11 @@ const shell = (title, description, path, body) => `<!doctype html><html lang="en
 await mkdir('dist/work', { recursive: true });
 for (const project of projects) {
   const path = `/work/${project.slug}/`;
+  if (project.slug === 'owa') {
+    await mkdir(`dist${path}`, { recursive: true });
+    await writeFile(`dist${path}index.html`, renderOwaStory());
+    continue;
+  }
   const body = `<a class="back" href="/work/">← Selected work</a><p class="eyebrow">${escape(project.category)}</p><h1>${escape(project.name)}</h1><p class="lede">${escape(project.summary)}</p><p class="role">${escape(project.role)}</p><ul class="tags">${project.technologies.map((tag) => `<li>${escape(tag)}</li>`).join('')}</ul>${visual(project)}<section><p class="eyebrow">01 / The problem</p><h2>What needed to be clearer</h2><p>${escape(project.problem)}</p></section><section><p class="eyebrow">02 / The approach</p><h2>How I approached it</h2><p>${escape(project.approach)}</p><div class="decisions">${project.decisions.map(([title, copy]) => `<article><h3>${escape(title)}</h3><p>${escape(copy)}</p></article>`).join('')}</div></section><section><p class="eyebrow">03 / The result</p><h2>What you can explore</h2><p>${escape(project.outcome)}</p><div class="links">${project.links.map(([label, url]) => `<a class="button" href="${escape(url)}">${escape(label)} ↗</a>`).join('')}</div></section>`;
   await mkdir(`dist${path}`, { recursive: true });
   await writeFile(`dist${path}index.html`, shell(project.name, project.summary, path, body));
