@@ -63,18 +63,28 @@ const steps = {
 };
 
 const byId = (id) => document.getElementById(id);
-const soundButton = byId('sound-toggle');
-const soundLabel = byId('sound-label');
-let soundOn = false;
 let audioContext;
 
-const chime = (kind = 'tap') => {
-  if (!soundOn) return;
+const primeAudio = () => {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
     audioContext ||= new AudioContextClass();
-    if (audioContext.state === 'suspended') audioContext.resume();
+    if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+  } catch {
+    // The page remains usable when a browser does not offer Web Audio.
+  }
+};
+
+// Browsers unlock audio after a gesture. Prime it on the first pointer or key
+// action so interaction sounds need no separate on/off control.
+document.addEventListener('pointerdown', primeAudio, { once: true, passive: true });
+document.addEventListener('keydown', primeAudio, { once: true });
+
+const chime = (kind = 'tap') => {
+  try {
+    primeAudio();
+    if (!audioContext) return;
     const start = audioContext.currentTime;
     const notes = kind === 'success' ? [530, 795] : kind === 'deny' ? [260, 210] : [420, 510];
     notes.forEach((frequency, index) => {
@@ -91,16 +101,12 @@ const chime = (kind = 'tap') => {
       oscillator.stop(at + 0.14);
     });
   } catch {
-    // Sound is optional; all interactions still work if audio is unavailable.
+    // All interactions still work if audio is unavailable.
   }
 };
 
-soundButton.addEventListener('click', () => {
-  soundOn = !soundOn;
-  soundButton.setAttribute('aria-pressed', String(soundOn));
-  soundButton.setAttribute('aria-label', soundOn ? 'Turn interaction sounds off' : 'Turn interaction sounds on');
-  soundLabel.textContent = soundOn ? 'Sound on' : 'Sound off';
-  if (soundOn) chime('success');
+document.addEventListener('click', (event) => {
+  if (event.target.closest('a')) chime();
 });
 
 document.querySelectorAll('[data-trace]').forEach((button) => {
