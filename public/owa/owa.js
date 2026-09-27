@@ -62,6 +62,55 @@ const steps = {
   },
 };
 
+const evidenceCases = {
+  approval: [
+    {
+      path: 'app/tools/approval.py',
+      summary: 'A failed or interrupted approval prompt returns false.',
+      title: 'The human says yes or no.',
+      detail: 'The default policy is “ask.” Deny, invalid policy, EOF, and interruption all return false. The decision is made before the command runs.',
+      linkLabel: 'Read approval.py ↗',
+    },
+    {
+      path: 'app/tools/shell.py',
+      summary: 'A command asks first, then uses Docker by default.',
+      title: 'The command has another boundary.',
+      detail: 'After approval, shell execution defaults to a Docker container without network access. The developer can explicitly choose host execution instead.',
+      linkLabel: 'Read shell.py ↗',
+    },
+    {
+      path: 'app/tools/registry.py',
+      summary: 'The registry names the actions the model can request.',
+      title: 'The available tools are explicit.',
+      detail: 'The agent can request registered tools such as run_command, read_file, and git_diff. The registry makes the action surface inspectable.',
+      linkLabel: 'Read registry.py ↗',
+    },
+  ],
+  context: [
+    {
+      path: 'app/indexer/search.py',
+      summary: 'Search combines lexical and semantic signals when possible.',
+      title: 'Retrieval can degrade openly.',
+      detail: 'A compatible embedding index adds a semantic signal. If embeddings are missing or incompatible, OwA warns and scores with lexical signals instead.',
+      linkLabel: 'Read search.py ↗',
+    },
+    {
+      path: 'app/agent/context.py',
+      summary: 'The evidence budget is shared across source excerpts.',
+      title: 'The excerpt has a cost.',
+      detail: 'OwA reserves room for prompts, tools, conversation, and output. It then shares the remaining evidence budget across eligible results and keeps citation headers.',
+      linkLabel: 'Read context.py ↗',
+    },
+    {
+      path: 'app/indexer/relevance.py',
+      summary: 'Identifiers, paths, and phrases add precise match signals.',
+      title: 'Exact names deserve attention.',
+      detail: 'The relevance helpers split code identifiers and check quoted phrases, explicit paths, and symbol names. These signals help the search stay useful for code.',
+      linkLabel: 'Read relevance.py ↗',
+    },
+  ],
+};
+
 const byId = (id) => document.getElementById(id);
 let audioContext;
 
@@ -150,6 +199,57 @@ document.querySelectorAll('[data-step]').forEach((button) => {
   });
 });
 
+let currentEvidenceCase = 'approval';
+let selectedEvidenceIndex = 0;
+const evidenceRange = byId('evidence-count');
+const evidenceButtons = [...document.querySelectorAll('[data-evidence-index]')];
+const renderEvidenceDesk = () => {
+  const files = evidenceCases[currentEvidenceCase];
+  const count = Number(evidenceRange.value);
+  byId('evidence-count-value').textContent = `${count} of 3`;
+  evidenceButtons.forEach((button, index) => {
+    const file = files[index];
+    const included = index < count;
+    button.querySelector('.desk-file-path').textContent = file.path;
+    button.querySelector('.desk-file-summary').textContent = file.summary;
+    button.querySelector('.desk-file-state').textContent = included ? 'In context' : 'Outside pile';
+    button.classList.toggle('is-out', !included);
+    button.classList.toggle('is-selected', index === selectedEvidenceIndex);
+    button.setAttribute('aria-pressed', String(index === selectedEvidenceIndex));
+  });
+  const selected = files[selectedEvidenceIndex];
+  document.querySelector('.desk-inspector-eyebrow').textContent = `${selectedEvidenceIndex < count ? 'In the pile' : 'Outside the pile'} / 0${selectedEvidenceIndex + 1}`;
+  byId('desk-file-title').textContent = selected.title;
+  byId('desk-file-detail').textContent = selected.detail;
+  const link = byId('desk-file-link');
+  link.textContent = selected.linkLabel;
+  link.href = `https://github.com/ZakaCoding/ollama-workspace-agent/blob/main/${selected.path}`;
+  byId('desk-outcome-text').textContent = `${count} source ${count === 1 ? 'card is' : 'cards are'} in this illustrative pile. ${count < 3 ? 'The rest remain one click away; ' : 'All three are visible; '}OwA keeps citations so a developer can inspect a full file when an excerpt misses context.`;
+};
+
+document.querySelectorAll('[data-desk-case]').forEach((button) => {
+  button.addEventListener('click', () => {
+    currentEvidenceCase = button.dataset.deskCase;
+    selectedEvidenceIndex = 0;
+    document.querySelectorAll('[data-desk-case]').forEach((choice) => {
+      const active = choice === button;
+      choice.classList.toggle('is-active', active);
+      choice.setAttribute('aria-pressed', String(active));
+    });
+    renderEvidenceDesk();
+    chime();
+  });
+});
+evidenceButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    selectedEvidenceIndex = Number(button.dataset.evidenceIndex);
+    renderEvidenceDesk();
+    chime();
+  });
+});
+evidenceRange.addEventListener('input', renderEvidenceDesk);
+evidenceRange.addEventListener('change', () => chime());
+
 const approvalVisual = document.querySelector('.approval-visual');
 byId('approve-command').addEventListener('click', () => {
   byId('approval-feedback').textContent = 'Demo: permission granted. In OwA, the approved command would run in its configured sandbox and return real output.';
@@ -164,7 +264,7 @@ byId('deny-command').addEventListener('click', () => {
   chime('deny');
 });
 
-document.querySelectorAll('.detail-list details').forEach((detail) => {
+document.querySelectorAll('.detail-list details, .field-note').forEach((detail) => {
   detail.addEventListener('toggle', () => { if (detail.open) chime(); });
 });
 
@@ -205,7 +305,7 @@ window.addEventListener('scroll', () => {
 updateProgress();
 
 if ('IntersectionObserver' in window) {
-  const sections = [...document.querySelectorAll('.chapter[id]')];
+  const sections = [...document.querySelectorAll('.chapter[id], .evidence-desk[id]')];
   const railLinks = [...document.querySelectorAll('.story-rail a[href^="#"]')];
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
