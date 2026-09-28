@@ -62,7 +62,7 @@ function AppContent() {
   const isOperatorDesk = location.pathname.startsWith('/operator');
   useEffect(() => {
     if (isOperatorDesk) return;
-    const page = location.pathname === '/about' ? 'About Zaka Noor' : location.pathname === '/archive' ? 'Project archive · Zaka Noor' : 'Hello World · Zaka Noor';
+    const page = location.pathname === '/about' ? 'About Zaka Noor' : location.pathname === '/archive' ? 'Work · Zaka Noor' : 'Hello World · Zaka Noor';
     document.title = page;
   }, [location.pathname, isOperatorDesk]);
 

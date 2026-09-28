@@ -111,7 +111,7 @@ export function Welcome() {
               <motion.a
                 className="hero-action hero-action-work"
                 aria-label="Explore my work"
-                href="/work/"
+                href="/#/archive"
                 whileTap={{ scale: 0.985 }}
                 transition={{ type: 'spring', stiffness: 520, damping: 32 }}
               >

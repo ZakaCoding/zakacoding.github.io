@@ -1,195 +1,241 @@
-import { motion } from 'framer-motion';
-import { BoxArrowUpRight } from 'react-bootstrap-icons';
+/* eslint-disable react/prop-types */
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useDragControls, useMotionValue } from 'framer-motion';
+import { ArrowUpRight, ArrowsMove, ArrowRepeat, Folder2Open, X } from 'react-bootstrap-icons';
 
 import { Footer } from '../components/Footer';
-
 import ngefont from '../assets/image/ngefont/ngfont-illustration.webp';
 import amogasakti from '../assets/image/amogasakti/amogasakti.webp';
 import takeit from '../assets/image/takeit/1.webp';
+import './Archive.css';
 
-const easeOut = [0.22, 1, 0.36, 1];
+const mainWork = [
+  { id: 'owa', number: '01', kind: 'Local AI · open source', title: 'OwA', summary: 'A coding partner that knows your repo and runs on your machine.', href: '/work/owa/', action: 'Explore the story' },
+  { id: 'logistics', number: '02', kind: 'Operations · production', title: 'Logistics ecosystem', summary: 'Five connected products for the people moving things in the real world.', href: '/work/logistics/', action: 'Explore the story' },
+  { id: 'cmap', number: '03', kind: 'Visual thinking · open source', title: 'Open CMAP', summary: 'An open canvas that makes ideas and their relationships visible.', href: '/work/open-cmap/', action: 'Explore the story' },
+];
 
-const reveal = {
-  initial: { opacity: 0, y: 40 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.16 },
-  transition: { duration: 0.75, ease: easeOut },
-};
+const otherWork = [
+  { id: 'ngefont', number: '04', kind: 'Typography platform', title: 'Ngefont', summary: 'A home for finding the right type.', href: 'https://ngefont.com', action: 'Visit website', image: ngefont },
+  { id: 'takeit', number: '05', kind: 'Creative agency', title: 'TakeIt', summary: 'A digital home for a creative team.', href: 'https://takeitoffice.com', action: 'Visit website', image: takeit },
+  { id: 'amogasakti', number: '06', kind: 'Playful web experience', title: 'Amogasakti', summary: 'A card game with a world of its own.', href: 'https://amogasakti.vercel.app/', action: 'Visit website', image: amogasakti },
+];
 
-const Archive = () => (
-  <>
-    <main className="archive-page">
-      <section className="work-story archive-work-story" aria-labelledby="archive-page-title">
-        <div className="story-shell">
-          <motion.header className="work-story-heading" {...reveal}>
-            <div>
-              <span className="section-number">01 / Archive</span>
-              <h1 id="archive-page-title">Built for the real world,<br /><em>not the demo reel.</em></h1>
-            </div>
-            <p>Three kinds of problems. One way of working: understand the system, make it clear, and build it to last.</p>
-          </motion.header>
+function NoteVisual({ project }) {
+  if (project.id === 'owa') {
+    return (
+      <div className="canvas-note-visual canvas-note-terminal" aria-hidden="true">
+        <span className="terminal-dots"><i /><i /><i /></span>
+        <span className="terminal-line"><b>›</b> owa ask <em>&quot;where does this live?&quot;</em></span>
+        <span className="terminal-answer">↳ reading the relevant code...</span>
+        <span className="terminal-status">● local &amp; grounded</span>
+      </div>
+    );
+  }
 
-          <div className="featured-project-list">
-            <motion.article className="featured-project project-owa" {...reveal}>
-              <div className="featured-project-copy">
-                <div className="project-meta"><span>01</span><span>Independent · Open source</span></div>
-                <p className="project-type">Local AI / Developer tooling</p>
-                <h2>OwA</h2>
-                <p className="project-name">Ollama Workspace Agent</p>
-                <p className="project-lede">A local-first coding agent built specifically for Ollama and smaller models. It grounds answers in the repository, uses tools safely, and keeps code on the developer’s own machine.</p>
-                <ul className="project-tags" aria-label="OwA technologies">
-                  <li>Python</li><li>Ollama</li><li>Hybrid search</li><li>CLI</li>
-                </ul>
-                <div className="project-actions">
-                  <a href="/work/owa/">Engineering story <BoxArrowUpRight /></a>
-                  <a href="https://zakacoding.github.io/ollama-workspace-agent" target="_blank" rel="noreferrer">Visit OwA <BoxArrowUpRight /></a>
-                  <a href="https://github.com/ZakaCoding/ollama-workspace-agent" target="_blank" rel="noreferrer">Source <BoxArrowUpRight /></a>
-                </div>
-              </div>
+  if (project.id === 'logistics') {
+    return (
+      <div className="canvas-note-visual canvas-note-logistics" aria-hidden="true">
+        <span className="logistics-center">DiGILOG</span>
+        <span className="logistics-node logistics-node-one">OMS</span>
+        <span className="logistics-node logistics-node-two">WMS</span>
+        <span className="logistics-node logistics-node-three">TMS</span>
+        <span className="logistics-node logistics-node-four">FMS</span>
+        <span className="logistics-node logistics-node-five">VMS</span>
+      </div>
+    );
+  }
 
-              <div className="owa-terminal" aria-label="OwA terminal preview">
-                <div className="terminal-bar"><span>owa — workspace</span><span>● ● ●</span></div>
-                <div className="terminal-content">
-                  <pre className="terminal-wordmark">{`   _       __
-  | | /| / /
-  | |/ |/ /
-  |__/|__/`}</pre>
-                  <p><b>$</b> owa</p>
-                  <p className="terminal-dim">✓ repository indexed · context ready</p>
-                  <p><b>›</b> explain this deployment flow</p>
-                  <p className="terminal-response">Reading the relevant code before answering…</p>
-                  <div className="terminal-state"><span /> local · private · grounded</div>
-                </div>
-              </div>
-            </motion.article>
+  if (project.id === 'cmap') {
+    return (
+      <div className="canvas-note-visual canvas-note-cmap" aria-hidden="true">
+        <span className="cmap-thought cmap-thought-one">ideas</span>
+        <span className="cmap-thought cmap-thought-two">connect</span>
+        <span className="cmap-thought cmap-thought-three">to ideas</span>
+        <svg viewBox="0 0 310 116" preserveAspectRatio="none"><path d="M92 56 C124 56 120 22 150 24 M190 30 C215 31 205 76 232 76" /></svg>
+      </div>
+    );
+  }
 
-            <motion.article className="featured-project project-logistics" {...reveal}>
-              <div className="featured-project-copy">
-                <div className="project-meta"><span>02</span><span>Production · CKL Cargo</span></div>
-                <p className="project-type">Operations / System modernization</p>
-                <h2>Logistics<br />ecosystem</h2>
-                <p className="project-lede">Connected software for order, warehouse, transport, fleet, and vendor operations—modernized as one ecosystem with clearer workflows and safer delivery.</p>
-                <ul className="project-tags" aria-label="Logistics platform technologies">
-                  <li>Laravel</li><li>React</li><li>Docker</li><li>PostgreSQL</li><li>Redis</li>
-                </ul>
-                <div className="project-actions"><a href="/work/logistics/">Engineering story <BoxArrowUpRight /></a></div>
-              </div>
+  return null;
+}
 
-              <div className="logistics-map" aria-label="DiGILOG connected product ecosystem">
-                <svg viewBox="0 0 600 600" aria-hidden="true">
-                  <circle cx="300" cy="300" r="204" />
-                  <circle cx="300" cy="300" r="126" />
-                  <path d="M300 300 L170 138 M300 300 L435 135 M300 300 L500 322 M300 300 L393 493 M300 300 L142 454" />
-                </svg>
-                <div className="map-core">DiGILOG<small>Operations core</small></div>
-                <span className="map-node map-oms">OMS</span>
-                <span className="map-node map-wms">WMS</span>
-                <span className="map-node map-tms">TMS</span>
-                <span className="map-node map-fms">FMS</span>
-                <span className="map-node map-vms">VMS</span>
-                <p>Five products. Shared operational context.</p>
-              </div>
-            </motion.article>
+function WorkNote({ project, boardRef }) {
+  const controls = useDragControls();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const external = project.href.startsWith('http');
 
-            <motion.article className="featured-project project-cmap" {...reveal}>
-              <div className="featured-project-copy">
-                <div className="project-meta"><span>03</span><span>Independent · Open source</span></div>
-                <p className="project-type">Knowledge tools / Visual thinking</p>
-                <h2>Open CMAP</h2>
-                <p className="project-lede">A free visual workspace for organizing concepts and relationships—making complex thinking easier to understand, edit, and share.</p>
-                <ul className="project-tags" aria-label="Open CMAP qualities">
-                  <li>Concept mapping</li><li>Visual tools</li><li>Open source</li>
-                </ul>
-                <div className="project-actions">
-                  <a href="/work/open-cmap/">Engineering story <BoxArrowUpRight /></a>
-                  <a href="https://open-cmap.fly.dev/" target="_blank" rel="noreferrer">Open the canvas <BoxArrowUpRight /></a>
-                  <a href="https://open-cmap.fly.dev/presentation" target="_blank" rel="noreferrer">Read the story <BoxArrowUpRight /></a>
-                </div>
-              </div>
+  const moveWithKeyboard = (event) => {
+    const moves = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] };
+    const move = moves[event.key];
+    if (!move || !boardRef.current) return;
+    event.preventDefault();
 
-              <div className="cmap-preview">
-                <div className="cmap-ui" role="img" aria-label="Simplified Open CMAP interface showing a concept map being built from a central idea">
-                  <div className="cmap-ui-nav">
-                    <span className="cmap-mark" aria-hidden="true">O</span>
-                    <span>Dashboard</span>
-                    <span>Release Notes</span>
-                    <span className="cmap-user">Zaka Noor⌄</span>
-                  </div>
+    const board = boardRef.current.getBoundingClientRect();
+    const note = event.currentTarget.closest('.canvas-note-position').getBoundingClientRect();
+    const horizontal = move[0] > 0 ? Math.min(move[0], board.right - note.right) : Math.max(move[0], board.left - note.left);
+    const vertical = move[1] > 0 ? Math.min(move[1], board.bottom - note.bottom) : Math.max(move[1], board.top - note.top);
+    x.set(x.get() + horizontal);
+    y.set(y.get() + vertical);
+  };
 
-                  <div className="cmap-ui-header">
-                    <div>
-                      <strong>Map Board</strong>
-                      <small>CMAP Key: T9D-MNH-CMAP</small>
-                    </div>
-                    <div className="cmap-ui-actions" aria-hidden="true">
-                      <span>Save</span><span>Export Map</span><b>✓ Create Assignment</b>
-                    </div>
-                  </div>
-
-                  <div className="cmap-ui-workspace">
-                    <div className="cmap-ui-sidebar" aria-hidden="true">
-                      <strong>Build From</strong>
-                      <div className="cmap-source-buttons"><span>Scratch</span><span>File PDF</span></div>
-                      <hr />
-                      <strong>Super Concept</strong>
-                      <div className="cmap-faux-input">Concept mapping</div>
-                      <small>The most important concept in the map.</small>
-                      <strong>Concept</strong>
-                      <div className="cmap-faux-input muted">Add a concept</div>
-                      <hr />
-                      <strong>ⓘ Tips</strong>
-                    </div>
-
-                    <div className="cmap-ui-board" aria-hidden="true">
-                      <span className="cmap-collapse">‹</span>
-                      <svg className="cmap-connectors" viewBox="0 0 600 380" preserveAspectRatio="none">
-                        <motion.path d="M304 154 C365 132 404 118 463 118" initial={{ pathLength: 0, opacity: 0 }} whileInView={{ pathLength: 1, opacity: 1 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, delay: 0.35, ease: easeOut }} />
-                        <motion.path d="M294 170 C264 205 222 239 176 264" initial={{ pathLength: 0, opacity: 0 }} whileInView={{ pathLength: 1, opacity: 1 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, delay: 0.6, ease: easeOut }} />
-                        <motion.path d="M313 171 C337 212 356 240 378 273" initial={{ pathLength: 0, opacity: 0 }} whileInView={{ pathLength: 1, opacity: 1 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, delay: 0.82, ease: easeOut }} />
-                      </svg>
-                      <span className="cmap-link-label cmap-link-one">Link</span>
-                      <span className="cmap-link-label cmap-link-two">Link</span>
-                      <span className="cmap-link-label cmap-link-three">Link</span>
-                      <motion.span className="cmap-node cmap-super-node" initial={{ opacity: 0, scale: 0.72 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.45, ease: easeOut }}>Concept mapping</motion.span>
-                      <motion.span className="cmap-node cmap-proposition-node" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.8 }}>Proposition</motion.span>
-                      <motion.span className="cmap-node cmap-concept-node" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 1.02 }}>concept</motion.span>
-                      <motion.span className="cmap-node cmap-new-node" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 1.18 }}>new node</motion.span>
-                    </div>
-                  </div>
-                </div>
-                <span className="preview-note">Ideas become visible</span>
-              </div>
-            </motion.article>
-          </div>
-
-          <motion.section className="project-archive" aria-labelledby="more-work-title" {...reveal}>
-            <div className="archive-heading">
-              <span className="section-number">More work</span>
-              <h2 id="more-work-title">A few more things I’ve made.</h2>
-            </div>
-            <div className="archive-grid">
-              <a href="https://ngefont.com" target="_blank" rel="noreferrer" className="archive-card">
-                <img src={ngefont} alt="Ngefont website interface" loading="lazy" />
-                <div><span>Typography platform</span><strong>Ngefont</strong><BoxArrowUpRight /></div>
-              </a>
-              <a href="https://takeitoffice.com" target="_blank" rel="noreferrer" className="archive-card">
-                <img src={takeit} alt="TakeIt agency website" loading="lazy" />
-                <div><span>Creative agency</span><strong>TakeIt</strong><BoxArrowUpRight /></div>
-              </a>
-              <a href="https://amogasakti.vercel.app/" target="_blank" rel="noreferrer" className="archive-card">
-                <img src={amogasakti} alt="Amogasakti card game website" loading="lazy" />
-                <div><span>Card game experience</span><strong>Amogasakti</strong><BoxArrowUpRight /></div>
-              </a>
-            </div>
-          </motion.section>
+  return (
+    <motion.div
+      className={'canvas-note-position canvas-note-position-' + project.id}
+      style={{ x, y }}
+      drag
+      dragListener={false}
+      dragControls={controls}
+      dragConstraints={boardRef}
+      dragElastic={0.08}
+      dragMomentum={false}
+      whileDrag={{ scale: 1.035, zIndex: 20, cursor: 'grabbing' }}
+    >
+      <article className={'canvas-note canvas-note-' + project.id}>
+        <div className="canvas-note-top">
+          <span>{project.number} / {project.kind}</span>
+          <button
+            className="canvas-note-grip"
+            type="button"
+            aria-label={'Move ' + project.title + ' note. Drag or use arrow keys.'}
+            aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
+            title="Drag or use arrow keys to move"
+            onPointerDown={(event) => controls.start(event)}
+            onKeyDown={moveWithKeyboard}
+          >
+            <ArrowsMove aria-hidden="true" />
+          </button>
         </div>
-      </section>
-    </main>
+        <NoteVisual project={project} />
+        <div className="canvas-note-copy">
+          <h2>{project.title}</h2>
+          <p>{project.summary}</p>
+          <a href={project.href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
+            {project.action} <ArrowUpRight aria-hidden="true" />
+          </a>
+        </div>
+      </article>
+    </motion.div>
+  );
+}
 
-    <section className="portfolio-contact-strip" aria-label="Contact Zaka"><h2>Have a related problem?</h2><a href="/#/about?chat=1">Start a conversation →</a><a href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a></section>
+function Archive() {
+  const boardRef = useRef(null);
+  const folderContentsRef = useRef(null);
+  const [layout, setLayout] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
+  const [folderOpen, setFolderOpen] = useState(false);
 
-    <Footer />
-  </>
-);
+  useEffect(() => {
+    if (!folderOpen) return undefined;
+    const frame = requestAnimationFrame(() => {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      folderContentsRef.current?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [folderOpen]);
+
+  const resetBoard = () => {
+    setLayout(0);
+    setResetKey((value) => value + 1);
+  };
+
+  const shuffleBoard = () => {
+    setLayout((value) => (value + 1) % 3);
+    setResetKey((value) => value + 1);
+  };
+
+  return (
+    <>
+      <main className="archive-page canvas-work-page">
+        <section className="canvas-work-intro" aria-labelledby="archive-page-title">
+          <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
+          <h1 id="archive-page-title">Work<span className="canvas-work-title-star" aria-hidden="true">✳</span></h1>
+          <div className="canvas-work-manifesto">
+            <p>Make <span className="canvas-typed-word canvas-typed-one">ideas</span> tangible.</p>
+            <p>Make <span className="canvas-typed-word canvas-typed-two">systems</span> clearer.</p>
+            <p>Make <span className="canvas-typed-word canvas-typed-three">tools</span> useful.</p>
+          </div>
+          <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> Grab a note and make this space yours</div>
+        </section>
+
+        <section className="canvas-board-shell" aria-label="Selected work board">
+          <div className="canvas-board-toolbar">
+            <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
+            <div className="canvas-board-actions">
+              <button type="button" onClick={shuffleBoard}><span aria-hidden="true">✳</span> Shuffle</button>
+              <button type="button" onClick={resetBoard}><ArrowRepeat aria-hidden="true" /> Reset</button>
+            </div>
+          </div>
+          <div className="canvas-board" ref={boardRef} data-layout={layout}>
+            <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
+            <div className="canvas-margin-note canvas-margin-note-two"><span>scribble / 02</span><p>Messy ideas are welcome here.</p></div>
+            <span className="canvas-board-scribble canvas-board-scribble-one" aria-hidden="true">curiosity in progress ↗</span>
+            <span className="canvas-board-scribble canvas-board-scribble-two" aria-hidden="true">keep making things</span>
+            <span className="canvas-board-cross canvas-board-cross-one" aria-hidden="true">+</span>
+            <span className="canvas-board-cross canvas-board-cross-two" aria-hidden="true">+</span>
+            {mainWork.map((project) => <WorkNote key={project.id + '-' + resetKey} project={project} boardRef={boardRef} />)}
+            <button
+              type="button"
+              className="canvas-folder"
+              aria-expanded={folderOpen}
+              aria-controls="canvas-folder-contents"
+              onClick={() => setFolderOpen((open) => !open)}
+            >
+              <span className="canvas-folder-tab">filed away / 03</span>
+              <span className="canvas-folder-art" aria-hidden="true"><i /><i /><Folder2Open /></span>
+              <strong>Other little worlds</strong>
+              <span>{folderOpen ? 'Folder open · see below' : 'Ngefont, TakeIt & Amogasakti'} <ArrowUpRight aria-hidden="true" /></span>
+            </button>
+          </div>
+          <AnimatePresence initial={false}>
+            {folderOpen && (
+              <motion.section
+                id="canvas-folder-contents"
+                ref={folderContentsRef}
+                className="canvas-folder-contents"
+                aria-label="Other projects"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="canvas-folder-inner">
+                  <div className="canvas-folder-heading"><div><span>OPEN FOLDER / 03 MORE PROJECTS</span><h2>More things I’ve made.</h2></div><button type="button" onClick={() => setFolderOpen(false)} aria-label="Close other projects"><X aria-hidden="true" /></button></div>
+                  <div className="canvas-folder-grid">
+                    {otherWork.map((project, index) => (
+                      <motion.a
+                        className="canvas-folder-project"
+                        href={project.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        key={project.id}
+                        initial={{ opacity: 0, y: 26, rotate: index === 1 ? 2 : -2 }}
+                        animate={{ opacity: 1, y: 0, rotate: 0 }}
+                        exit={{ opacity: 0, y: 12 }}
+                        whileHover={{ y: -4, rotate: index === 1 ? 1 : -1 }}
+                        transition={{ delay: 0.1 + index * 0.08, duration: 0.45 }}
+                      >
+                        <img src={project.image} alt="" loading="lazy" />
+                        <span>{project.number} / {project.kind}</span>
+                        <strong>{project.title} <ArrowUpRight aria-hidden="true" /></strong>
+                        <p>{project.summary}</p>
+                      </motion.a>
+                    ))}
+                  </div>
+                </div>
+              </motion.section>
+            )}
+          </AnimatePresence>
+          <div className="canvas-board-bottom"><span>Drag to rearrange <span aria-hidden="true">↗</span></span><span>Click a project to step inside</span></div>
+        </section>
+      </main>
+
+      <section className="portfolio-contact-strip" aria-label="Contact Zaka"><h2>Have a related problem?</h2><a href="/#/about?chat=1">Start a conversation →</a><a href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a></section>
+      <Footer />
+    </>
+  );
+}
 
 export default Archive;

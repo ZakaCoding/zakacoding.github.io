@@ -24,13 +24,13 @@ export const renderOwaStory = () => `<!doctype html>
   <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
   <header class="site-header">
     <a class="site-brand" href="/" aria-label="ZakaCoding home"><img src="/logo/logo.svg" width="1082" height="512" alt=""><span>ZakaCoding</span></a>
-    <nav aria-label="Main navigation"><a href="/work/">All work</a><a href="/#/about">About</a><a href="https://github.com/ZakaCoding/ollama-workspace-agent" target="_blank" rel="noreferrer">Source <span aria-hidden="true">↗</span></a></nav>
+    <nav aria-label="Main navigation"><a href="/#/archive">All work</a><a href="/#/about">About</a><a href="https://github.com/ZakaCoding/ollama-workspace-agent" target="_blank" rel="noreferrer">Source <span aria-hidden="true">↗</span></a></nav>
   </header>
 
   <main id="main">
     <section class="hero" aria-labelledby="story-title">
       <div class="hero-copy">
-        <a class="breadcrumb" href="/work/">← Selected work</a>
+        <a class="breadcrumb" href="/#/archive">← Selected work</a>
         <p class="eyebrow"><span class="status-light"></span> Independent project <span class="eyebrow-divider">/</span> Local AI <span class="eyebrow-divider">/</span> 2026</p>
         <h1 id="story-title">The codebase<br><em>before the answer.</em></h1>
         <p class="hero-lede">OwA is a coding agent for Ollama that starts with the workspace in front of it. It reads, searches, and asks before it changes things.</p>
@@ -109,7 +109,7 @@ export const renderOwaStory = () => `<!doctype html>
 
         <section class="chapter try-chapter" id="try-owa" aria-labelledby="try-title"><div class="chapter-heading"><span class="chapter-number">06 / Take it for a spin</span><h2 id="try-title">Your repository.<br><em>Your machine.</em></h2><p>OwA is open source. The current setup and requirements live in its README; this is the shortest path to the CLI after you have Ollama and models ready.</p></div><div class="install-block"><div class="install-top"><span>Terminal / install</span><button type="button" id="copy-install" aria-live="polite">Copy command</button></div><pre><code>pipx install ollama-workspace-agent
 cd your-project
-owa</code></pre></div><p class="source-line">Python 3.11+, a reachable Ollama server, and chat and embedding models are required. <a href="https://github.com/ZakaCoding/ollama-workspace-agent#quick-start" target="_blank" rel="noreferrer">Follow the full setup ↗</a></p><div class="closing-links"><a class="primary-link" href="https://github.com/ZakaCoding/ollama-workspace-agent" target="_blank" rel="noreferrer">Explore the repository ↗</a><a class="quiet-link" href="https://zakacoding.github.io/ollama-workspace-agent/" target="_blank" rel="noreferrer">Visit project site ↗</a><a class="quiet-link" href="/work/">Back to selected work →</a></div></section>
+owa</code></pre></div><p class="source-line">Python 3.11+, a reachable Ollama server, and chat and embedding models are required. <a href="https://github.com/ZakaCoding/ollama-workspace-agent#quick-start" target="_blank" rel="noreferrer">Follow the full setup ↗</a></p><div class="closing-links"><a class="primary-link" href="https://github.com/ZakaCoding/ollama-workspace-agent" target="_blank" rel="noreferrer">Explore the repository ↗</a><a class="quiet-link" href="https://zakacoding.github.io/ollama-workspace-agent/" target="_blank" rel="noreferrer">Visit project site ↗</a><a class="quiet-link" href="/#/archive">Back to selected work →</a></div></section>
       </div>
     </div>
   </main>
