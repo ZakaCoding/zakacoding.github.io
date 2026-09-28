@@ -64,7 +64,6 @@ function WorkNote({ project, boardRef }) {
   const controls = useDragControls();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const external = project.href.startsWith('http');
 
   const moveWithKeyboard = (event) => {
     const moves = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] };
@@ -111,10 +110,11 @@ function WorkNote({ project, boardRef }) {
         <div className="canvas-note-copy">
           <h2>{project.title}</h2>
           <p>{project.summary}</p>
-          <a href={project.href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
+          <span className="canvas-note-action">
             {project.action} <ArrowUpRight aria-hidden="true" />
-          </a>
+          </span>
         </div>
+        <a className="canvas-note-link" href={project.href} aria-label={'Explore ' + project.title + ' story'} />
       </article>
     </motion.div>
   );

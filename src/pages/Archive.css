@@ -204,6 +204,8 @@
 .canvas-note-top > span { font-size: 0.62rem; font-weight: 760; letter-spacing: 0.07em; text-transform: uppercase; }
 
 .canvas-note-grip {
+  position: relative;
+  z-index: 2;
   display: grid;
   flex: none;
   width: 1.9rem;
@@ -243,17 +245,21 @@
 .logistics-node-one { top: 10%; left: 26%; }.logistics-node-two { top: 8%; right: 23%; }.logistics-node-three { top: 42%; right: 8%; }.logistics-node-four { bottom: 8%; right: 22%; }.logistics-node-five { bottom: 8%; left: 22%; }
 
 .canvas-note-cmap .canvas-note-visual { position: relative; overflow: hidden; background: #cbc5fa; }
-.canvas-note-cmap svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: #6157b1; stroke-width: 2; stroke-dasharray: 4 4; }
+.canvas-note-cmap .canvas-note-visual > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: #6157b1; stroke-width: 2; stroke-dasharray: 4 4; }
 .cmap-thought { position: absolute; z-index: 1; display: grid; min-width: 4.5rem; min-height: 2rem; padding: 0.15rem 0.5rem; place-items: center; border: 1px solid #8079bf; border-radius: 999px; background: #fbfaff; font-size: 0.65rem; font-weight: 750; }
 .cmap-thought-one { top: 34%; left: 6%; }.cmap-thought-two { top: 8%; left: 46%; }.cmap-thought-three { bottom: 17%; right: 5%; }
 
 .canvas-note-copy { padding: 0.85rem 0.15rem 0.2rem; }
 .canvas-note-copy h2 { margin: 0; font-size: clamp(1.45rem, 2.6vw, 2rem); font-weight: 780; line-height: 1.03; letter-spacing: -0.055em; }
 .canvas-note-copy p { min-height: 2.7em; margin: 0.45rem 0 0.85rem; color: #666157; font-size: 0.8rem; line-height: 1.4; }
-.canvas-note-copy a { display: inline-flex; align-items: center; gap: 0.35rem; color: #25251f; font-size: 0.78rem; font-weight: 800; text-decoration: underline; text-decoration-color: rgba(37, 37, 31, 0.32); text-underline-offset: 0.28em; }
-.canvas-note-copy a:hover { color: #d85e3d; text-decoration-color: currentColor; }
-.canvas-note-copy a svg { width: 0.88rem; height: 0.88rem; transition: transform 180ms ease; }
-.canvas-note-copy a:hover svg { transform: translate(2px, -2px); }
+.canvas-note-link { position: absolute; inset: 0; z-index: 1; border-radius: inherit; cursor: pointer; }
+.canvas-note-link:focus-visible { outline: 3px solid #6157b1; outline-offset: -3px; }
+.canvas-note-position:focus-within .canvas-note-action { color: #d85e3d; text-decoration-color: currentColor; }
+
+.canvas-note-copy .canvas-note-action { display: inline-flex; align-items: center; gap: 0.35rem; color: #25251f; font-size: 0.78rem; font-weight: 800; text-decoration: underline; text-decoration-color: rgba(37, 37, 31, 0.32); text-underline-offset: 0.28em; }
+.canvas-note-position:hover .canvas-note-action { color: #d85e3d; text-decoration-color: currentColor; }
+.canvas-note-copy .canvas-note-action svg { width: 0.88rem; height: 0.88rem; transition: transform 180ms ease; }
+.canvas-note-position:hover .canvas-note-action svg { transform: translate(2px, -2px); }
 
 .canvas-folder {
   position: absolute;
@@ -349,6 +355,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .canvas-note, .canvas-board-actions button, .canvas-note-copy a svg, .canvas-folder, .canvas-folder-project { transition: none; }
+  .canvas-note, .canvas-board-actions button, .canvas-note-copy .canvas-note-action svg, .canvas-folder, .canvas-folder-project { transition: none; }
   .canvas-typed-word { animation: none; clip-path: none; }
 }
