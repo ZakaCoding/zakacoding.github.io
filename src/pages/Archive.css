@@ -182,6 +182,57 @@
 .canvas-margin-note-two { top: 625px; right: 9%; width: 175px; transform: rotate(6deg); }
 .canvas-margin-note-two p { font-size: 1.17rem; }
 
+.canvas-break-note {
+  position: absolute;
+  top: 875px;
+  left: 47%;
+  z-index: 1;
+  width: 245px;
+  padding: 1.35rem 1rem 1.2rem;
+  border: 1px solid rgba(91, 77, 64, 0.1);
+  background: #fffaf1;
+  box-shadow: 5px 10px 20px rgba(74, 54, 44, 0.1);
+  transform: rotate(3deg);
+}
+.canvas-break-note::before {
+  position: absolute;
+  top: -0.55rem;
+  left: 35%;
+  width: 4rem;
+  height: 1rem;
+  background: rgba(219, 194, 152, 0.56);
+  content: '';
+  transform: rotate(-5deg);
+}
+.canvas-break-label {
+  color: #9a806f;
+  font-size: 0.55rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.canvas-break-note p {
+  margin: 0.7rem 0 0.9rem;
+  font: 1.05rem/1.15 Mona, system-ui, sans-serif;
+  letter-spacing: -0.035em;
+}
+.canvas-break-rebus { display: flex; align-items: center; justify-content: space-between; gap: 0.25rem; }
+.canvas-break-rebus > span:not(.canvas-break-dnd) { font-size: 1.55rem; line-height: 1; }
+.canvas-break-dnd {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.35rem 0.4rem;
+  border-radius: 999px;
+  color: #fff;
+  background: #4a3437;
+  font-size: 0.53rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.canvas-break-dnd span { font-size: 0.9rem; line-height: 0.7; }
+
+
 .canvas-note {
   position: relative;
   overflow: hidden;
@@ -321,6 +372,7 @@
   .canvas-note-position-logistics { margin-top: 3.5rem; }
   .canvas-board-scribble, .canvas-board-cross { display: none; }
   .canvas-margin-note { position: relative; top: auto; right: auto; bottom: auto; left: auto; order: 3; }
+  .canvas-break-note { position: relative; top: auto; left: auto; order: 1; width: min(100%, 300px); margin: 2rem auto 0; }
   .canvas-margin-note-one { margin: 2rem auto 0; }
   .canvas-margin-note-two { margin: 3rem auto 0; }
   .canvas-folder { position: relative; top: auto; right: auto; order: 2; width: min(100%, 270px); margin: 2rem auto 0; }
@@ -345,6 +397,7 @@
   .canvas-note-position-logistics { margin-top: 0; }
   .canvas-folder { margin-top: 1rem; }
   .canvas-margin-note { margin-top: 0; }
+  .canvas-break-note { margin-top: 0; }
   .canvas-margin-note-one { justify-self: start; }
   .canvas-margin-note-two { justify-self: end; }
   .canvas-folder-grid { grid-template-columns: 1fr; }
