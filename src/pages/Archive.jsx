@@ -64,7 +64,7 @@ function NoteVisual({ project }) {
   return null;
 }
 
-function WorkNote({ project, boardRef }) {
+function WorkNote({ project, boardRef, soundEnabled, playSound }) {
   const controls = useDragControls();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -93,6 +93,8 @@ function WorkNote({ project, boardRef }) {
       dragConstraints={boardRef}
       dragElastic={0.08}
       dragMomentum={false}
+      onDragStart={() => { if (soundEnabled) playSound('pickup'); }}
+      onDragEnd={() => { if (soundEnabled) playSound('drop'); }}
       whileDrag={{ scale: 1.035, zIndex: 20, cursor: 'grabbing' }}
     >
       <article className={'canvas-note canvas-note-' + project.id}>
@@ -130,6 +132,44 @@ function Archive() {
   const [layout, setLayout] = useState(0);
   const [resetKey, setResetKey] = useState(0);
   const [folderOpen, setFolderOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const audioRef = useRef(null);
+
+  const getAudioContext = () => {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return null;
+    if (!audioRef.current) audioRef.current = new AudioContext();
+    if (audioRef.current.state === 'suspended') void audioRef.current.resume();
+    return audioRef.current;
+  };
+
+  const playSound = (kind) => {
+    const context = getAudioContext();
+    if (!context) return;
+    const duration = kind === 'pickup' ? 0.16 : 0.09;
+    const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * duration), context.sampleRate);
+    const samples = buffer.getChannelData(0);
+    for (let index = 0; index < samples.length; index += 1) samples[index] = Math.random() * 2 - 1;
+
+    const noise = context.createBufferSource();
+    const filter = context.createBiquadFilter();
+    const volume = context.createGain();
+    const now = context.currentTime;
+    noise.buffer = buffer;
+    filter.type = 'bandpass';
+    filter.frequency.value = kind === 'pickup' ? 1250 : 620;
+    filter.Q.value = 0.7;
+    volume.gain.setValueAtTime(0.0001, now);
+    volume.gain.exponentialRampToValueAtTime(kind === 'pickup' ? 0.035 : 0.025, now + 0.012);
+    volume.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    noise.connect(filter).connect(volume).connect(context.destination);
+    noise.start(now);
+    noise.stop(now + duration);
+    noise.onended = () => { noise.disconnect(); filter.disconnect(); volume.disconnect(); };
+  };
+
+  useEffect(() => () => { if (audioRef.current) void audioRef.current.close(); }, []);
+
   const [heroProgress, setHeroProgress] = useState(() => prefersReducedMotion() ? heroText.length : 0);
   const [heroFinished, setHeroFinished] = useState(() => prefersReducedMotion());
 
@@ -204,6 +244,7 @@ function Archive() {
           <div className="canvas-board-toolbar">
             <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
             <div className="canvas-board-actions">
+              <button type="button" aria-pressed={soundEnabled} onClick={() => { if (!soundEnabled) getAudioContext(); setSoundEnabled((enabled) => !enabled); }}><span aria-hidden="true">♪</span> Sound {soundEnabled ? 'on' : 'off'}</button>
               <button type="button" onClick={shuffleBoard}><span aria-hidden="true">✳</span> Shuffle</button>
               <button type="button" onClick={resetBoard}><ArrowRepeat aria-hidden="true" /> Reset</button>
             </div>
@@ -223,7 +264,7 @@ function Archive() {
             <span className="canvas-board-scribble canvas-board-scribble-two" aria-hidden="true">keep making things</span>
             <span className="canvas-board-cross canvas-board-cross-one" aria-hidden="true">+</span>
             <span className="canvas-board-cross canvas-board-cross-two" aria-hidden="true">+</span>
-            {mainWork.map((project) => <WorkNote key={project.id + '-' + resetKey} project={project} boardRef={boardRef} />)}
+            {mainWork.map((project) => <WorkNote key={project.id + '-' + resetKey} project={project} boardRef={boardRef} soundEnabled={soundEnabled} playSound={playSound} />)}
             <button
               type="button"
               className="canvas-folder"
