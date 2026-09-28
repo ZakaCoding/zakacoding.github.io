@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useDragControls, useMotionValue } from 'framer-motion';
-import { ArrowUpRight, ArrowsMove, ArrowRepeat, Folder2Open, X } from 'react-bootstrap-icons';
+import { ArrowRight, ArrowUpRight, ArrowsMove, ArrowRepeat, Folder2Open, X } from 'react-bootstrap-icons';
 
 import { Footer } from '../components/Footer';
 import ngefont from '../assets/image/ngefont/ngfont-illustration.webp';
@@ -133,6 +133,7 @@ function Archive() {
   const [resetKey, setResetKey] = useState(0);
   const [folderOpen, setFolderOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [doNotDisturb, setDoNotDisturb] = useState(true);
   const audioRef = useRef(null);
 
   const getAudioContext = () => {
@@ -216,7 +217,7 @@ function Archive() {
       <main className="archive-page canvas-work-page">
         <section className="canvas-work-intro" aria-labelledby="archive-page-title">
           <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
-          <p className="canvas-work-greeting">✳ Hey, I'm Zaka. This is a little of what I make.</p>
+          <p className="canvas-work-greeting">✳ Hey, I&apos;m Zaka. This is a little of what I make.</p>
           <div className="canvas-work-headline">
             <h1 id="archive-page-title" aria-label={heroLines.join(' ')}>
               {heroLines.map((line, index) => {
@@ -252,13 +253,23 @@ function Archive() {
           <div className="canvas-board" ref={boardRef} data-layout={layout}>
             <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
             <div className="canvas-margin-note canvas-margin-note-two"><span>scribble / 02</span><p>Messy ideas are welcome here.</p></div>
-            <div className="canvas-break-note">
-              <span className="canvas-break-label">out of office / probably</span>
-              <p>Thank you for your email, but...</p>
-              <div className="canvas-break-rebus" role="img" aria-label="Do not disturb, a drink, a scream, and a candle">
-                <span className="canvas-break-dnd"><span aria-hidden="true">☾</span> Do Not Disturb</span>
-                <span aria-hidden="true">🍷</span><span aria-hidden="true">😱</span><span aria-hidden="true">🕯️</span>
+            <div className={'canvas-break-note' + (doNotDisturb ? ' is-quiet' : ' is-chatty')}>
+              <span className="canvas-break-label">{doNotDisturb ? 'out of office / probably' : 'back at my desk / allegedly'}</span>
+              <p>{doNotDisturb ? 'Thank you for your email, but...' : 'Plot twist: my inbox is awake.'}</p>
+              <div className="canvas-break-rebus">
+                <button
+                  type="button"
+                  className="canvas-break-dnd"
+                  role="switch"
+                  aria-label="Do not disturb"
+                  aria-checked={doNotDisturb}
+                  onClick={() => setDoNotDisturb((quiet) => !quiet)}
+                >
+                  <span className="canvas-break-dnd-label" aria-hidden="true">{doNotDisturb ? 'Do Not Disturb' : 'Please Disturb'}</span>
+                </button>
+                <span className="canvas-break-emojis" aria-hidden="true">{doNotDisturb ? '🍷 😱 🕯️' : '☕ 👋 💬'}</span>
               </div>
+              <span className="canvas-break-aside" role="status">{doNotDisturb ? 'Shh... the bugs are napping.' : 'Okay, the bugs can talk again.'}</span>
             </div>
             <span className="canvas-board-scribble canvas-board-scribble-one" aria-hidden="true">curiosity in progress ↗</span>
             <span className="canvas-board-scribble canvas-board-scribble-two" aria-hidden="true">keep making things</span>
@@ -321,7 +332,11 @@ function Archive() {
         </section>
       </main>
 
-      <section className="portfolio-contact-strip" aria-label="Contact Zaka"><h2>Have a related problem?</h2><a href="/#/about?chat=1">Start a conversation →</a><a href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a></section>
+      <section className="portfolio-contact-strip" aria-label="Contact Zaka">
+        <h2>Have a related problem?</h2>
+        <a className="about-closing-cta portfolio-contact-button" href="/#/about?chat=1">Start a conversation <ArrowRight aria-hidden="true" /></a>
+        <a href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a>
+      </section>
       <Footer />
     </>
   );
