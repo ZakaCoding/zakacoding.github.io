@@ -151,11 +151,14 @@ function Archive() {
       <main className="archive-page canvas-work-page">
         <section className="canvas-work-intro" aria-labelledby="archive-page-title">
           <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
-          <h1 id="archive-page-title">Work<span className="canvas-work-title-star" aria-hidden="true">✳</span></h1>
-          <div className="canvas-work-manifesto">
-            <p>Make <span className="canvas-typed-word canvas-typed-one">ideas</span> tangible.</p>
-            <p>Make <span className="canvas-typed-word canvas-typed-two">systems</span> clearer.</p>
-            <p>Make <span className="canvas-typed-word canvas-typed-three">tools</span> useful.</p>
+          <p className="canvas-work-greeting">✳ Hey, I'm Zaka. This is a little of what I make.</p>
+          <div className="canvas-work-headline">
+            <h1 id="archive-page-title"><span>Make ideas tangible.</span><span>Make systems clearer.</span><span>Make tools useful.</span></h1>
+            <div className="canvas-work-stickers" aria-hidden="true">
+              <span className="canvas-work-sticker canvas-work-sticker-one">real-world ops</span>
+              <span className="canvas-work-sticker canvas-work-sticker-two">local AI</span>
+              <span className="canvas-work-sticker canvas-work-sticker-three">visual thinking</span>
+            </div>
           </div>
           <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> Grab a note and make this space yours</div>
         </section>
