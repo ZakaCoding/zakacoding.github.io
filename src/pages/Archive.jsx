@@ -15,6 +15,10 @@ const mainWork = [
   { id: 'cmap', number: '03', kind: 'Visual thinking · open source', title: 'Open CMAP', summary: 'An open canvas that makes ideas and their relationships visible.', href: '/work/open-cmap/', action: 'Explore the story' },
 ];
 
+const heroLines = ['Make ideas tangible.', 'Make systems clearer.', 'Make tools useful.'];
+const heroText = heroLines.join('');
+const prefersReducedMotion = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const otherWork = [
   { id: 'ngefont', number: '04', kind: 'Typography platform', title: 'Ngefont', summary: 'A home for finding the right type.', href: 'https://ngefont.com', action: 'Visit website', image: ngefont },
   { id: 'takeit', number: '05', kind: 'Creative agency', title: 'TakeIt', summary: 'A digital home for a creative team.', href: 'https://takeitoffice.com', action: 'Visit website', image: takeit },
@@ -166,6 +170,28 @@ function Archive() {
 
   useEffect(() => () => { if (audioRef.current) void audioRef.current.close(); }, []);
 
+  const [heroProgress, setHeroProgress] = useState(() => prefersReducedMotion() ? heroText.length : 0);
+  const [heroFinished, setHeroFinished] = useState(() => prefersReducedMotion());
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+
+    let timer;
+    const typeNext = (index) => {
+      if (index === heroText.length) {
+        timer = window.setTimeout(() => setHeroFinished(true), 650);
+        return;
+      }
+      const delay = heroText[index] === '.' ? 300 : 36;
+      timer = window.setTimeout(() => {
+        setHeroProgress(index + 1);
+        typeNext(index + 1);
+      }, delay);
+    };
+    typeNext(0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     if (!folderOpen) return undefined;
     const frame = requestAnimationFrame(() => {
@@ -192,8 +218,20 @@ function Archive() {
           <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
           <p className="canvas-work-greeting">✳ Hey, I'm Zaka. This is a little of what I make.</p>
           <div className="canvas-work-headline">
-            <h1 id="archive-page-title"><span>Make ideas tangible.</span><span>Make systems clearer.</span><span>Make tools useful.</span></h1>
-            <div className="canvas-work-stickers" aria-hidden="true">
+            <h1 id="archive-page-title" aria-label={heroLines.join(' ')}>
+              {heroLines.map((line, index) => {
+                const start = heroLines.slice(0, index).reduce((length, item) => length + item.length, 0);
+                const shown = Math.max(0, Math.min(line.length, heroProgress - start));
+                const active = !heroFinished && heroProgress >= start && (heroProgress < start + line.length || (index === heroLines.length - 1 && heroProgress === heroText.length));
+                return (
+                  <span className="canvas-work-hero-line" key={line} aria-hidden="true">
+                    <span className="canvas-work-line-measure">{line}</span>
+                    <span className="canvas-work-line-typed">{line.slice(0, shown)}{active && <span className="canvas-work-caret" />}</span>
+                  </span>
+                );
+              })}
+            </h1>
+            <div className={'canvas-work-stickers' + (heroFinished ? ' is-ready' : '')} aria-hidden="true">
               <span className="canvas-work-sticker canvas-work-sticker-one">real-world ops</span>
               <span className="canvas-work-sticker canvas-work-sticker-two">local AI</span>
               <span className="canvas-work-sticker canvas-work-sticker-three">visual thinking</span>
