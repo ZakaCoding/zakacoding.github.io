@@ -171,6 +171,14 @@ function Archive() {
           <div className="canvas-board" ref={boardRef} data-layout={layout}>
             <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
             <div className="canvas-margin-note canvas-margin-note-two"><span>scribble / 02</span><p>Messy ideas are welcome here.</p></div>
+            <div className="canvas-break-note">
+              <span className="canvas-break-label">out of office / probably</span>
+              <p>Thank you for your email, but...</p>
+              <div className="canvas-break-rebus" role="img" aria-label="Do not disturb, a drink, a scream, and a candle">
+                <span className="canvas-break-dnd"><span aria-hidden="true">☾</span> Do Not Disturb</span>
+                <span aria-hidden="true">🍷</span><span aria-hidden="true">😱</span><span aria-hidden="true">🕯️</span>
+              </div>
+            </div>
             <span className="canvas-board-scribble canvas-board-scribble-one" aria-hidden="true">curiosity in progress ↗</span>
             <span className="canvas-board-scribble canvas-board-scribble-two" aria-hidden="true">keep making things</span>
             <span className="canvas-board-cross canvas-board-cross-one" aria-hidden="true">+</span>
