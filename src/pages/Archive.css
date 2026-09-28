@@ -411,3 +411,73 @@
   .canvas-note, .canvas-board-actions button, .canvas-note-copy .canvas-note-action svg, .canvas-folder, .canvas-folder-project { transition: none; }
   .canvas-typed-word { animation: none; clip-path: none; }
 }
+
+
+/* Work introduction: editorial typography with a small stack of desk labels. */
+.canvas-work-intro {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: min(1460px, 100%);
+  min-height: clamp(36rem, 56vw, 47rem);
+  margin: 0 auto;
+  padding: clamp(8rem, 18vw, 15rem) 5% 5rem;
+  transform: none;
+  text-align: left;
+  pointer-events: auto;
+}
+.canvas-work-intro .canvas-work-greeting {
+  margin: 1.6rem 0 1rem;
+  color: #77746c;
+  font-size: clamp(0.95rem, 1.5vw, 1.25rem);
+  line-height: 1.4;
+}
+.canvas-work-headline { position: relative; max-width: 1100px; }
+.canvas-work-intro h1 {
+  width: auto;
+  margin: 0;
+  font-size: clamp(3.6rem, 6.3vw, 7.1rem);
+  font-weight: 680;
+  line-height: 1.08;
+  letter-spacing: -0.075em;
+}
+.canvas-work-intro h1 span { display: block; }
+.canvas-work-stickers {
+  position: absolute;
+  right: 0;
+  bottom: -2.8rem;
+  width: 340px;
+  height: 105px;
+  pointer-events: none;
+}
+.canvas-work-sticker {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.35rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(49, 45, 37, 0.12);
+  border-radius: 0.55rem;
+  box-shadow: 0 5px 10px rgba(48, 42, 32, 0.12);
+  color: #29271f;
+  font-size: clamp(0.85rem, 1.4vw, 1.15rem);
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+}
+.canvas-work-sticker-one { top: 0.4rem; left: 2.2rem; z-index: 1; background: #d8f5ca; transform: rotate(7deg); }
+.canvas-work-sticker-two { top: 2.2rem; left: 0; z-index: 2; background: #ccefff; transform: rotate(-8deg); }
+.canvas-work-sticker-three { top: 2.9rem; left: 8.4rem; z-index: 3; background: #ffe4a9; transform: rotate(5deg); }
+.canvas-work-intro .canvas-work-hint { margin-top: 5.4rem; }
+
+@media (max-width: 1300px) {
+  .canvas-work-intro { min-height: clamp(32rem, 55vw, 42rem); padding: clamp(7rem, 13vw, 10rem) 3% 5rem; }
+  .canvas-work-intro h1 { font-size: clamp(3.4rem, 7vw, 6.2rem); }
+}
+@media (max-width: 680px) {
+  .canvas-work-intro { min-height: 0; margin: 0 auto 1rem; padding: 5rem 0.65rem 4.5rem; }
+  .canvas-work-intro .canvas-work-greeting { margin-top: 1.4rem; font-size: 0.9rem; }
+  .canvas-work-intro h1 { font-size: clamp(2.7rem, 9vw, 4.5rem); line-height: 1.12; }
+  .canvas-work-stickers { position: relative; right: auto; bottom: auto; width: min(100%, 340px); height: 105px; margin-top: 1rem; }
+  .canvas-work-intro .canvas-work-hint { margin-top: 0.6rem; font-size: 0.66rem; }
+}
