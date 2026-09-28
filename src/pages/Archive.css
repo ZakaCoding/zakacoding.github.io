@@ -203,7 +203,7 @@
 .canvas-note-top { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; min-height: 1.9rem; margin-bottom: 0.65rem; }
 .canvas-note-top > span { font-size: 0.62rem; font-weight: 760; letter-spacing: 0.07em; text-transform: uppercase; }
 
- .canvas-note-grip {
+.canvas-note-grip {
   position: relative;
   z-index: 2;
   display: grid;
