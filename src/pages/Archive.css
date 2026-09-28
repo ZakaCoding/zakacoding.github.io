@@ -481,3 +481,12 @@
   .canvas-work-stickers { position: relative; right: auto; bottom: auto; width: min(100%, 340px); height: 105px; margin-top: 1rem; }
   .canvas-work-intro .canvas-work-hint { margin-top: 0.6rem; font-size: 0.66rem; }
 }
+
+
+.canvas-board-actions { flex-wrap: wrap; justify-content: flex-end; }
+.canvas-board-actions button[aria-pressed="true"] { border-color: #c8aa8e; color: #5d3f32; background: #fff0df; }
+@media (max-width: 680px) {
+  .canvas-board-toolbar { flex-wrap: wrap; }
+  .canvas-board-label { max-width: 100%; }
+  .canvas-board-actions { width: 100%; }
+}
