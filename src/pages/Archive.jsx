@@ -215,8 +215,32 @@ function Archive() {
   return (
     <>
       <main className="archive-page canvas-work-page">
+        <section className="canvas-opening" aria-labelledby="archive-page-title">
+          <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
+          <p className="canvas-work-greeting">✳ Hey, I&apos;m Zaka. Welcome to my desk—mind the ideas.</p>
+          <h1 id="archive-page-title">Work<span className="canvas-work-title-star" aria-hidden="true">✳</span></h1>
+          <div className="canvas-work-manifesto">
+            <span className="sr-only">{heroLines.join(' ')}</span>
+            {heroLines.map((line, index) => {
+              const start = heroLines.slice(0, index).reduce((length, item) => length + item.length, 0);
+              const shown = Math.max(0, Math.min(line.length, heroProgress - start));
+              const active = !heroFinished && heroProgress >= start && (heroProgress < start + line.length || (index === heroLines.length - 1 && heroProgress === heroText.length));
+              return (
+                <span className="canvas-work-hero-line" key={line} aria-hidden="true">
+                  <span className="canvas-work-line-measure">{line}</span>
+                  <span className="canvas-work-line-typed">{line.slice(0, shown)}{active && <span className="canvas-work-caret" />}</span>
+                </span>
+              );
+            })}
+          </div>
+          <button
+            className="canvas-opening-next"
+            type="button"
+            onClick={() => document.getElementById('selected-work')?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' })}
+          >Step into the desk <span aria-hidden="true">↓</span></button>
+        </section>
         <section className="canvas-board-shell" aria-label="Selected work board">
-          <div className="canvas-board-toolbar">
+          <div className="canvas-board-toolbar" id="selected-work">
             <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
             <div className="canvas-board-actions">
               <button type="button" aria-pressed={soundEnabled} onClick={() => { if (!soundEnabled) getAudioContext(); setSoundEnabled((enabled) => !enabled); }}><span aria-hidden="true">♪</span> Sound {soundEnabled ? 'on' : 'off'}</button>
@@ -225,24 +249,10 @@ function Archive() {
             </div>
           </div>
           <div className="canvas-board" ref={boardRef} data-layout={layout}>
-            <div className="canvas-work-intro">
-              <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
-              <p className="canvas-work-greeting">✳ Hey, I&apos;m Zaka. Welcome to my desk—mind the ideas.</p>
-              <h1 id="archive-page-title">Work<span className="canvas-work-title-star" aria-hidden="true">✳</span></h1>
-              <div className="canvas-work-manifesto">
-                <span className="sr-only">{heroLines.join(' ')}</span>
-                {heroLines.map((line, index) => {
-                  const start = heroLines.slice(0, index).reduce((length, item) => length + item.length, 0);
-                  const shown = Math.max(0, Math.min(line.length, heroProgress - start));
-                  const active = !heroFinished && heroProgress >= start && (heroProgress < start + line.length || (index === heroLines.length - 1 && heroProgress === heroText.length));
-                  return (
-                    <span className="canvas-work-hero-line" key={line} aria-hidden="true">
-                      <span className="canvas-work-line-measure">{line}</span>
-                      <span className="canvas-work-line-typed">{line.slice(0, shown)}{active && <span className="canvas-work-caret" />}</span>
-                    </span>
-                  );
-                })}
-              </div>
+            <div className="canvas-board-center">
+              <span>03 selected stories</span>
+              <h2>Pull up a chair.</h2>
+              <p>These are the things I keep coming back to.</p>
               <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> Grab a note and make this space yours</div>
             </div>
             <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
