@@ -6,6 +6,7 @@
   font-family: 'Mona';
   src: url('./assets/font/Mona-Sans.woff2');
   font-display: swap;
+  font-weight: 100 900;
 }
 
 @font-face {
@@ -108,6 +109,10 @@ button:hover {
 
 .work-nav { min-height: 3.2rem; transition: padding 220ms ease; }
 .work-nav-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   min-height: 2.2rem;
   padding: 0.35rem 1rem;
   border: 0;
@@ -116,13 +121,49 @@ button:hover {
   font: 650 0.86rem/1 Mona, system-ui, sans-serif;
   white-space: nowrap;
   cursor: pointer;
+  transition: color 200ms ease, background 200ms ease, transform 240ms cubic-bezier(0.2, 1.6, 0.4, 1);
 }
-.work-nav-trigger:hover { color: #d85e3d; }
+.work-nav-trigger::after {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.1rem;
+  left: 1rem;
+  border-bottom: 2px solid #e9896a;
+  border-radius: 50%;
+  content: '';
+  transform: rotate(-3deg) scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.work-nav-trigger::before {
+  position: absolute;
+  top: -0.7rem;
+  right: -0.2rem;
+  color: #e36c4a;
+  content: '↗';
+  font: 700 0.85rem/1 Mona, system-ui, sans-serif;
+  opacity: 0;
+  transform: translate(-0.4rem, 0.45rem) rotate(-20deg);
+  transition: opacity 200ms ease, transform 320ms cubic-bezier(0.2, 1.6, 0.4, 1);
+  pointer-events: none;
+}
+.work-nav-trigger:hover, .work-nav-trigger[aria-expanded="true"] { color: #9e513a; background: #fff7ef; transform: rotate(-2deg); }
+.work-nav-trigger:hover::before, .work-nav-trigger[aria-expanded="true"]::before { opacity: 1; transform: translate(0, 0) rotate(12deg); }
+.work-nav-trigger:hover::after, .work-nav-trigger[aria-expanded="true"]::after { transform: rotate(-3deg) scaleX(1); }
+.work-nav-trigger-signal { display: inline-block; transform-origin: center bottom; transition: transform 300ms cubic-bezier(0.2, 1.6, 0.4, 1); }
+.work-nav-trigger:hover .work-nav-trigger-signal { transform: translate(3px, -2px) rotate(13deg) scale(1.15); }
+.work-nav-trigger[aria-expanded="true"] .work-nav-trigger-signal { color: #e36c4a; transform: rotate(35deg) scale(1.15); }
 .work-nav-trigger:focus-visible { outline: 2px solid #d85e3d; outline-offset: 2px; }
-.work-nav-links { position: relative; }
+.work-nav-links { position: relative; animation: workNavUnfold 340ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.work-nav-links a { animation: workNavLinkArrive 320ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.work-nav-links a:nth-of-type(2) { animation-delay: 55ms; }
+.work-nav-links a:nth-of-type(3) { animation-delay: 100ms; }
 .work-nav-links .nav-pill { inset-block: 0; }
+@keyframes workNavUnfold { from { opacity: 0; transform: translateX(-0.7rem) scaleX(0.94); } to { opacity: 1; transform: translateX(0) scaleX(1); } }
+@keyframes workNavLinkArrive { from { opacity: 0; transform: translateY(0.45rem); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .work-nav { transition: none; }
+  .work-nav, .work-nav-trigger, .work-nav-trigger::before, .work-nav-trigger::after, .work-nav-trigger-signal { transition: none; }
+  .work-nav-links, .work-nav-links a { animation: none; }
 }
 
 /* The final About slide owns the full viewport. */

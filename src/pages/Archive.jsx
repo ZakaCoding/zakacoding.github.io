@@ -219,8 +219,8 @@ function Archive() {
         <section className="canvas-board-shell" aria-label="Selected work board">
           <div className="canvas-board-toolbar">
             <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
+            <WorkDeskPresence boardRef={boardRef} />
             <div className="canvas-board-actions">
-              <WorkDeskPresence boardRef={boardRef} />
               <button type="button" aria-pressed={soundEnabled} onClick={() => { if (!soundEnabled) getAudioContext(); setSoundEnabled((enabled) => !enabled); }}><span aria-hidden="true">♪</span> Sound {soundEnabled ? 'on' : 'off'}</button>
               <button type="button" onClick={shuffleBoard}><span aria-hidden="true">✳</span> Shuffle</button>
               <button type="button" onClick={resetBoard}><ArrowRepeat aria-hidden="true" /> Reset</button>
@@ -229,7 +229,7 @@ function Archive() {
           <div className="canvas-board" ref={boardRef} data-layout={layout}>
             <div className="canvas-work-intro">
               <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
-              <p className="canvas-work-greeting">✳ Hey, I&apos;m Zaka. Welcome to my desk—mind the ideas.</p>
+              <p className="canvas-work-greeting"><span aria-hidden="true">✳</span> <strong>Hey, I&apos;m Zaka.</strong> Welcome to my desk—mind the ideas.</p>
               <h1 id="archive-page-title">Work<span className="canvas-work-title-star" aria-hidden="true">✳</span></h1>
               <div className="canvas-work-manifesto">
                 <span className="sr-only">{heroLines.join(' ')}</span>
@@ -238,7 +238,7 @@ function Archive() {
                   const shown = Math.max(0, Math.min(line.length, heroProgress - start));
                   const active = !heroFinished && heroProgress >= start && (heroProgress < start + line.length || (index === heroLines.length - 1 && heroProgress === heroText.length));
                   return (
-                    <span className="canvas-work-hero-line" key={line} aria-hidden="true">
+                    <span className={`canvas-work-hero-line canvas-work-hero-line-${index + 1}`} key={line} aria-hidden="true">
                       <span className="canvas-work-line-measure">{line}</span>
                       <span className="canvas-work-line-typed">{line.slice(0, shown)}{active && <span className="canvas-work-caret" />}</span>
                     </span>

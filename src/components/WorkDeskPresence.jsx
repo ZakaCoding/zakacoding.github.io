@@ -18,14 +18,37 @@ const validName = (value) => {
 export function WorkDeskPresence({ boardRef }) {
   const [name, setName] = useState('');
   const [identity, setIdentity] = useState(null);
+  const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
   const [cursors, setCursors] = useState({});
+  const controlRef = useRef(null);
+  const inputRef = useRef(null);
   const members = useRef(new Map());
   const live = useRef(false);
   const pending = useRef(null);
   const lastSent = useRef(0);
   const timer = useRef(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    inputRef.current?.focus();
+    const onPointerDown = (event) => {
+      if (!controlRef.current?.contains(event.target)) setOpen(false);
+    };
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        controlRef.current?.querySelector('.work-presence-tag')?.focus();
+      }
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!identity) return undefined;
@@ -53,6 +76,7 @@ export function WorkDeskPresence({ boardRef }) {
       setCursors((current) => Object.fromEntries(Object.entries(current).filter(([id]) => members.current.has(id))));
       live.current = true;
       setStatus('live');
+      setError('');
     };
     channel.here((list) => { if (!disposed) putMembers(list); });
     channel.joining((member) => {
@@ -92,7 +116,13 @@ export function WorkDeskPresence({ boardRef }) {
       setStatus('connecting');
     };
     connection?.bind('state_change', onState);
-    const onError = () => { if (!disposed) { setStatus('unavailable'); setError('Could not join the live desk. Please try again.'); } };
+    const onError = () => {
+      if (disposed) return;
+      live.current = false;
+      members.current.clear();
+      setCursors({});
+      setStatus('unavailable');
+    };
     channel.error(onError);
     return () => {
       disposed = true;
@@ -162,6 +192,7 @@ export function WorkDeskPresence({ boardRef }) {
       const joined = await joinWorkDesk(normalized);
       if (!joined?.id || !joined?.token) throw new Error('Missing guest identity');
       setIdentity(joined);
+      setOpen(false);
       setStatus('connecting');
     } catch {
       setStatus('idle');
@@ -174,24 +205,31 @@ export function WorkDeskPresence({ boardRef }) {
     setStatus('idle');
     setCursors({});
     setError('');
+    setOpen(false);
   };
 
   const visible = Object.entries(cursors).filter(([id]) => members.current.has(id)).sort((a, b) => b[1].at - a[1].at).slice(0, MAX_CURSORS);
 
   return (
     <>
-      <div className={`work-presence-control${identity ? ' is-joined' : ''}`}>
+      <div className={`work-presence-control${identity ? ' is-joined' : ''}`} ref={controlRef}>
         {identity ? (
-          <><span className="work-presence-status" role="status"><span className="work-presence-live-dot" aria-hidden="true" />{status === 'live' ? `At the desk as ${identity.name}` : status === 'unavailable' ? 'Desk unavailable' : 'Connecting to desk…'}</span><button type="button" onClick={leave}>Leave desk</button></>
+          <div className="work-presence-tag work-presence-tag-joined">
+            <span className="work-presence-status" role="status"><span className={`work-presence-live-dot${status === 'live' ? ' is-live' : ''}`} aria-hidden="true" />{status === 'live' ? `Here as ${identity.name}` : status === 'unavailable' ? 'Desk unavailable' : 'Connecting…'}</span>
+            <button type="button" onClick={leave}>Hide me</button>
+          </div>
         ) : (
-          <form id="work-presence-form" onSubmit={submit}>
-            <div className="work-presence-heading"><svg viewBox="0 0 18 23" fill="none" aria-hidden="true"><path d="M1 1v18l4.4-4.5 3.1 7 3.2-1.4-3.1-6.8H16L1 1Z" fill="currentColor" stroke="white" strokeWidth="1.5" /></svg><label htmlFor="work-presence-name">Join the desk</label></div>
-            <div className="work-presence-entry"><span aria-hidden="true">Hello,</span><input id="work-presence-name" value={name} onChange={(event) => { setName(event.target.value); if (error) setError(''); }} placeholder="your name…" aria-label="Your display name" aria-describedby="work-presence-note" maxLength={100} autoComplete="off" required /><button type="submit" disabled={status === 'joining'}>{status === 'joining' ? 'Joining…' : 'Join'}</button></div>
-            <p id="work-presence-note">People here will see your name while you’re joined.</p>
-            {error && <span className="work-presence-error" role="alert">{error}</span>}
-          </form>
+          <>
+            <button className="work-presence-tag" type="button" aria-expanded={open} aria-controls="work-presence-card" onClick={() => setOpen((value) => !value)}><span aria-hidden="true">✎</span> Leave your name here <span aria-hidden="true">↗</span></button>
+            {open && <form id="work-presence-card" className="work-presence-card" onSubmit={submit}>
+              <label htmlFor="work-presence-name">What should we call you?</label>
+              <p>Want others to see you wandering around?</p>
+              <div className="work-presence-entry"><input ref={inputRef} id="work-presence-name" value={name} onChange={(event) => { setName(event.target.value); if (error) setError(''); }} placeholder="Your name…" aria-describedby="work-presence-note" maxLength={100} autoComplete="off" required /><button type="submit" disabled={status === 'joining'}>{status === 'joining' ? 'One sec…' : 'Appear'}</button></div>
+              <small id="work-presence-note">Only people who opt in can see your named cursor while you’re here.</small>
+              {error && <span className="work-presence-error" role="alert">{error}</span>}
+            </form>}
+          </>
         )}
-        {identity && error && <span className="work-presence-error" role="alert">{error}</span>}
       </div>
       {identity && boardRef.current && createPortal(<div className="work-cursors" aria-hidden="true">
         {visible.map(([id, cursor]) => (
