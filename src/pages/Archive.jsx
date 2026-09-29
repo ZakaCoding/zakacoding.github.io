@@ -215,32 +215,6 @@ function Archive() {
   return (
     <>
       <main className="archive-page canvas-work-page">
-        <section className="canvas-work-intro" aria-labelledby="archive-page-title">
-          <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
-          <p className="canvas-work-greeting">✳ Hey, I&apos;m Zaka. This is a little of what I make.</p>
-          <div className="canvas-work-headline">
-            <h1 id="archive-page-title" aria-label={heroLines.join(' ')}>
-              {heroLines.map((line, index) => {
-                const start = heroLines.slice(0, index).reduce((length, item) => length + item.length, 0);
-                const shown = Math.max(0, Math.min(line.length, heroProgress - start));
-                const active = !heroFinished && heroProgress >= start && (heroProgress < start + line.length || (index === heroLines.length - 1 && heroProgress === heroText.length));
-                return (
-                  <span className="canvas-work-hero-line" key={line} aria-hidden="true">
-                    <span className="canvas-work-line-measure">{line}</span>
-                    <span className="canvas-work-line-typed">{line.slice(0, shown)}{active && <span className="canvas-work-caret" />}</span>
-                  </span>
-                );
-              })}
-            </h1>
-            <div className={'canvas-work-stickers' + (heroFinished ? ' is-ready' : '')} aria-hidden="true">
-              <span className="canvas-work-sticker canvas-work-sticker-one">real-world ops</span>
-              <span className="canvas-work-sticker canvas-work-sticker-two">local AI</span>
-              <span className="canvas-work-sticker canvas-work-sticker-three">visual thinking</span>
-            </div>
-          </div>
-          <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> Grab a note and make this space yours</div>
-        </section>
-
         <section className="canvas-board-shell" aria-label="Selected work board">
           <div className="canvas-board-toolbar">
             <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
@@ -251,6 +225,26 @@ function Archive() {
             </div>
           </div>
           <div className="canvas-board" ref={boardRef} data-layout={layout}>
+            <div className="canvas-work-intro">
+              <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
+              <p className="canvas-work-greeting">✳ Hey, I&apos;m Zaka. Welcome to my desk—mind the ideas.</p>
+              <h1 id="archive-page-title">Work<span className="canvas-work-title-star" aria-hidden="true">✳</span></h1>
+              <div className="canvas-work-manifesto">
+                <span className="sr-only">{heroLines.join(' ')}</span>
+                {heroLines.map((line, index) => {
+                  const start = heroLines.slice(0, index).reduce((length, item) => length + item.length, 0);
+                  const shown = Math.max(0, Math.min(line.length, heroProgress - start));
+                  const active = !heroFinished && heroProgress >= start && (heroProgress < start + line.length || (index === heroLines.length - 1 && heroProgress === heroText.length));
+                  return (
+                    <span className="canvas-work-hero-line" key={line} aria-hidden="true">
+                      <span className="canvas-work-line-measure">{line}</span>
+                      <span className="canvas-work-line-typed">{line.slice(0, shown)}{active && <span className="canvas-work-caret" />}</span>
+                    </span>
+                  );
+                })}
+              </div>
+              <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> Grab a note and make this space yours</div>
+            </div>
             <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
             <div className="canvas-margin-note canvas-margin-note-two"><span>scribble / 02</span><p>Messy ideas are welcome here.</p></div>
             <div className={'canvas-break-note' + (doNotDisturb ? ' is-quiet' : ' is-chatty')}>

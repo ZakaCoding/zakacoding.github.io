@@ -475,103 +475,83 @@
 }
 
 
-/* Work introduction: editorial typography with a small stack of desk labels. */
+/* The desk is the introduction: cards frame the title from the first screen. */
 .canvas-work-intro {
-  position: relative;
-  top: auto;
-  left: auto;
-  width: min(1460px, 100%);
-  min-height: clamp(36rem, 56vw, 47rem);
-  margin: 0 auto;
-  padding: clamp(8rem, 18vw, 15rem) 5% 5rem;
-  transform: none;
-  text-align: left;
-  pointer-events: auto;
-}
-.canvas-work-intro .canvas-work-greeting {
-  margin: 1.6rem 0 1rem;
-  color: #77746c;
-  font-size: clamp(0.95rem, 1.5vw, 1.25rem);
-  line-height: 1.4;
-}
-.canvas-work-headline { position: relative; max-width: 1100px; }
-.canvas-work-intro h1 {
-  width: auto;
-  margin: 0;
-  font-size: clamp(3.6rem, 6.3vw, 7.1rem);
-  font-weight: 680;
-  line-height: 1.08;
-  letter-spacing: -0.075em;
-}
-.canvas-work-intro h1 span { display: block; }
-.canvas-work-stickers {
   position: absolute;
-  right: 0;
-  bottom: -2.8rem;
-  width: 340px;
-  height: 105px;
+  top: clamp(11.5rem, 16vw, 14rem);
+  left: 50%;
+  z-index: 1;
+  width: min(60%, 800px);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  transform: translateX(-50%);
+  text-align: center;
   pointer-events: none;
 }
-.canvas-work-sticker {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.35rem;
-  padding: 0.35rem 0.8rem;
-  border: 1px solid rgba(49, 45, 37, 0.12);
-  border-radius: 0.55rem;
-  box-shadow: 0 5px 10px rgba(48, 42, 32, 0.12);
-  color: #29271f;
-  font-size: clamp(0.85rem, 1.4vw, 1.15rem);
-  font-weight: 650;
-  line-height: 1;
-  white-space: nowrap;
+.canvas-work-intro .canvas-work-greeting {
+  margin: 1rem 0 0;
+  color: #706c64;
+  font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+  line-height: 1.4;
 }
-.canvas-work-sticker-one { top: 0.4rem; left: 2.2rem; z-index: 1; background: #d8f5ca; transform: rotate(7deg); }
-.canvas-work-sticker-two { top: 2.2rem; left: 0; z-index: 2; background: #ccefff; transform: rotate(-8deg); }
-.canvas-work-sticker-three { top: 2.9rem; left: 8.4rem; z-index: 3; background: #ffe4a9; transform: rotate(5deg); }
-.canvas-work-intro .canvas-work-hint { margin-top: 5.4rem; }
-
-@media (max-width: 1300px) {
-  .canvas-work-intro { min-height: clamp(32rem, 55vw, 42rem); padding: clamp(7rem, 13vw, 10rem) 3% 5rem; }
-  .canvas-work-intro h1 { font-size: clamp(3.4rem, 7vw, 6.2rem); }
+.canvas-work-intro h1 {
+  width: fit-content;
+  margin: 0.03em auto 0;
+  font-size: clamp(9rem, 20vw, 20rem);
+  font-weight: 760;
+  line-height: 0.94;
+  letter-spacing: -0.105em;
 }
-@media (max-width: 680px) {
-  .canvas-work-intro { min-height: 0; margin: 0 auto 1rem; padding: 5rem 0.65rem 4.5rem; }
-  .canvas-work-intro .canvas-work-greeting { margin-top: 1.4rem; font-size: 0.9rem; }
-  .canvas-work-intro h1 { font-size: clamp(2.7rem, 9vw, 4.5rem); line-height: 1.12; }
-  .canvas-work-stickers { position: relative; right: auto; bottom: auto; width: min(100%, 340px); height: 105px; margin-top: 1rem; }
-  .canvas-work-intro .canvas-work-hint { margin-top: 0.6rem; font-size: 0.66rem; }
+.canvas-work-manifesto {
+  display: grid;
+  justify-items: center;
+  gap: 0.12rem;
+  margin-top: 1.3rem;
+  color: #6b685f;
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  line-height: 1.3;
 }
-
-
 .canvas-work-hero-line { position: relative; display: block; }
 .canvas-work-line-measure { display: block; visibility: hidden; }
 .canvas-work-line-typed { position: absolute; top: 0; left: 0; width: 100%; }
-.canvas-work-intro h1 .canvas-work-caret {
+.canvas-work-manifesto .canvas-work-caret {
   display: inline-block;
-  width: 0.065em;
-  height: 0.78em;
+  width: 0.08em;
+  height: 0.8em;
   margin-left: 0.06em;
   background: #f46c45;
-  vertical-align: -0.06em;
+  vertical-align: -0.08em;
   animation: canvasCaretBlink 0.8s step-end infinite;
 }
 @keyframes canvasCaretBlink { 50% { opacity: 0; } }
-.canvas-work-sticker {
-  opacity: 0;
-  translate: 0 14px;
-  scale: 0.96;
-  transition: opacity 450ms ease, translate 450ms cubic-bezier(0.2, 1.4, 0.4, 1), scale 450ms ease;
-}
-.canvas-work-stickers.is-ready .canvas-work-sticker { opacity: 1; translate: 0 0; scale: 1; }
-.canvas-work-sticker-two { transition-delay: 120ms; }
-.canvas-work-sticker-three { transition-delay: 240ms; }
-@media (prefers-reduced-motion: reduce) {
-  .canvas-work-intro h1 .canvas-work-caret { animation: none; }
-  .canvas-work-sticker { transition: none; }
-}
+.canvas-work-intro .canvas-work-hint { margin-top: 1.4rem; }
 
+@media (max-width: 1300px) {
+  .canvas-work-page { padding-top: 7.5rem; }
+  .canvas-work-intro {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-column: 1 / -1;
+    order: -2;
+    width: 100%;
+    margin: 0 auto 1rem;
+    transform: none;
+  }
+  .canvas-work-intro h1 { font-size: clamp(7rem, 19vw, 14rem); }
+}
+@media (max-width: 680px) {
+  .canvas-work-page { padding: 7rem 0.8rem 4rem; }
+  .canvas-work-intro { margin-bottom: 0; }
+  .canvas-work-intro .canvas-work-greeting { font-size: 0.88rem; }
+  .canvas-work-intro h1 { font-size: clamp(6.9rem, 29vw, 12rem); }
+  .canvas-work-manifesto { font-size: 0.95rem; }
+  .canvas-work-intro .canvas-work-hint { margin-top: 1.2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .canvas-work-manifesto .canvas-work-caret { animation: none; }
+}
 
 .canvas-board-actions { flex-wrap: wrap; justify-content: flex-end; }
 .canvas-board-actions button[aria-pressed="true"] { border-color: #c8aa8e; color: #5d3f32; background: #fff0df; }
