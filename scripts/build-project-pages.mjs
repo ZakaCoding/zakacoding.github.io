@@ -2,7 +2,7 @@ import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { projects } from '../src/lib/projects.js';
 import { renderOwaStory } from './owa-story.mjs';
 
-const origin = 'https://zakacoding.github.io';
+const origin = 'https://zakacoding.dev';
 const escape = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
 const visual = (project) => project.visual === 'logistics'
   ? '<figure class="project-visual ecosystem"><span>OMS</span><span>WMS</span><strong>DiGILOG<small>Shared operational context</small></strong><span>TMS</span><span>FMS</span><span>VMS</span><figcaption>Scope diagram · five connected product areas</figcaption></figure>'
@@ -23,7 +23,7 @@ for (const project of projects) {
   await mkdir(`dist${path}`, { recursive: true });
   await writeFile(`dist${path}index.html`, shell(project.name, project.summary, path, body));
 }
-await writeFile('dist/work/index.html', '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=/#/archive"><title>Work · Zaka Noor</title><link rel="canonical" href="https://zakacoding.github.io/#/archive"></head><body><p><a href="/#/archive">Open the work board</a></p></body></html>');
+await writeFile('dist/work/index.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=/#/archive"><title>Work · Zaka Noor</title><link rel="canonical" href="${origin}/#/archive"></head><body><p><a href="/#/archive">Open the work board</a></p></body></html>`);
 const urls = ['/', '/work/', ...projects.map((project) => `/work/${project.slug}/`)];
 await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((path) => `<url><loc>${origin}${path}</loc></url>`).join('')}</urlset>`);
 await writeFile('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);

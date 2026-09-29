@@ -180,7 +180,7 @@ export function Welcome() {
 
           <motion.a
             className="hero-card hero-story-card hero-owa-card"
-            href="https://zakacoding.github.io/ollama-workspace-agent"
+            href="https://zakacoding.dev/ollama-workspace-agent"
             target="_blank"
             rel="noreferrer"
             variants={heroItem}

@@ -11,7 +11,7 @@ export const projects = [
     ],
     outcome: 'An open-source local coding tool, with the implementation available for inspection. The repository is the place to check current capabilities, setup instructions, and limitations.',
     technologies: ['Python', 'Ollama', 'Hybrid search', 'CLI'],
-    links: [['Visit OwA', 'https://zakacoding.github.io/ollama-workspace-agent'], ['Read the source', 'https://github.com/ZakaCoding/ollama-workspace-agent']],
+    links: [['Visit OwA', 'https://zakacoding.dev/ollama-workspace-agent'], ['Read the source', 'https://github.com/ZakaCoding/ollama-workspace-agent']],
     visual: 'owa',
   },
   {

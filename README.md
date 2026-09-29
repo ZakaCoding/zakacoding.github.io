@@ -1,6 +1,6 @@
 # ZakaCoding portfolio
 
-Source for [zakacoding.github.io](https://zakacoding.github.io/), Zaka Noor's portfolio. It presents selected engineering work, an interactive About page, and a conversation interface.
+Source for [zakacoding.dev](https://zakacoding.dev/), Zaka Noor's portfolio. It presents selected engineering work, an interactive About page, and a conversation interface.
 
 ## Run locally
 
@@ -32,3 +32,5 @@ npm run release
 ```
 
 `npm run release` checks the production configuration, builds the site, and publishes `dist/` to the `gh-pages` branch. The public browser settings used for release are in `.env.production`. Create and push a Git tag separately when marking a version; deployment does not create one.
+
+The `public/CNAME` file keeps `zakacoding.dev` attached to GitHub Pages across releases. The Pages custom domain and Cloudflare DNS must point to the same domain. The chat API and Reverb remain on Fly; their deployed origin allowlists must include `https://zakacoding.dev` and `https://www.zakacoding.dev` for browser features to work from the custom domain.
