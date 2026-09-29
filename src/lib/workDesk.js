@@ -17,3 +17,17 @@ const request = async (path, body, token) => {
 
 export const joinWorkDesk = async (name) => (await request('join', { name }))?.data;
 export const sendWorkCursor = (token, position) => request('cursor', position || { active: false }, token);
+
+let viewerIdentity;
+let viewerRequest;
+
+export const getWorkDeskViewer = () => {
+  if (viewerIdentity && Date.parse(viewerIdentity.expires_at) - Date.now() > 60000) return Promise.resolve(viewerIdentity);
+  if (!viewerRequest) {
+    viewerRequest = joinWorkDesk('Viewer').then((identity) => {
+      viewerIdentity = identity;
+      return identity;
+    }).finally(() => { viewerRequest = null; });
+  }
+  return viewerRequest;
+};

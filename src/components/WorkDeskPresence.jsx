@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 
 import { createPortfolioEcho } from '../lib/realtime';
-import { joinWorkDesk, sendWorkCursor } from '../lib/workDesk';
+import { getWorkDeskViewer, joinWorkDesk, sendWorkCursor } from '../lib/workDesk';
 
 const IDLE_MS = 3000;
 const SEND_MS = 85;
@@ -25,10 +25,12 @@ const validName = (value) => {
 export function WorkDeskPresence({ boardRef }) {
   const [name, setName] = useState('');
   const [identity, setIdentity] = useState(null);
+  const [viewerIdentity, setViewerIdentity] = useState(null);
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
   const [cursors, setCursors] = useState({});
+  const [ownCursor, setOwnCursor] = useState(null);
   const [board, setBoard] = useState(null);
   const [previewHover, setPreviewHover] = useState(false);
   const controlRef = useRef(null);
@@ -45,8 +47,32 @@ export function WorkDeskPresence({ boardRef }) {
   const echoX = useSpring(previewX, { stiffness: 120, damping: 22 });
   const echoY = useSpring(previewY, { stiffness: 120, damping: 22 });
   const reducedMotion = useReducedMotion();
+  const connectionIdentity = identity || viewerIdentity;
 
   useEffect(() => { setBoard(boardRef.current); }, [boardRef]);
+
+  useEffect(() => {
+    let disposed = false;
+    let refreshTimer;
+    const connectViewer = async () => {
+      try {
+        const viewer = await getWorkDeskViewer();
+        if (disposed) return;
+        if (!viewer?.id || !viewer?.token) throw new Error('Invalid viewer identity');
+        const refreshIn = Date.parse(viewer.expires_at) - Date.now() - 30000;
+        if (!Number.isFinite(refreshIn)) throw new Error('Invalid viewer expiry');
+        setViewerIdentity(viewer);
+        refreshTimer = window.setTimeout(connectViewer, Math.max(1000, refreshIn));
+      } catch {
+        if (!disposed) refreshTimer = window.setTimeout(connectViewer, 30000);
+      }
+    };
+    void connectViewer();
+    return () => {
+      disposed = true;
+      window.clearTimeout(refreshTimer);
+    };
+  }, []);
 
   const movePreview = (event) => {
     if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
@@ -92,8 +118,8 @@ export function WorkDeskPresence({ boardRef }) {
   }, [identity]);
 
   useEffect(() => {
-    if (!identity) return undefined;
-    const echo = createPortfolioEcho('/api/work/desk/broadcasting/auth', identity.token);
+    if (!connectionIdentity) return undefined;
+    const echo = createPortfolioEcho('/api/work/desk/broadcasting/auth', connectionIdentity.token);
     if (!echo) {
       setStatus('unavailable');
       return undefined;
@@ -123,7 +149,7 @@ export function WorkDeskPresence({ boardRef }) {
       });
     });
     channel.listen('.work.cursor', (payload) => {
-      if (disposed || !live.current || payload?.id === identity.id || !members.current.has(payload?.id)) return;
+      if (disposed || !live.current || payload?.id === connectionIdentity.id || !members.current.has(payload?.id)) return;
       if (payload.x === null && payload.y === null) {
         setCursors((current) => {
           const next = { ...current };
@@ -163,7 +189,7 @@ export function WorkDeskPresence({ boardRef }) {
       echo.leave('work.desk');
       echo.disconnect();
     };
-  }, [identity]);
+  }, [connectionIdentity]);
 
   useEffect(() => {
     if (!identity) return undefined;
@@ -183,10 +209,12 @@ export function WorkDeskPresence({ boardRef }) {
       const rect = board.getBoundingClientRect();
       if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
       pending.current = { x: (event.clientX - rect.left) / rect.width, y: (event.clientY - rect.top) / rect.height };
+      setOwnCursor(pending.current);
       if (timer.current === null) timer.current = window.setTimeout(send, Math.max(0, SEND_MS - (Date.now() - lastSent.current)));
     };
     const stop = () => {
       pending.current = null;
+      setOwnCursor(null);
       window.clearTimeout(timer.current);
       timer.current = null;
       if (live.current) void sendWorkCursor(identity.token, null).catch(() => {});
@@ -232,6 +260,7 @@ export function WorkDeskPresence({ boardRef }) {
 
   const leave = () => {
     setIdentity(null);
+    setOwnCursor(null);
     setStatus('idle');
     setCursors({});
     setError('');
@@ -255,7 +284,7 @@ export function WorkDeskPresence({ boardRef }) {
               <label htmlFor="work-presence-name">What should we call you?</label>
               <p>Want others to see you wandering around?</p>
               <div className="work-presence-entry"><input ref={inputRef} id="work-presence-name" value={name} onChange={(event) => { setName(event.target.value); if (error) setError(''); }} placeholder="Your name…" aria-describedby="work-presence-note" maxLength={100} autoComplete="off" required /><button type="submit" disabled={status === 'joining'}>{status === 'joining' ? 'One sec…' : 'Appear'}</button></div>
-              <small id="work-presence-note">Only people who opt in can see your named cursor while you’re here.</small>
+              <small id="work-presence-note">Anyone viewing this page can see your named cursor while you’re here.</small>
               {error && <span className="work-presence-error" role="alert">{error}</span>}
             </form>}
           </>
@@ -277,13 +306,14 @@ export function WorkDeskPresence({ boardRef }) {
           </span>
           <span className="work-presence-invite-copy"><strong>Your cursor could be here.</strong><small>Move around · leave your name ↗</small></span>
         </button>, board)}
-      {identity && boardRef.current && createPortal(<div className="work-cursors" aria-hidden="true">
+      {connectionIdentity && boardRef.current && createPortal(<div className="work-cursors" aria-hidden="true">
         {visible.map(([id, cursor]) => (
           <div className="work-cursor" key={id} style={{ left: `${cursor.x * 100}%`, top: `${cursor.y * 100}%`, '--cursor-color': COLORS[Array.from(id).reduce((sum, char) => sum + char.charCodeAt(0), 0) % COLORS.length] }}>
             <svg viewBox="0 0 18 23" fill="none"><path d="M1 1v18l4.4-4.5 3.1 7 3.2-1.4-3.1-6.8H16L1 1Z" fill="currentColor" stroke="white" strokeWidth="1.5" /></svg>
             <span>{members.current.get(id)}</span>
           </div>
         ))}
+        {identity && ownCursor && <div className="work-cursor is-own" style={{ left: `${ownCursor.x * 100}%`, top: `${ownCursor.y * 100}%` }}><span>yours</span></div>}
       </div>, boardRef.current)}
     </>
   );

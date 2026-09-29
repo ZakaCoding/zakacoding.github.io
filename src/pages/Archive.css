@@ -228,6 +228,7 @@
 .work-cursor { position: absolute; display: flex; align-items: flex-start; color: var(--cursor-color); transition: left 90ms linear, top 90ms linear; pointer-events: none; }
 .work-cursor svg { width: 16px; height: 21px; flex: none; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.24)); }
 .work-cursor span { max-width: 11rem; margin: 13px 0 0 -1px; padding: 0.28rem 0.48rem; overflow: hidden; border-radius: 0.3rem; color: #fff; background: var(--cursor-color); font-size: 0.68rem; font-weight: 750; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+.work-cursor.is-own { --cursor-color: #bd6446; transform: translateX(12px); }
 
 .canvas-board {
   position: relative;
