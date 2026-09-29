@@ -16,7 +16,6 @@ const validName = (value) => {
 };
 
 export function WorkDeskPresence({ boardRef }) {
-  const [formOpen, setFormOpen] = useState(false);
   const [name, setName] = useState('');
   const [identity, setIdentity] = useState(null);
   const [status, setStatus] = useState('idle');
@@ -163,7 +162,6 @@ export function WorkDeskPresence({ boardRef }) {
       const joined = await joinWorkDesk(normalized);
       if (!joined?.id || !joined?.token) throw new Error('Missing guest identity');
       setIdentity(joined);
-      setFormOpen(false);
       setStatus('connecting');
     } catch {
       setStatus('idle');
@@ -182,21 +180,18 @@ export function WorkDeskPresence({ boardRef }) {
 
   return (
     <>
-      <div className="work-presence-control">
+      <div className={`work-presence-control${identity ? ' is-joined' : ''}`}>
         {identity ? (
-          <><span className="work-presence-status" role="status">{status === 'live' ? `At the desk as ${identity.name}` : status === 'unavailable' ? 'Desk unavailable' : 'Connecting to desk…'}</span><button type="button" onClick={leave}>Leave desk</button></>
+          <><span className="work-presence-status" role="status"><span className="work-presence-live-dot" aria-hidden="true" />{status === 'live' ? `At the desk as ${identity.name}` : status === 'unavailable' ? 'Desk unavailable' : 'Connecting to desk…'}</span><button type="button" onClick={leave}>Leave desk</button></>
         ) : (
-          <button type="button" onClick={() => { setFormOpen((open) => !open); setError(''); }} aria-expanded={formOpen} aria-controls="work-presence-form">Join the desk</button>
-        )}
-        {formOpen && !identity && (
           <form id="work-presence-form" onSubmit={submit}>
-            <label htmlFor="work-presence-name">Display name</label>
-            <input id="work-presence-name" value={name} onChange={(event) => setName(event.target.value)} maxLength={100} autoComplete="off" required />
-            <p>Other visitors on this page will see your name while you’re joined.</p>
-            <button type="submit" disabled={status === 'joining'}>{status === 'joining' ? 'Joining…' : 'Join'}</button>
+            <div className="work-presence-heading"><svg viewBox="0 0 18 23" fill="none" aria-hidden="true"><path d="M1 1v18l4.4-4.5 3.1 7 3.2-1.4-3.1-6.8H16L1 1Z" fill="currentColor" stroke="white" strokeWidth="1.5" /></svg><label htmlFor="work-presence-name">Join the desk</label></div>
+            <div className="work-presence-entry"><span aria-hidden="true">Hello,</span><input id="work-presence-name" value={name} onChange={(event) => { setName(event.target.value); if (error) setError(''); }} placeholder="your name…" aria-label="Your display name" aria-describedby="work-presence-note" maxLength={100} autoComplete="off" required /><button type="submit" disabled={status === 'joining'}>{status === 'joining' ? 'Joining…' : 'Join'}</button></div>
+            <p id="work-presence-note">People here will see your name while you’re joined.</p>
+            {error && <span className="work-presence-error" role="alert">{error}</span>}
           </form>
         )}
-        {error && <span className="work-presence-error" role="alert">{error}</span>}
+        {identity && error && <span className="work-presence-error" role="alert">{error}</span>}
       </div>
       {identity && boardRef.current && createPortal(<div className="work-cursors" aria-hidden="true">
         {visible.map(([id, cursor]) => (

@@ -131,22 +131,24 @@
 .canvas-board-actions svg { width: 0.9rem; height: 0.9rem; }
 .canvas-board-actions button span { color: #f46c45; font-size: 1rem; line-height: 0.5; }
 
-.work-presence-control { position: relative; display: flex; align-items: center; gap: 0.5rem; }
-.work-presence-control > button { border-color: #c7b6a5; color: #614839; background: #fff7ed; }
-.work-presence-status { max-width: 12rem; overflow: hidden; color: #62574e; font-size: 0.7rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-.work-presence-control form {
-  position: absolute; top: calc(100% + 0.6rem); right: 0; z-index: 30;
-  display: grid; gap: 0.55rem; width: min(17rem, 80vw); padding: 1rem;
-  border: 1px solid #d9d1c5; border-radius: 0.9rem; background: #fffdf8;
-  box-shadow: 0 12px 32px rgba(55, 42, 30, 0.13);
-}
-.work-presence-control form label { color: #38302a; font-size: 0.78rem; font-weight: 750; }
-.work-presence-control form input { min-height: 2.35rem; padding: 0.4rem 0.65rem; border: 1px solid #bdb4a7; border-radius: 0.45rem; color: #29251f; background: #fff; font: inherit; }
-.work-presence-control form input:focus-visible, .work-presence-control button:focus-visible { outline: 2px solid #a85537; outline-offset: 2px; }
-.work-presence-control form p { margin: 0; color: #655a51; font-size: 0.73rem; line-height: 1.4; }
-.work-presence-control form button { justify-self: start; }
-.work-presence-error { position: absolute; top: calc(100% + 0.5rem); right: 0; z-index: 31; width: 17rem; padding: 0.65rem; border-radius: 0.5rem; color: #713227; background: #fff3ef; font-size: 0.72rem; }
-.work-presence-control:has(form) .work-presence-error { top: calc(100% + 13.6rem); }
+.work-presence-control { position: relative; flex: none; }
+.work-presence-control form { display: grid; gap: 0.38rem; width: 17.5rem; padding: 0.7rem 0.8rem; border: 1px solid #d9c5b4; border-radius: 0.85rem; background: #fffaf4; box-shadow: 0 4px 14px rgba(85, 58, 35, 0.07); }
+.work-presence-heading { display: flex; align-items: center; gap: 0.4rem; color: #9d5039; }
+.work-presence-heading svg { width: 0.75rem; height: 0.95rem; flex: none; }
+.work-presence-heading label { color: #4b362c; font-size: 0.74rem; font-weight: 800; }
+.work-presence-entry { display: flex; align-items: center; gap: 0.35rem; }
+.work-presence-entry > span { flex: none; color: #4b362c; font-size: 0.8rem; font-weight: 750; }
+.work-presence-control .work-presence-entry input { width: 100%; min-width: 0; min-height: 2.1rem; padding: 0.35rem 0.2rem; border: 0; border-bottom: 1px solid #a88974; border-radius: 0; color: #29251f; background: transparent; font: 600 0.74rem Mona, system-ui, sans-serif; }
+.work-presence-control .work-presence-entry input::placeholder { color: #82786f; font-weight: 500; }
+.canvas-board-actions .work-presence-entry button { min-height: 2.1rem; padding: 0.35rem 0.72rem; border-color: #9c563b; border-radius: 0.5rem; color: #fff; background: #9c563b; }
+.canvas-board-actions .work-presence-entry button:hover { border-color: #78412e; background: #78412e; }
+.work-presence-control form p { margin: 0; color: #66574c; font-size: 0.65rem; line-height: 1.35; }
+.work-presence-control input:focus-visible, .work-presence-control button:focus-visible { outline: 2px solid #a85537; outline-offset: 2px; }
+.work-presence-error { display: block; color: #873c2b; font-size: 0.68rem; line-height: 1.35; }
+.work-presence-control.is-joined { display: flex; align-items: center; gap: 0.5rem; }
+.work-presence-control.is-joined > button { border-color: #c7b6a5; color: #614839; background: #fff7ed; }
+.work-presence-status { display: inline-flex; align-items: center; gap: 0.45rem; max-width: 12rem; overflow: hidden; color: #62574e; font-size: 0.7rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.work-presence-live-dot { width: 0.5rem; height: 0.5rem; flex: none; border-radius: 50%; background: #4a8961; }
 .work-cursors { position: absolute; inset: 0; z-index: 25; overflow: hidden; border-radius: inherit; pointer-events: none; }
 .work-cursor { position: absolute; display: flex; align-items: flex-start; color: var(--cursor-color); transition: left 90ms linear, top 90ms linear; pointer-events: none; }
 .work-cursor svg { width: 16px; height: 21px; flex: none; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.24)); }
@@ -464,15 +466,23 @@
   .canvas-folder-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+@media (max-width: 950px) {
+  .canvas-board-toolbar { flex-wrap: wrap; }
+  .canvas-board-actions { flex-wrap: wrap; }
+}
+
 @media (max-width: 680px) {
   .canvas-work-page { padding: 7rem 0.8rem 4rem; }
   .canvas-work-intro { margin: 0 auto 3rem; }
   .canvas-work-intro h1 { font-size: clamp(6.9rem, 29vw, 12rem); }
   .canvas-work-manifesto p { padding: 0 0.6rem; font-size: 0.95rem; }
   .canvas-work-hint { margin-top: 1.25rem; font-size: 0.66rem; }
-  .canvas-board-toolbar { align-items: flex-start; gap: 0.9rem; padding: 0 0.35rem 1rem; }
-  .canvas-board-label { flex-wrap: wrap; gap: 0.45rem; max-width: 45%; font-size: 0.65rem; }
-  .canvas-board-count { width: 100%; padding-left: 1rem; }
+  .canvas-board-toolbar { align-items: flex-start; flex-wrap: wrap; gap: 0.8rem; padding: 0 0.35rem 1rem; }
+  .canvas-board-label { flex-wrap: wrap; gap: 0.45rem; width: 100%; font-size: 0.65rem; }
+  .canvas-board-count { padding-left: 0.25rem; }
+  .canvas-board-actions { width: 100%; flex-wrap: wrap; }
+  .work-presence-control { width: 100%; }
+  .work-presence-control form { width: min(100%, 22rem); }
   .canvas-board-actions button { min-height: 2.2rem; padding: 0.4rem 0.65rem; font-size: 0.68rem; }
   .canvas-board { grid-template-columns: 1fr; gap: 2rem; padding: 2.25rem 1.45rem; border-radius: 1.25rem; }
   .canvas-note-position, .canvas-board[data-layout] .canvas-note-position { width: min(100%, 380px); margin: 0 auto; }
