@@ -103,7 +103,7 @@ export function Navbar() {
           aria-expanded={workMenuOpen}
           aria-controls="work-nav-links"
           onClick={() => setWorkMenuOpen(true)}
-        >{workMenuOpen ? 'Found it ✳' : 'Where to? 👀'}</button>}
+        ><span className="work-nav-trigger-copy">{workMenuOpen ? 'Found it' : 'Where to?'}</span><span className="work-nav-trigger-signal" aria-hidden="true">{workMenuOpen ? '✳' : '👀'}</span></button>}
         {(!isWork || workMenuOpen) && <div id={isWork ? 'work-nav-links' : undefined} className="work-nav-links flex items-center gap-1">
         {/* sliding pill */}
         <span

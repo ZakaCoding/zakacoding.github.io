@@ -131,24 +131,57 @@
 .canvas-board-actions svg { width: 0.9rem; height: 0.9rem; }
 .canvas-board-actions button span { color: #f46c45; font-size: 1rem; line-height: 0.5; }
 
-.work-presence-control { position: relative; flex: none; }
-.work-presence-control form { display: grid; gap: 0.38rem; width: 17.5rem; padding: 0.7rem 0.8rem; border: 1px solid #d9c5b4; border-radius: 0.85rem; background: #fffaf4; box-shadow: 0 4px 14px rgba(85, 58, 35, 0.07); }
-.work-presence-heading { display: flex; align-items: center; gap: 0.4rem; color: #9d5039; }
-.work-presence-heading svg { width: 0.75rem; height: 0.95rem; flex: none; }
-.work-presence-heading label { color: #4b362c; font-size: 0.74rem; font-weight: 800; }
-.work-presence-entry { display: flex; align-items: center; gap: 0.35rem; }
-.work-presence-entry > span { flex: none; color: #4b362c; font-size: 0.8rem; font-weight: 750; }
-.work-presence-control .work-presence-entry input { width: 100%; min-width: 0; min-height: 2.1rem; padding: 0.35rem 0.2rem; border: 0; border-bottom: 1px solid #a88974; border-radius: 0; color: #29251f; background: transparent; font: 600 0.74rem Mona, system-ui, sans-serif; }
-.work-presence-control .work-presence-entry input::placeholder { color: #82786f; font-weight: 500; }
-.canvas-board-actions .work-presence-entry button { min-height: 2.1rem; padding: 0.35rem 0.72rem; border-color: #9c563b; border-radius: 0.5rem; color: #fff; background: #9c563b; }
-.canvas-board-actions .work-presence-entry button:hover { border-color: #78412e; background: #78412e; }
-.work-presence-control form p { margin: 0; color: #66574c; font-size: 0.65rem; line-height: 1.35; }
+.work-presence-control { position: absolute; z-index: 30; top: calc(100% - 1.15rem); right: 1.35rem; }
+.work-presence-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 2.65rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #d9c5b4;
+  border-radius: 0.55rem;
+  color: #5b3b2e;
+  background: #fff9f1;
+  box-shadow: 3px 5px 13px rgba(85, 58, 35, 0.13);
+  font: 750 0.73rem/1.2 Mona, system-ui, sans-serif;
+  white-space: nowrap;
+  transform: rotate(2deg);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.work-presence-tag:hover { box-shadow: 4px 7px 17px rgba(85, 58, 35, 0.18); transform: rotate(0deg) translateY(-2px); }
+.work-presence-tag > span:first-child { color: #bd6446; font-size: 1.1rem; line-height: 0.7; }
+.work-presence-tag > span:last-child { color: #ac6d54; font-size: 0.95rem; }
+.work-presence-card {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 0.85rem);
+  display: grid;
+  gap: 0.55rem;
+  width: 19rem;
+  padding: 1rem;
+  border: 1px solid #d9c5b4;
+  border-radius: 0.8rem;
+  color: #4b362c;
+  background: #fffaf4;
+  box-shadow: 0 15px 35px rgba(85, 58, 35, 0.17);
+}
+.work-presence-card label { font-size: 0.85rem; font-weight: 800; }
+.work-presence-card p { margin: -0.3rem 0 0; color: #6c6258; font-size: 0.7rem; line-height: 1.35; }
+.work-presence-card small { color: #74665a; font-size: 0.65rem; line-height: 1.4; }
+.work-presence-entry { display: flex; align-items: center; gap: 0.45rem; }
+.work-presence-entry input { width: 100%; min-width: 0; min-height: 2.35rem; padding: 0.5rem 0.6rem; border: 1px solid #d7c8b9; border-radius: 0.45rem; color: #29251f; background: #fff; font: 600 0.75rem Mona, system-ui, sans-serif; }
+.work-presence-entry input::placeholder { color: #82786f; font-weight: 500; }
+.work-presence-entry button { min-height: 2.35rem; padding: 0.45rem 0.75rem; border: 1px solid #9c563b; border-radius: 0.45rem; color: #fff; background: #9c563b; font: 750 0.72rem Mona, system-ui, sans-serif; }
+.work-presence-entry button:hover { background: #78412e; }
+.work-presence-entry button:disabled { opacity: 0.7; cursor: wait; }
 .work-presence-control input:focus-visible, .work-presence-control button:focus-visible { outline: 2px solid #a85537; outline-offset: 2px; }
 .work-presence-error { display: block; color: #873c2b; font-size: 0.68rem; line-height: 1.35; }
-.work-presence-control.is-joined { display: flex; align-items: center; gap: 0.5rem; }
-.work-presence-control.is-joined > button { border-color: #c7b6a5; color: #614839; background: #fff7ed; }
+.work-presence-tag-joined { gap: 0.75rem; transform: rotate(0); }
 .work-presence-status { display: inline-flex; align-items: center; gap: 0.45rem; max-width: 12rem; overflow: hidden; color: #62574e; font-size: 0.7rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-.work-presence-live-dot { width: 0.5rem; height: 0.5rem; flex: none; border-radius: 50%; background: #4a8961; }
+.work-presence-live-dot { width: 0.5rem; height: 0.5rem; flex: none; border-radius: 50%; background: #b9a996; }
+.work-presence-live-dot.is-live { background: #4a8961; }
+.work-presence-tag-joined button { padding: 0; border: 0; color: #9c563b; background: transparent; font: inherit; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
 .work-cursors { position: absolute; inset: 0; z-index: 25; overflow: hidden; border-radius: inherit; pointer-events: none; }
 .work-cursor { position: absolute; display: flex; align-items: flex-start; color: var(--cursor-color); transition: left 90ms linear, top 90ms linear; pointer-events: none; }
 .work-cursor svg { width: 16px; height: 21px; flex: none; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.24)); }
@@ -481,8 +514,9 @@
   .canvas-board-label { flex-wrap: wrap; gap: 0.45rem; width: 100%; font-size: 0.65rem; }
   .canvas-board-count { padding-left: 0.25rem; }
   .canvas-board-actions { width: 100%; flex-wrap: wrap; }
-  .work-presence-control { width: 100%; }
-  .work-presence-control form { width: min(100%, 22rem); }
+  .work-presence-control { position: relative; top: auto; right: auto; order: 1; width: 100%; }
+  .work-presence-card { top: calc(100% + 0.55rem); right: auto; left: 0; width: min(22rem, 100%); }
+  .canvas-board-actions { order: 2; }
   .canvas-board-actions button { min-height: 2.2rem; padding: 0.4rem 0.65rem; font-size: 0.68rem; }
   .canvas-board { grid-template-columns: 1fr; gap: 2rem; padding: 2.25rem 1.45rem; border-radius: 1.25rem; }
   .canvas-note-position, .canvas-board[data-layout] .canvas-note-position { width: min(100%, 380px); margin: 0 auto; }
@@ -500,6 +534,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .work-presence-tag { transition: none; }
   .work-cursor { transition: none; }
   .canvas-note, .canvas-board-actions button, .canvas-note-copy .canvas-note-action svg, .canvas-folder, .canvas-folder-project,
   .canvas-break-dnd, .canvas-break-dnd::before { transition: none; }
@@ -522,11 +557,15 @@
   pointer-events: none;
 }
 .canvas-work-intro .canvas-work-greeting {
-  margin: 1rem 0 0;
-  color: #706c64;
-  font-size: clamp(0.95rem, 1.35vw, 1.2rem);
-  line-height: 1.4;
+  margin: 0.9rem 0 0;
+  color: #777269;
+  font-size: clamp(0.98rem, 1.4vw, 1.22rem);
+  font-weight: 450;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
 }
+.canvas-work-greeting strong { color: #302e29; font-weight: 750; }
+.canvas-work-greeting > span { display: inline-block; margin-right: 0.15rem; color: #bf684a; font-size: 0.8em; transform: rotate(-14deg); }
 .canvas-work-intro h1 {
   width: fit-content;
   margin: 0.03em auto 0;
@@ -538,13 +577,16 @@
 .canvas-work-manifesto {
   display: grid;
   justify-items: center;
-  gap: 0.12rem;
-  margin-top: 1.3rem;
-  color: #6b685f;
-  font-size: clamp(1rem, 1.35vw, 1.2rem);
-  line-height: 1.3;
+  gap: 0.14rem;
+  margin-top: 1.45rem;
+  color: #625e55;
+  font-size: clamp(1.08rem, 1.65vw, 1.48rem);
+  font-weight: 550;
+  line-height: 1.22;
+  letter-spacing: -0.04em;
 }
 .canvas-work-hero-line { position: relative; display: block; }
+.canvas-work-hero-line-three { color: #292823; font-weight: 760; }
 .canvas-work-line-measure { display: block; visibility: hidden; }
 .canvas-work-line-typed { position: absolute; top: 0; left: 0; width: 100%; }
 .canvas-work-manifesto .canvas-work-caret {
@@ -576,9 +618,9 @@
 @media (max-width: 680px) {
   .canvas-work-page { padding: 7rem 0.8rem 4rem; }
   .canvas-work-intro { margin-bottom: 0; }
-  .canvas-work-intro .canvas-work-greeting { font-size: 0.88rem; }
+  .canvas-work-intro .canvas-work-greeting { max-width: 19rem; margin-right: auto; margin-left: auto; font-size: 0.95rem; }
   .canvas-work-intro h1 { font-size: clamp(6.9rem, 29vw, 12rem); }
-  .canvas-work-manifesto { font-size: 0.95rem; }
+  .canvas-work-manifesto { font-size: 1.1rem; }
   .canvas-work-intro .canvas-work-hint { margin-top: 1.2rem; }
 }
 @media (prefers-reduced-motion: reduce) {
