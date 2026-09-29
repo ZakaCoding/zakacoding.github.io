@@ -131,6 +131,27 @@
 .canvas-board-actions svg { width: 0.9rem; height: 0.9rem; }
 .canvas-board-actions button span { color: #f46c45; font-size: 1rem; line-height: 0.5; }
 
+.work-presence-control { position: relative; display: flex; align-items: center; gap: 0.5rem; }
+.work-presence-control > button { border-color: #c7b6a5; color: #614839; background: #fff7ed; }
+.work-presence-status { max-width: 12rem; overflow: hidden; color: #62574e; font-size: 0.7rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.work-presence-control form {
+  position: absolute; top: calc(100% + 0.6rem); right: 0; z-index: 30;
+  display: grid; gap: 0.55rem; width: min(17rem, 80vw); padding: 1rem;
+  border: 1px solid #d9d1c5; border-radius: 0.9rem; background: #fffdf8;
+  box-shadow: 0 12px 32px rgba(55, 42, 30, 0.13);
+}
+.work-presence-control form label { color: #38302a; font-size: 0.78rem; font-weight: 750; }
+.work-presence-control form input { min-height: 2.35rem; padding: 0.4rem 0.65rem; border: 1px solid #bdb4a7; border-radius: 0.45rem; color: #29251f; background: #fff; font: inherit; }
+.work-presence-control form input:focus-visible, .work-presence-control button:focus-visible { outline: 2px solid #a85537; outline-offset: 2px; }
+.work-presence-control form p { margin: 0; color: #655a51; font-size: 0.73rem; line-height: 1.4; }
+.work-presence-control form button { justify-self: start; }
+.work-presence-error { position: absolute; top: calc(100% + 0.5rem); right: 0; z-index: 31; width: 17rem; padding: 0.65rem; border-radius: 0.5rem; color: #713227; background: #fff3ef; font-size: 0.72rem; }
+.work-presence-control:has(form) .work-presence-error { top: calc(100% + 13.6rem); }
+.work-cursors { position: absolute; inset: 0; z-index: 25; overflow: hidden; border-radius: inherit; pointer-events: none; }
+.work-cursor { position: absolute; display: flex; align-items: flex-start; color: var(--cursor-color); transition: left 90ms linear, top 90ms linear; pointer-events: none; }
+.work-cursor svg { width: 16px; height: 21px; flex: none; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.24)); }
+.work-cursor span { max-width: 11rem; margin: 13px 0 0 -1px; padding: 0.28rem 0.48rem; overflow: hidden; border-radius: 0.3rem; color: #fff; background: var(--cursor-color); font-size: 0.68rem; font-weight: 750; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+
 .canvas-board {
   position: relative;
   min-height: 1230px;
@@ -469,6 +490,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .work-cursor { transition: none; }
   .canvas-note, .canvas-board-actions button, .canvas-note-copy .canvas-note-action svg, .canvas-folder, .canvas-folder-project,
   .canvas-break-dnd, .canvas-break-dnd::before { transition: none; }
   .canvas-typed-word { animation: none; clip-path: none; }

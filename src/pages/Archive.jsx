@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useDragControls, useMotionValue } from 'framer
 import { ArrowRight, ArrowUpRight, ArrowsMove, ArrowRepeat, Folder2Open, X } from 'react-bootstrap-icons';
 
 import { Footer } from '../components/Footer';
+import { WorkDeskPresence } from '../components/WorkDeskPresence';
 import ngefont from '../assets/image/ngefont/ngfont-illustration.webp';
 import amogasakti from '../assets/image/amogasakti/amogasakti.webp';
 import takeit from '../assets/image/takeit/1.webp';
@@ -219,6 +220,7 @@ function Archive() {
           <div className="canvas-board-toolbar">
             <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
             <div className="canvas-board-actions">
+              <WorkDeskPresence boardRef={boardRef} />
               <button type="button" aria-pressed={soundEnabled} onClick={() => { if (!soundEnabled) getAudioContext(); setSoundEnabled((enabled) => !enabled); }}><span aria-hidden="true">♪</span> Sound {soundEnabled ? 'on' : 'off'}</button>
               <button type="button" onClick={shuffleBoard}><span aria-hidden="true">✳</span> Shuffle</button>
               <button type="button" onClick={resetBoard}><ArrowRepeat aria-hidden="true" /> Reset</button>

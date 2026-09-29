@@ -1,40 +1,15 @@
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
-import { API_URL } from './api';
+import { createPortfolioEcho } from '../realtime';
 import { normalizeMessage } from './types';
 
-const appKey = import.meta.env.VITE_REVERB_APP_KEY;
-const host = import.meta.env.VITE_REVERB_HOST;
-const port = Number(import.meta.env.VITE_REVERB_PORT || 443);
-const scheme = import.meta.env.VITE_REVERB_SCHEME || 'https';
-
 export const subscribeToConversation = ({ conversationId, token, onMessage, onStatus, onReconnect, onTyping }) => {
-  if (!appKey || !host) {
-    onStatus('saved');
-    return () => {};
-  }
-
   let echo;
   try {
-    window.Pusher = Pusher;
     onStatus('connecting');
-    echo = new Echo({
-      broadcaster: 'reverb',
-      key: appKey,
-      wsHost: host,
-      wsPort: port,
-      wssPort: port,
-      forceTLS: scheme === 'https',
-      enabledTransports: ['ws', 'wss'],
-      authEndpoint: `${API_URL}/broadcasting/auth`,
-      auth: {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    });
+    echo = createPortfolioEcho('/broadcasting/auth', token);
+    if (!echo) {
+      onStatus('saved');
+      return () => {};
+    }
 
     const channel = echo.private(`conversation.${conversationId}`);
     // MessageCreated::broadcastAs() publishes the custom event name
