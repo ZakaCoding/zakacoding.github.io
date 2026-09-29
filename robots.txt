@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://zakacoding.github.io/sitemap.xml
+Sitemap: https://zakacoding.dev/sitemap.xml
