@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 
 import { createPortfolioEcho } from '../lib/realtime';
 import { joinWorkDesk, sendWorkCursor } from '../lib/workDesk';
@@ -9,6 +10,12 @@ const IDLE_MS = 3000;
 const SEND_MS = 85;
 const MAX_CURSORS = 12;
 const COLORS = ['#bd513b', '#276477', '#75613e', '#6a5a8c', '#3c7158'];
+const PREVIEW_X = 85;
+const PREVIEW_Y = 35;
+
+function CursorArrow() {
+  return <svg viewBox="0 0 18 23" fill="none" aria-hidden="true"><path d="M1 1v18l4.4-4.5 3.1 7 3.2-1.4-3.1-6.8H16L1 1Z" fill="currentColor" stroke="white" strokeWidth="1.5" /></svg>;
+}
 
 const validName = (value) => {
   const name = value.trim().replace(/ +/gu, ' ');
@@ -22,6 +29,8 @@ export function WorkDeskPresence({ boardRef }) {
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
   const [cursors, setCursors] = useState({});
+  const [board, setBoard] = useState(null);
+  const [previewHover, setPreviewHover] = useState(false);
   const controlRef = useRef(null);
   const inputRef = useRef(null);
   const members = useRef(new Map());
@@ -29,6 +38,27 @@ export function WorkDeskPresence({ boardRef }) {
   const pending = useRef(null);
   const lastSent = useRef(0);
   const timer = useRef(null);
+  const previewX = useMotionValue(PREVIEW_X);
+  const previewY = useMotionValue(PREVIEW_Y);
+  const pointerX = useSpring(previewX, { stiffness: 550, damping: 34 });
+  const pointerY = useSpring(previewY, { stiffness: 550, damping: 34 });
+  const echoX = useSpring(previewX, { stiffness: 120, damping: 22 });
+  const echoY = useSpring(previewY, { stiffness: 120, damping: 22 });
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => { setBoard(boardRef.current); }, [boardRef]);
+
+  const movePreview = (event) => {
+    if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    previewX.set(Math.min(Math.max(event.clientX - rect.left, 12), rect.width - 65));
+    previewY.set(Math.min(Math.max(event.clientY - rect.top, 8), rect.height - 45));
+  };
+  const resetPreview = () => {
+    setPreviewHover(false);
+    previewX.set(PREVIEW_X);
+    previewY.set(PREVIEW_Y);
+  };
 
   useEffect(() => {
     if (!open) return undefined;
@@ -231,6 +261,22 @@ export function WorkDeskPresence({ boardRef }) {
           </>
         )}
       </div>
+      {!identity && !open && board && createPortal(
+        <button
+          className={`work-presence-invite${previewHover ? ' is-hovered' : ''}`}
+          type="button"
+          aria-label="Leave your name to show your cursor on the desk"
+          onPointerEnter={(event) => { if (event.pointerType === 'mouse' || event.pointerType === 'pen') { setPreviewHover(true); movePreview(event); } }}
+          onPointerMove={movePreview}
+          onPointerLeave={resetPreview}
+          onClick={() => { resetPreview(); setOpen(true); }}
+        >
+          <span className="work-presence-invite-art" aria-hidden="true">
+            <motion.span className="work-invite-pointer is-echo" style={{ x: echoX, y: echoY }}><CursorArrow /></motion.span>
+            <motion.span className="work-invite-pointer is-main" style={{ x: reducedMotion ? previewX : pointerX, y: reducedMotion ? previewY : pointerY }}><CursorArrow /><span>you?</span></motion.span>
+          </span>
+          <span className="work-presence-invite-copy"><strong>Your cursor could be here.</strong><small>Move around · leave your name ↗</small></span>
+        </button>, board)}
       {identity && boardRef.current && createPortal(<div className="work-cursors" aria-hidden="true">
         {visible.map(([id, cursor]) => (
           <div className="work-cursor" key={id} style={{ left: `${cursor.x * 100}%`, top: `${cursor.y * 100}%`, '--cursor-color': COLORS[Array.from(id).reduce((sum, char) => sum + char.charCodeAt(0), 0) % COLORS.length] }}>
