@@ -7,18 +7,6 @@ import { OperatorThread } from '../components/operator/OperatorThread';
 import { useOperatorChat } from '../hooks/useOperatorChat';
 import './Operator.css';
 
-const ensureMeta = (name, content) => {
-  let element = document.querySelector(`meta[name="${name}"]`);
-  if (!element) {
-    element = document.createElement('meta');
-    element.name = name;
-    document.head.appendChild(element);
-  }
-  const previous = element.content;
-  element.content = content;
-  return () => { element.content = previous; };
-};
-
 export default function Operator() {
   const chat = useOperatorChat();
   const location = useLocation();
@@ -36,29 +24,9 @@ export default function Operator() {
     document.title = 'Zaka Desk';
     document.body.classList.add('operator-page-active');
 
-    // Safari only considers the first manifest link when creating a Home
-    // Screen shortcut. Reuse the site's existing link instead of appending a
-    // second manifest, otherwise it may install the portfolio shortcut.
-    const manifest = document.querySelector('#site-manifest, link[rel="manifest"]');
-    const createdManifest = !manifest;
-    const previousManifestHref = manifest?.getAttribute('href');
-    const operatorManifest = manifest || document.createElement('link');
-    operatorManifest.id = operatorManifest.id || 'site-manifest';
-    operatorManifest.rel = 'manifest';
-    operatorManifest.href = '/operator.webmanifest';
-    if (createdManifest) document.head.appendChild(operatorManifest);
-    const restoreCapable = ensureMeta('apple-mobile-web-app-capable', 'yes');
-    const restoreTitle = ensureMeta('apple-mobile-web-app-title', 'Zaka Desk');
-    const restoreStatusBar = ensureMeta('apple-mobile-web-app-status-bar-style', 'black-translucent');
-
     return () => {
       document.title = previousTitle;
       document.body.classList.remove('operator-page-active');
-      if (createdManifest) operatorManifest.remove();
-      else if (previousManifestHref) operatorManifest.href = previousManifestHref;
-      restoreCapable();
-      restoreTitle();
-      restoreStatusBar();
     };
   }, []);
 

@@ -19,7 +19,7 @@ Vite prints the local URL. The portfolio pages work without a backend. The conve
 - `/work/` — selected work and engineering stories, generated as static pages at build time
 - `/#/archive` — project archive
 - `/#/about` — About page and conversation interface
-- `/#/operator` — authenticated conversation desk
+- `/operator/` — authenticated conversation desk with a dedicated Home Screen manifest (old `/#/operator` links redirect here)
 
 The React pages use hash routing so shared links work on GitHub Pages. The `/work/` pages are generated as standalone HTML by `scripts/build-project-pages.mjs`. Run `npm run build` followed by `npm run preview` to view those pages locally.
 
@@ -34,3 +34,9 @@ npm run release
 `npm run release` checks the production configuration, builds the site, and publishes `dist/` to the `gh-pages` branch. The public browser settings used for release are in `.env.production`. Create and push a Git tag separately when marking a version; deployment does not create one.
 
 The `public/CNAME` file keeps `zakacoding.dev` attached to GitHub Pages across releases. The Pages custom domain and Cloudflare DNS must point to the same domain. The chat API and Reverb remain on Fly; their deployed origin allowlists must include `https://zakacoding.dev` and `https://www.zakacoding.dev` for browser features to work from the custom domain.
+
+### iPhone operator shortcut
+
+After deploying, open `https://zakacoding.dev/operator/` in Safari and use Share → Add to Home Screen. The shortcut should be named **Zaka Desk**. Replace an old shortcut that launches About; its saved launch URL may still belong to the portfolio app. Sign in and enable notifications from the new Desk shortcut. Operator authentication remains on the backend.
+
+Run `npm run build && node --test tests/operator-entry.test.mjs` to check the built entry page, manifest, legacy routes, and notification targets.

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, LockFill } from 'react-bootstrap-icons';
-import { Link } from 'react-router-dom';
 
 export function OperatorLogin({ isAuthenticating, notice, onLogin }) {
   const [email, setEmail] = useState('');
@@ -16,10 +15,10 @@ export function OperatorLogin({ isAuthenticating, notice, onLogin }) {
 
   return (
     <main className="operator-login-shell">
-      <Link className="operator-back-link" to="/about">
+      <a className="operator-back-link" href="/#/about">
         <ArrowLeft aria-hidden="true" />
         Portfolio
-      </Link>
+      </a>
 
       <section className="operator-login-card" aria-labelledby="operator-login-title">
         <div className="operator-mark" aria-hidden="true">

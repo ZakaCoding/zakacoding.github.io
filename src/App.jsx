@@ -61,6 +61,13 @@ function AppContent() {
   const location = useLocation();
   const isOperatorDesk = location.pathname.startsWith('/operator');
   useEffect(() => {
+    // React Router uses pushState for internal hash links, which does not fire
+    // the entry script's hashchange listener. Reload onto the static Desk shell.
+    if (isOperatorDesk && window.location.pathname !== '/operator/') {
+      window.location.replace(`/operator/#${location.pathname}${location.search}`);
+    }
+  }, [isOperatorDesk, location.pathname, location.search]);
+  useEffect(() => {
     if (isOperatorDesk) return;
     const page = location.pathname === '/about' ? 'About Zaka Noor' : location.pathname === '/archive' ? 'Work · Zaka Noor' : 'Hello World · Zaka Noor';
     document.title = page;

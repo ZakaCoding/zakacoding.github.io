@@ -7,6 +7,9 @@ export default defineConfig(({ mode }) => {
   return {
   base: '/',
   plugins: [react()],
+  build: {
+    rollupOptions: { input: { portfolio: 'index.html', operator: 'operator/index.html' } },
+  },
   server: {
     proxy: {
       '/chat-api': {

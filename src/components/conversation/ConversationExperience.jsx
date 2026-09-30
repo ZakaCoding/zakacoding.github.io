@@ -364,7 +364,7 @@ export const ConversationExperience = () => {
             isSending={conversation.isSending}
           />
           {hasNewMessages && conversation.session && <ConversationFollowUp key={conversation.contactEmail} session={conversation.session} contactEmail={conversation.contactEmail} onContactSaved={conversation.setContactEmail} />}
-          <a className="conversation-email-link" href="mailto:zakanoor@outlook.co.id">Email me directly</a>
+          <a className="conversation-email-link" href="mailto:hello@zakacoding.dev">Email me directly</a>
         </motion.section>
       ))}
     </AnimatePresence>

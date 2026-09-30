@@ -563,7 +563,7 @@ const About = () => {
                     that make complicated things feel clear.
                   </p>
                   <ConversationExperience />
-                  <a className="about-direct-email" href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a>
+                  <a className="about-direct-email" href="mailto:hello@zakacoding.dev">hello@zakacoding.dev</a>
                 </div>
               </div>
 

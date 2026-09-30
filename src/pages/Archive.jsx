@@ -331,7 +331,7 @@ function Archive() {
       <section className="portfolio-contact-strip" aria-label="Contact Zaka">
         <h2>Have a related problem?</h2>
         <a className="about-closing-cta portfolio-contact-button" href="/#/about?chat=1">Start a conversation <ArrowRight aria-hidden="true" /></a>
-        <a href="mailto:zakanoor@outlook.co.id">zakanoor@outlook.co.id</a>
+        <a href="mailto:hello@zakacoding.dev">hello@zakacoding.dev</a>
       </section>
       <Footer />
     </>
