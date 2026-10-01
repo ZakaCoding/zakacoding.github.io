@@ -17,7 +17,7 @@ export const renderOwaStory = () => `<!doctype html>
   <link rel="preload" href="/owa/local-loop.png" as="image">
   <link rel="stylesheet" href="/owa/owa.css">
   <script src="/owa/owa.js" defer></script>
-  <title>OwA — the codebase before the answer · Zaka Noor</title>
+  <title>OwA | My code has a roommate</title>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to story</a>

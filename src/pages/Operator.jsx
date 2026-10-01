@@ -21,7 +21,7 @@ export default function Operator() {
 
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = 'Zaka Desk';
+    document.title = 'Desk | The human is typing';
     document.body.classList.add('operator-page-active');
 
     return () => {
