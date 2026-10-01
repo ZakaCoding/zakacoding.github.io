@@ -6,7 +6,7 @@ self.addEventListener('push', (event) => {
   let payload;
   try { payload = event.data?.json(); } catch { payload = null; }
   const url = payload?.operator
-    ? `/#/operator?conversation=${encodeURIComponent(payload.conversation_id || '')}`
+    ? `/operator/#/operator?conversation=${encodeURIComponent(payload.conversation_id || '')}`
     : '/#/about?chat=1';
   event.waitUntil(self.registration.showNotification(payload?.title || 'ZakaCoding', {
     body: payload?.body || 'You have a new conversation update.',
@@ -22,7 +22,11 @@ self.addEventListener('notificationclick', (event) => {
   if (url.origin !== self.location.origin) return;
   event.waitUntil((async () => {
     const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    const client = windows.find((window) => new URL(window.url).origin === url.origin);
+    const isDesk = (target) => target.pathname.startsWith('/operator/') || /^#\/operator(?:[/?]|$)/.test(target.hash);
+    const client = windows.find((window) => {
+      const current = new URL(window.url);
+      return current.origin === url.origin && isDesk(current) === isDesk(url);
+    });
     if (client) { await client.navigate(url.href); await client.focus(); }
     else await self.clients.openWindow(url.href);
   })());
