@@ -1,5 +1,4 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { PaperIndexNav } from './PaperIndexNav';
 import { Alt } from 'react-bootstrap-icons';
 import { useEffect, useRef, useState } from 'react';
 
@@ -11,6 +10,8 @@ const links = [
 
 export function Navbar() {
   const [visible, setVisible] = useState(true);
+  const [workMenuOpen, setWorkMenuOpen] = useState(false);
+  const triggerRef = useRef(null);
   const [mounted, setMounted] = useState(false);
   const [pillStyle, setPillStyle] = useState({});
   const lastScrollY = useRef(0);
@@ -19,7 +20,16 @@ export function Navbar() {
   const location = useLocation();
   const isWork = location.pathname === '/archive';
 
-  useEffect(() => { setVisible(true); }, [location.pathname]);
+  useEffect(() => { setVisible(true); setWorkMenuOpen(false); }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isWork || !workMenuOpen) return;
+    const dismiss = (event) => {
+      if (!navRef.current?.contains(event.target)) setWorkMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', dismiss);
+    return () => document.removeEventListener('pointerdown', dismiss);
+  }, [isWork, workMenuOpen]);
 
 
   useEffect(() => {
@@ -67,7 +77,7 @@ export function Navbar() {
       observer.disconnect();
       window.removeEventListener('resize', updatePill);
     };
-  }, [location.pathname, isWork, mounted]);
+  }, [location.pathname, isWork, mounted, workMenuOpen]);
 
   return (
     <header
@@ -78,17 +88,25 @@ export function Navbar() {
           : { animation: 'navSlideDown 0.8s cubic-bezier(0.4,0,0.2,1) forwards' }
       }
     >
-      {isWork ? <PaperIndexNav /> : <nav
+      <nav
         ref={navRef}
-        className='nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full'
+        className={`nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full${isWork ? ' work-nav-reveal' : ''}`}
         aria-label="Primary navigation"
->
-        <div className="relative flex items-center gap-1">
+        onPointerEnter={(event) => { if (isWork && event.pointerType === 'mouse') setWorkMenuOpen(true); }}
+        onPointerLeave={(event) => { if (isWork && event.pointerType === 'mouse' && !navRef.current?.contains(document.activeElement)) setWorkMenuOpen(false); }}
+        onBlur={(event) => { if (isWork && !event.currentTarget.contains(event.relatedTarget)) setWorkMenuOpen(false); }}
+        onKeyDown={(event) => { if (isWork && event.key === 'Escape') { setWorkMenuOpen(false); triggerRef.current?.focus(); } }}
+      >
+        {isWork && <button ref={triggerRef} type="button" className="work-nav-invitation" aria-expanded={workMenuOpen} aria-controls="work-nav-destinations"
+          onClick={(event) => { if (event.detail === 0 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) setWorkMenuOpen(open => !open); else setWorkMenuOpen(true); }}>
+          <span>{workMenuOpen ? 'Found it' : 'Where to?'}</span><span className="work-nav-look" aria-hidden="true">👀</span>
+        </button>}
+        {(!isWork || workMenuOpen) && <div id={isWork ? "work-nav-destinations" : undefined} className="relative flex items-center gap-1">
         {/* sliding pill */}
-        <span
+        {!isWork && <span
           className='nav-pill absolute inset-y-2 left-0 rounded-full pointer-events-none'
           style={{ transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1), width 0.4s cubic-bezier(0.4,0,0.2,1)', ...pillStyle }}
-        />
+        />}
         {links.map((link, i) => (
           <NavLink
             key={link.to}
@@ -107,8 +125,8 @@ export function Navbar() {
             {link.icon && <Alt size={13} />}
           </NavLink>
         ))}
-        </div>
-      </nav>}
+        </div>}
+      </nav>
     </header>
   );
 }

@@ -121,3 +121,28 @@ body.hide-navbar .navbar-header {
   color: #6e6e73;
   font: 600 0.9rem/1.5 Mona, system-ui, sans-serif;
 }
+
+/* Work reveals the same links as Home, without the orange decoration. */
+.work-nav-invitation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.2rem;
+  padding: 0.35rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  color: #4c4841;
+  background: transparent;
+  font: 650 0.86rem/1 Mona, system-ui, sans-serif;
+  white-space: nowrap;
+}
+.work-nav-look { display: inline-block; transition: transform 220ms ease; }
+.work-nav-invitation[aria-expanded="true"] .work-nav-look { transform: translateX(2px); }
+.work-nav-invitation:focus-visible { outline: 2px solid #555; outline-offset: 2px; }
+@media (max-width: 480px) {
+  .work-nav-reveal { flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 24px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-nav-look { transition: none; }
+}
