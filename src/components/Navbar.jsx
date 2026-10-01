@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
+import { WorkNavbar } from './WorkNavbar';
 import { Alt } from 'react-bootstrap-icons';
 import { useEffect, useRef, useState } from 'react';
 
@@ -10,26 +11,17 @@ const links = [
 
 export function Navbar() {
   const [visible, setVisible] = useState(true);
-  const [navAside, setNavAside] = useState('Just looking? Same');
-  const [workMenuOpen, setWorkMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [pillStyle, setPillStyle] = useState({});
   const lastScrollY = useRef(0);
   const navRef = useRef(null);
   const itemRefs = useRef([]);
   const location = useLocation();
-  const isWork = location.pathname === '/archive';
-
-  useEffect(() => { setWorkMenuOpen(false); setVisible(true); }, [location.pathname]);
 
   useEffect(() => {
-    if (!isWork || !workMenuOpen) return;
-    const dismiss = (event) => {
-      if (!navRef.current?.contains(event.target)) setWorkMenuOpen(false);
-    };
-    document.addEventListener('pointerdown', dismiss);
-    return () => document.removeEventListener('pointerdown', dismiss);
-  }, [isWork, workMenuOpen]);
+    setVisible(true);
+    lastScrollY.current = window.scrollY;
+  }, [location.pathname]);
 
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 800);
@@ -39,7 +31,7 @@ export function Navbar() {
   useEffect(() => {
     if (!mounted) return;
     const handleScroll = () => {
-      if (location.pathname.startsWith('/about') || isWork) {
+      if (location.pathname.startsWith('/about') || location.pathname === '/archive') {
         setVisible(true);
         return;
       }
@@ -49,7 +41,7 @@ export function Navbar() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname, isWork, mounted]);
+  }, [location.pathname, mounted]);
 
   useEffect(() => {
     const updatePill = () => {
@@ -58,11 +50,15 @@ export function Navbar() {
       );
       const el = itemRefs.current[activeIndex];
       const nav = navRef.current;
-      if (!el || !nav) return;
+      if (!el || !nav) {
+        setPillStyle({ opacity: 0 });
+        return;
+      }
 
-      const navRect = el.parentElement.getBoundingClientRect();
+      const navRect = nav.getBoundingClientRect();
       const elRect = el.getBoundingClientRect();
       setPillStyle({
+        opacity: 1,
         width: elRect.width,
         transform: `translateX(${elRect.left - navRect.left}px)`,
       });
@@ -76,18 +72,7 @@ export function Navbar() {
       observer.disconnect();
       window.removeEventListener('resize', updatePill);
     };
-  }, [location.pathname, isWork, mounted, workMenuOpen]);
-
-  const closeOnBlur = (event) => {
-    if (isWork && !event.currentTarget.contains(event.relatedTarget)) setWorkMenuOpen(false);
-  };
-
-  const closeOnEscape = (event) => {
-    if (isWork && event.key === 'Escape') {
-      setWorkMenuOpen(false);
-      navRef.current?.querySelector('.work-nav-trigger')?.focus();
-    }
-  };
+  }, [location.pathname, mounted]);
 
   return (
     <header
@@ -98,33 +83,15 @@ export function Navbar() {
           : { animation: 'navSlideDown 0.8s cubic-bezier(0.4,0,0.2,1) forwards' }
       }
     >
-      <nav
-        ref={navRef}
-        className={`nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full${isWork ? ' work-nav' : ''}`}
-        aria-label="Primary navigation"
-        onPointerEnter={isWork ? (event) => { if (event.pointerType === 'mouse') { setNavAside('Just looking? Same'); setWorkMenuOpen(true); } } : undefined}
-        onPointerLeave={isWork ? (event) => { if (event.pointerType === 'mouse' && !navRef.current?.contains(document.activeElement)) setWorkMenuOpen(false); } : undefined}
-        onBlur={closeOnBlur}
-        onKeyDown={closeOnEscape}
-      >
-        {isWork && <button
-          type="button"
-          className="work-nav-trigger relative z-10 rounded-full"
-          aria-expanded={workMenuOpen}
-          aria-controls="work-nav-links"
-          onClick={(event) => { if (event.detail === 0 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) setWorkMenuOpen(open => !open); else setWorkMenuOpen(true); }}
-        ><span className="work-nav-trigger-copy">{workMenuOpen ? 'Found it' : 'Where to?'}</span><span className="work-nav-trigger-signal" aria-hidden="true">👀</span></button>}
-        {(!isWork || workMenuOpen) && <div id={isWork ? 'work-nav-links' : undefined} className={`${isWork ? 'work-nav-links' : 'relative'} flex items-center gap-1`}>
+      {location.pathname === '/archive' ? <WorkNavbar /> : <nav ref={navRef} className='nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full' aria-label="Primary navigation">
         {/* sliding pill */}
-        {!isWork && <span
+        <span
           className='nav-pill absolute inset-y-2 left-0 rounded-full pointer-events-none'
           style={{ transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1), width 0.4s cubic-bezier(0.4,0,0.2,1)', ...pillStyle }}
-        />}
+        />
         {links.map((link, i) => (
           <NavLink
             key={link.to}
-            onPointerEnter={isWork ? () => setNavAside(['Back to square one', 'Plot twist, a human', 'Me in a sensible font'][i]) : undefined}
-            onFocus={isWork ? () => setNavAside(['Back to square one', 'Plot twist, a human', 'Me in a sensible font'][i]) : undefined}
             to={link.to}
             end={link.to === '/'}
             target={link.external ? '_blank' : undefined}
@@ -140,9 +107,7 @@ export function Navbar() {
             {link.icon && <Alt size={13} />}
           </NavLink>
         ))}
-        </div>}
-        {isWork && workMenuOpen && <span className="work-nav-aside" aria-hidden="true">{navAside}</span>}
-      </nav>
+      </nav>}
     </header>
   );
 }

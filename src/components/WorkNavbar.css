@@ -1,0 +1,147 @@
+.work-wayfinder {
+  position: relative;
+  color: #29292d;
+  font-family: Mona, system-ui, sans-serif;
+  --look-x: 0px;
+  --look-y: 0px;
+}
+/* A frosted-glass web treatment, with a solid fallback when blur is unavailable. */
+.work-wayfinder .work-wayfinder-trigger,
+.work-wayfinder-panel {
+  border: 1px solid rgba(255, 255, 255, .88);
+  background: #f9f9fb;
+  box-shadow: 0 12px 32px #22223012, 0 2px 6px #22223006,
+    inset 0 1px 0 #fff, inset 0 -1px 0 #ffffff70;
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .work-wayfinder .work-wayfinder-trigger,
+  .work-wayfinder-panel {
+    background: linear-gradient(155deg, #ffffff80, #ffffff14 55%, #ffffff38), rgba(250, 250, 252, .64);
+    -webkit-backdrop-filter: blur(22px) saturate(135%);
+    backdrop-filter: blur(22px) saturate(135%);
+  }
+}
+.work-wayfinder-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 999px;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 350ms cubic-bezier(.2, 1.6, .4, 1), box-shadow 250ms;
+}
+.work-wayfinder-trigger:hover { border-color: #fff; transform: rotate(-2deg); }
+.work-wayfinder.is-open .work-wayfinder-trigger { transform: rotate(0); box-shadow: 0 5px 16px #18182012, inset 0 1px 0 #fff, inset 0 -1px 0 #ffffff70; }
+.work-wayfinder-copy { min-width: 102px; text-align: left; font-size: 13px; font-weight: 650; }
+.work-wayfinder-eyes { display: flex; gap: 3px; transform: rotate(-7deg); }
+.work-wayfinder-eyes i {
+  position: relative;
+  width: 14px;
+  height: 19px;
+  overflow: hidden;
+  border: 1.5px solid #35353a;
+  border-radius: 50%;
+  background: #fff;
+}
+.work-wayfinder-eyes i::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 4px;
+  width: 5px;
+  height: 7px;
+  border-radius: 50%;
+  background: #29292d;
+  transform: translate(var(--look-x), var(--look-y));
+  transition: transform 100ms ease-out;
+}
+.work-wayfinder.is-open .work-wayfinder-eyes { animation: wayfinder-double-take 650ms ease both; }
+.work-wayfinder-chevron {
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid #73737b;
+  border-bottom: 1.5px solid #73737b;
+  transform: rotate(45deg);
+  transition: transform 250ms;
+}
+.work-wayfinder.is-open .work-wayfinder-chevron { transform: rotate(225deg); }
+.work-wayfinder-reveal {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: min(326px, calc(100vw - 28px));
+  padding-top: 10px;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-9px) scale(.88) rotate(-3deg);
+  transform-origin: 50% 0;
+  transition: opacity 160ms, transform 220ms ease, visibility 220ms;
+}
+.work-wayfinder.is-open .work-wayfinder-reveal {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0) scale(1) rotate(0);
+  transition: opacity 160ms, transform 430ms cubic-bezier(.16, 1.35, .35, 1), visibility 0s;
+}
+.work-wayfinder-panel {
+  padding: 8px 8px 0;
+  border-radius: 23px;
+}
+.work-wayfinder-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.work-wayfinder-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 78px;
+  border-radius: 16px;
+  color: #55555e;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: background 160ms, color 160ms, transform 240ms, opacity 150ms;
+}
+.work-wayfinder.is-open .work-wayfinder-link { opacity: 1; transform: translateY(0); transition-delay: 0ms, 0ms, var(--arrival), var(--arrival); }
+.work-wayfinder-link:hover, .work-wayfinder-link:focus-visible { background: rgba(255, 255, 255, .72); color: #202026; }
+.work-wayfinder-link svg { transition: transform 320ms cubic-bezier(.2, 1.7, .4, 1); }
+.work-wayfinder-link:hover svg, .work-wayfinder-link:focus-visible svg { transform: translateY(-3px) rotate(-12deg); }
+.work-wayfinder-link:last-child:hover svg { transform: translate(3px, -3px); }
+.work-wayfinder-aside {
+  display: grid;
+  place-items: center;
+  min-height: 43px;
+  margin: 0;
+  padding: 8px 3px 10px;
+  color: #62626c;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+  animation: wayfinder-whisper 180ms ease both;
+}
+.work-wayfinder button:focus-visible, .work-wayfinder a:focus-visible { outline: 2px solid #56565e; outline-offset: 3px; }
+@keyframes wayfinder-double-take {
+  0%, 100% { transform: rotate(-7deg) scaleY(1); }
+  24% { transform: rotate(6deg) scaleY(.12); }
+  45% { transform: rotate(6deg) scaleY(1.12); }
+  70% { transform: rotate(-10deg) scaleY(1); }
+}
+@keyframes wayfinder-whisper { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .work-wayfinder *, .work-wayfinder *::after { transition: none !important; animation: none !important; }
+  .work-wayfinder-eyes i::after { transform: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .work-wayfinder .work-wayfinder-trigger,
+  .work-wayfinder-panel {
+    background: #f9f9fb;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
