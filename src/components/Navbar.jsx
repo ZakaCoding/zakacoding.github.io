@@ -10,8 +10,8 @@ const links = [
 
 export function Navbar() {
   const [visible, setVisible] = useState(true);
+  const [navAside, setNavAside] = useState('Just looking? Same');
   const [workMenuOpen, setWorkMenuOpen] = useState(false);
-  const triggerRef = useRef(null);
   const [mounted, setMounted] = useState(false);
   const [pillStyle, setPillStyle] = useState({});
   const lastScrollY = useRef(0);
@@ -20,7 +20,7 @@ export function Navbar() {
   const location = useLocation();
   const isWork = location.pathname === '/archive';
 
-  useEffect(() => { setVisible(true); setWorkMenuOpen(false); }, [location.pathname]);
+  useEffect(() => { setWorkMenuOpen(false); setVisible(true); }, [location.pathname]);
 
   useEffect(() => {
     if (!isWork || !workMenuOpen) return;
@@ -30,7 +30,6 @@ export function Navbar() {
     document.addEventListener('pointerdown', dismiss);
     return () => document.removeEventListener('pointerdown', dismiss);
   }, [isWork, workMenuOpen]);
-
 
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 800);
@@ -79,6 +78,17 @@ export function Navbar() {
     };
   }, [location.pathname, isWork, mounted, workMenuOpen]);
 
+  const closeOnBlur = (event) => {
+    if (isWork && !event.currentTarget.contains(event.relatedTarget)) setWorkMenuOpen(false);
+  };
+
+  const closeOnEscape = (event) => {
+    if (isWork && event.key === 'Escape') {
+      setWorkMenuOpen(false);
+      navRef.current?.querySelector('.work-nav-trigger')?.focus();
+    }
+  };
+
   return (
     <header
       className='fixed z-50 top-4 left-0 w-full flex justify-center navbar-header px-3'
@@ -90,18 +100,21 @@ export function Navbar() {
     >
       <nav
         ref={navRef}
-        className={`nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full${isWork ? ' work-nav-reveal' : ''}`}
+        className={`nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full${isWork ? ' work-nav' : ''}`}
         aria-label="Primary navigation"
-        onPointerEnter={(event) => { if (isWork && event.pointerType === 'mouse') setWorkMenuOpen(true); }}
-        onPointerLeave={(event) => { if (isWork && event.pointerType === 'mouse' && !navRef.current?.contains(document.activeElement)) setWorkMenuOpen(false); }}
-        onBlur={(event) => { if (isWork && !event.currentTarget.contains(event.relatedTarget)) setWorkMenuOpen(false); }}
-        onKeyDown={(event) => { if (isWork && event.key === 'Escape') { setWorkMenuOpen(false); triggerRef.current?.focus(); } }}
+        onPointerEnter={isWork ? (event) => { if (event.pointerType === 'mouse') { setNavAside('Just looking? Same'); setWorkMenuOpen(true); } } : undefined}
+        onPointerLeave={isWork ? (event) => { if (event.pointerType === 'mouse' && !navRef.current?.contains(document.activeElement)) setWorkMenuOpen(false); } : undefined}
+        onBlur={closeOnBlur}
+        onKeyDown={closeOnEscape}
       >
-        {isWork && <button ref={triggerRef} type="button" className="work-nav-invitation" aria-expanded={workMenuOpen} aria-controls="work-nav-destinations"
-          onClick={(event) => { if (event.detail === 0 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) setWorkMenuOpen(open => !open); else setWorkMenuOpen(true); }}>
-          <span>{workMenuOpen ? 'Found it' : 'Where to?'}</span><span className="work-nav-look" aria-hidden="true">👀</span>
-        </button>}
-        {(!isWork || workMenuOpen) && <div id={isWork ? "work-nav-destinations" : undefined} className="relative flex items-center gap-1">
+        {isWork && <button
+          type="button"
+          className="work-nav-trigger relative z-10 rounded-full"
+          aria-expanded={workMenuOpen}
+          aria-controls="work-nav-links"
+          onClick={(event) => { if (event.detail === 0 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) setWorkMenuOpen(open => !open); else setWorkMenuOpen(true); }}
+        ><span className="work-nav-trigger-copy">{workMenuOpen ? 'Found it' : 'Where to?'}</span><span className="work-nav-trigger-signal" aria-hidden="true">👀</span></button>}
+        {(!isWork || workMenuOpen) && <div id={isWork ? 'work-nav-links' : undefined} className={`${isWork ? 'work-nav-links' : 'relative'} flex items-center gap-1`}>
         {/* sliding pill */}
         {!isWork && <span
           className='nav-pill absolute inset-y-2 left-0 rounded-full pointer-events-none'
@@ -110,6 +123,8 @@ export function Navbar() {
         {links.map((link, i) => (
           <NavLink
             key={link.to}
+            onPointerEnter={isWork ? () => setNavAside(['Back to square one', 'Plot twist, a human', 'Me in a sensible font'][i]) : undefined}
+            onFocus={isWork ? () => setNavAside(['Back to square one', 'Plot twist, a human', 'Me in a sensible font'][i]) : undefined}
             to={link.to}
             end={link.to === '/'}
             target={link.external ? '_blank' : undefined}
@@ -126,6 +141,7 @@ export function Navbar() {
           </NavLink>
         ))}
         </div>}
+        {isWork && workMenuOpen && <span className="work-nav-aside" aria-hidden="true">{navAside}</span>}
       </nav>
     </header>
   );
