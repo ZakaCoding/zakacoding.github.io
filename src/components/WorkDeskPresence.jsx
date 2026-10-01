@@ -22,7 +22,9 @@ const validName = (value) => {
   return name.length >= 2 && name.length <= 24 && /^[\p{L}\p{M}\p{N}][\p{L}\p{M}\p{N} .'_-]*$/u.test(name) ? name : null;
 };
 
-export function WorkDeskPresence({ boardRef }) {
+export function WorkDeskPresence({ boardRef, meeting }) {
+  const stickerX = useMotionValue(0);
+  const stickerY = useMotionValue(0);
   const [name, setName] = useState('');
   const [identity, setIdentity] = useState(null);
   const [viewerIdentity, setViewerIdentity] = useState(null);
@@ -267,6 +269,8 @@ export function WorkDeskPresence({ boardRef }) {
     setOpen(false);
   };
 
+  const identityColor = identity ? COLORS[Array.from(identity.id).reduce((sum, char) => sum + char.charCodeAt(0), 0) % COLORS.length] : COLORS[0];
+
   const visible = Object.entries(cursors).filter(([id]) => members.current.has(id)).sort((a, b) => b[1].at - a[1].at).slice(0, MAX_CURSORS);
 
   return (
@@ -290,6 +294,19 @@ export function WorkDeskPresence({ boardRef }) {
           </>
         )}
       </div>
+      {identity && board && createPortal(
+        <motion.div className="desk-visitor-sticker" style={{ x: stickerX, y: stickerY, '--sticker-color': identityColor }} drag={!meeting} dragConstraints={boardRef} dragMomentum={false} dragElastic={0.05} whileDrag={{ scale: reducedMotion ? 1 : 1.03, zIndex: 30 }} role="group" aria-label={`Visitor sticker for ${identity.name}`}>
+          <button className="desk-sticker-grip" type="button" disabled={meeting} aria-label="Move your name sticker. Drag or use arrow keys." onKeyDown={(event) => {
+            const move = { ArrowLeft: [-20, 0], ArrowRight: [20, 0], ArrowUp: [0, -20], ArrowDown: [0, 20] }[event.key];
+            if (!move) return;
+            event.preventDefault();
+            const bounds = board.getBoundingClientRect();
+            const sticker = event.currentTarget.parentElement.getBoundingClientRect();
+            stickerX.set(stickerX.get() + Math.max(bounds.left - sticker.left, Math.min(move[0], bounds.right - sticker.right)));
+            stickerY.set(stickerY.get() + Math.max(bounds.top - sticker.top, Math.min(move[1], bounds.bottom - sticker.bottom)));
+          }}><strong>HELLO</strong><span>I&apos;m</span></button>
+          <b>{identity.name}</b><small>glad you pulled up a chair.</small>
+        </motion.div>, board)}
       {!identity && !open && board && createPortal(
         <button
           className={`work-presence-invite${previewHover ? ' is-hovered' : ''}`}
@@ -313,7 +330,7 @@ export function WorkDeskPresence({ boardRef }) {
             <span>{members.current.get(id)}</span>
           </div>
         ))}
-        {identity && ownCursor && <div className="work-cursor is-own" style={{ left: `${ownCursor.x * 100}%`, top: `${ownCursor.y * 100}%` }}><span>yours</span></div>}
+        {identity && ownCursor && <div className="work-cursor is-own" style={{ left: `${ownCursor.x * 100}%`, top: `${ownCursor.y * 100}%`, '--cursor-color': identityColor }}><span>yours</span></div>}
       </div>, boardRef.current)}
     </>
   );

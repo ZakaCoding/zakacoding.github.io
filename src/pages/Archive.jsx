@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useDragControls, useMotionValue } from 'framer-motion';
+import { AnimatePresence, animate, motion, useDragControls, useMotionValue, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, ArrowsMove, ArrowRepeat, Folder2Open, X } from 'react-bootstrap-icons';
 
+import { DeskProjectPreview } from '../components/DeskProjectPreview';
+import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
 import { Footer } from '../components/Footer';
 import { WorkDeskPresence } from '../components/WorkDeskPresence';
 import ngefont from '../assets/image/ngefont/ngfont-illustration.webp';
@@ -26,49 +28,21 @@ const otherWork = [
   { id: 'amogasakti', number: '06', kind: 'Playful web experience', title: 'Amogasakti', summary: 'A card game with a world of its own.', href: 'https://amogasakti.vercel.app/', action: 'Visit website', image: amogasakti },
 ];
 
-function NoteVisual({ project }) {
-  if (project.id === 'owa') {
-    return (
-      <div className="canvas-note-visual canvas-note-terminal" aria-hidden="true">
-        <span className="terminal-dots"><i /><i /><i /></span>
-        <span className="terminal-line"><b>›</b> owa ask <em>&quot;where does this live?&quot;</em></span>
-        <span className="terminal-answer">↳ reading the relevant code...</span>
-        <span className="terminal-status">● local &amp; grounded</span>
-      </div>
-    );
-  }
-
-  if (project.id === 'logistics') {
-    return (
-      <div className="canvas-note-visual canvas-note-logistics" aria-hidden="true">
-        <span className="logistics-center">DiGILOG</span>
-        <span className="logistics-node logistics-node-one">OMS</span>
-        <span className="logistics-node logistics-node-two">WMS</span>
-        <span className="logistics-node logistics-node-three">TMS</span>
-        <span className="logistics-node logistics-node-four">FMS</span>
-        <span className="logistics-node logistics-node-five">VMS</span>
-      </div>
-    );
-  }
-
-  if (project.id === 'cmap') {
-    return (
-      <div className="canvas-note-visual canvas-note-cmap" aria-hidden="true">
-        <span className="cmap-thought cmap-thought-one">ideas</span>
-        <span className="cmap-thought cmap-thought-two">connect</span>
-        <span className="cmap-thought cmap-thought-three">to ideas</span>
-        <svg viewBox="0 0 310 116" preserveAspectRatio="none"><path d="M92 56 C124 56 120 22 150 24 M190 30 C215 31 205 76 232 76" /></svg>
-      </div>
-    );
-  }
-
-  return null;
-}
-
-function WorkNote({ project, boardRef, soundEnabled, playSound }) {
+function WorkNote({ project, boardRef, soundEnabled, playSound, meeting }) {
   const controls = useDragControls();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const savedPosition = useRef(null);
+  const reduced = useReducedMotion();
+  const [dragging, setDragging] = useState(false);
+  useEffect(() => {
+    if (meeting) savedPosition.current = { x: x.get(), y: y.get() };
+    if (!savedPosition.current) return undefined;
+    const target = meeting ? { x: 0, y: 0 } : savedPosition.current;
+    const options = { duration: reduced ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] };
+    const animations = [animate(x, target.x, options), animate(y, target.y, options)];
+    return () => animations.forEach((animation) => animation.stop());
+  }, [meeting, reduced, x, y]);
 
   const moveWithKeyboard = (event) => {
     const moves = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] };
@@ -86,22 +60,25 @@ function WorkNote({ project, boardRef, soundEnabled, playSound }) {
 
   return (
     <motion.div
-      className={'canvas-note-position canvas-note-position-' + project.id}
+      className={'canvas-note-position canvas-note-position-' + project.id + (dragging ? ' is-picked-up' : '')}
+      layout
+      transition={{ layout: { duration: reduced ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] } }}
       style={{ x, y }}
-      drag
+      drag={!meeting}
       dragListener={false}
       dragControls={controls}
       dragConstraints={boardRef}
       dragElastic={0.08}
       dragMomentum={false}
-      onDragStart={() => { if (soundEnabled) playSound('pickup'); }}
-      onDragEnd={() => { if (soundEnabled) playSound('drop'); }}
-      whileDrag={{ scale: 1.035, zIndex: 20, cursor: 'grabbing' }}
+      onDragStart={() => { setDragging(true); if (soundEnabled) playSound('pickup'); }}
+      onDragEnd={() => { setDragging(false); if (soundEnabled) playSound('drop'); }}
+      whileDrag={{ scale: reduced ? 1 : 1.025, zIndex: 20, cursor: 'grabbing' }}
     >
       <article className={'canvas-note canvas-note-' + project.id}>
         <div className="canvas-note-top">
           <span>{project.number} / {project.kind}</span>
           <button
+            disabled={meeting}
             className="canvas-note-grip"
             type="button"
             aria-label={'Move ' + project.title + ' note. Drag or use arrow keys.'}
@@ -113,15 +90,14 @@ function WorkNote({ project, boardRef, soundEnabled, playSound }) {
             <ArrowsMove aria-hidden="true" />
           </button>
         </div>
-        <NoteVisual project={project} />
-        <div className="canvas-note-copy">
+        <DeskProjectPreview project={project} />
+        <a className="canvas-note-copy canvas-note-link" href={project.href} aria-label={'Explore ' + project.title + ' story'}>
           <h2>{project.title}</h2>
           <p>{project.summary}</p>
           <span className="canvas-note-action">
             {project.action} <ArrowUpRight aria-hidden="true" />
           </span>
-        </div>
-        <a className="canvas-note-link" href={project.href} aria-label={'Explore ' + project.title + ' story'} />
+        </a>
       </article>
     </motion.div>
   );
@@ -130,7 +106,8 @@ function WorkNote({ project, boardRef, soundEnabled, playSound }) {
 function Archive() {
   const boardRef = useRef(null);
   const folderContentsRef = useRef(null);
-  const [layout, setLayout] = useState(0);
+  const [meeting, setMeeting] = useState(false);
+  const reduced = useReducedMotion();
   const [resetKey, setResetKey] = useState(0);
   const [folderOpen, setFolderOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
@@ -204,13 +181,14 @@ function Archive() {
   }, [folderOpen]);
 
   const resetBoard = () => {
-    setLayout(0);
+    setMeeting(false);
     setResetKey((value) => value + 1);
   };
 
-  const shuffleBoard = () => {
-    setLayout((value) => (value + 1) % 3);
-    setResetKey((value) => value + 1);
+  const tidyBoard = () => {
+    setMeeting((value) => !value);
+    setFolderOpen(false);
+    if (soundEnabled) playSound('drop');
   };
 
   return (
@@ -219,14 +197,18 @@ function Archive() {
         <section className="canvas-board-shell" aria-label="Selected work board">
           <div className="canvas-board-toolbar">
             <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
-            <WorkDeskPresence boardRef={boardRef} />
+            <WorkDeskPresence boardRef={boardRef} meeting={meeting} />
             <div className="canvas-board-actions">
               <button type="button" aria-pressed={soundEnabled} onClick={() => { if (!soundEnabled) getAudioContext(); setSoundEnabled((enabled) => !enabled); }}><span aria-hidden="true">♪</span> Sound {soundEnabled ? 'on' : 'off'}</button>
-              <button type="button" onClick={shuffleBoard}><span aria-hidden="true">✳</span> Shuffle</button>
+              <button type="button" className="desk-tidy-toggle" aria-pressed={meeting} onClick={tidyBoard}><span aria-hidden="true">{meeting ? '↶' : '✳'}</span> {meeting ? 'Back to my desk' : 'Before a meeting'}</button>
               <button type="button" onClick={resetBoard}><ArrowRepeat aria-hidden="true" /> Reset</button>
             </div>
           </div>
-          <div className="canvas-board" ref={boardRef} data-layout={layout}>
+          <div className={`canvas-board${meeting ? ' is-meeting' : ''}`} ref={boardRef}>
+            <span className="sr-only" role="status">{meeting ? 'Desk tidied. Projects are aligned. Switch back to restore your arrangement.' : 'My desk. Pick up a project and look around.'}</span>
+            <div className="desk-paperweights" aria-hidden="true"><ZakaCodingLogo /><span>back in a coffee.</span></div>
+            <div className="desk-discovery desk-discovery-owa" aria-hidden="true"><span className="desk-coffee-ring" /><p>yes, this counts<br />as organizing.</p></div>
+            <div className="desk-discovery desk-discovery-cmap" aria-hidden="true"><p>it started with<br />one little “what if?”</p></div>
             <div className="canvas-work-intro">
               <span className="canvas-work-eyebrow"><span className="canvas-work-eyebrow-dot" /> Selected projects / 2020—now</span>
               <p className="canvas-work-greeting"><span aria-hidden="true">✳</span> <strong>Hey, I&apos;m Zaka.</strong> Welcome to my desk—mind the ideas.</p>
@@ -245,7 +227,7 @@ function Archive() {
                   );
                 })}
               </div>
-              <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> Grab a note and make this space yours</div>
+              <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> {meeting ? 'Presentable. Suspiciously presentable.' : 'Pull up a chair. Pick up a project.'}</div>
             </div>
             <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
             <div className="canvas-margin-note canvas-margin-note-two"><span>scribble / 02</span><p>Messy ideas are welcome here.</p></div>
@@ -265,13 +247,13 @@ function Archive() {
                 </button>
                 <span className="canvas-break-emojis" aria-hidden="true">{doNotDisturb ? '🍷 😱 🕯️' : '☕ 👋 💬'}</span>
               </div>
-              <span className="canvas-break-aside" role="status">{doNotDisturb ? 'Shh... the bugs are napping.' : 'Okay, the bugs can talk again.'}</span>
+              <span className="canvas-break-aside" role="status">{doNotDisturb ? 'You can still look around. Just quietly.' : 'Okay, the bugs can talk again.'}</span>
             </div>
             <span className="canvas-board-scribble canvas-board-scribble-one" aria-hidden="true">curiosity in progress ↗</span>
             <span className="canvas-board-scribble canvas-board-scribble-two" aria-hidden="true">keep making things</span>
             <span className="canvas-board-cross canvas-board-cross-one" aria-hidden="true">+</span>
             <span className="canvas-board-cross canvas-board-cross-two" aria-hidden="true">+</span>
-            {mainWork.map((project) => <WorkNote key={project.id + '-' + resetKey} project={project} boardRef={boardRef} soundEnabled={soundEnabled} playSound={playSound} />)}
+            {mainWork.map((project) => <WorkNote key={project.id + '-' + resetKey} project={project} boardRef={boardRef} soundEnabled={soundEnabled} playSound={playSound} meeting={meeting} />)}
             <button
               type="button"
               className="canvas-folder"
@@ -280,7 +262,7 @@ function Archive() {
               onClick={() => setFolderOpen((open) => !open)}
             >
               <span className="canvas-folder-tab">filed away / 03</span>
-              <span className="canvas-folder-art" aria-hidden="true"><i /><i /><Folder2Open /></span>
+              <span className="canvas-folder-art" aria-hidden="true"><i /><i /><Folder2Open /></span><span className="desk-folder-secret" aria-hidden="true"><s>build everything</s> start somewhere.</span>
               <strong>Other little worlds</strong>
               <span>{folderOpen ? 'Folder open · see below' : 'Ngefont, TakeIt & Amogasakti'} <ArrowUpRight aria-hidden="true" /></span>
             </button>
@@ -295,7 +277,7 @@ function Archive() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div className="canvas-folder-inner">
                   <div className="canvas-folder-heading"><div><span>OPEN FOLDER / 03 MORE PROJECTS</span><h2>More things I’ve made.</h2></div><button type="button" onClick={() => setFolderOpen(false)} aria-label="Close other projects"><X aria-hidden="true" /></button></div>
@@ -311,7 +293,7 @@ function Archive() {
                         animate={{ opacity: 1, y: 0, rotate: 0 }}
                         exit={{ opacity: 0, y: 12 }}
                         whileHover={{ y: -4, rotate: index === 1 ? 1 : -1 }}
-                        transition={{ delay: 0.1 + index * 0.08, duration: 0.45 }}
+                        transition={{ delay: reduced ? 0 : 0.1 + index * 0.08, duration: reduced ? 0 : 0.45 }}
                       >
                         <img src={project.image} alt="" loading="lazy" />
                         <span>{project.number} / {project.kind}</span>
