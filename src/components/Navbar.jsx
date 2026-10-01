@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { PaperIndexNav } from './PaperIndexNav';
+import { WorkPillNav } from './WorkPillNav';
 import { Alt } from 'react-bootstrap-icons';
 import { useEffect, useRef, useState } from 'react';
 
@@ -78,7 +78,7 @@ export function Navbar() {
           : { animation: 'navSlideDown 0.8s cubic-bezier(0.4,0,0.2,1) forwards' }
       }
     >
-      {isWork ? <PaperIndexNav /> : <nav
+      {isWork ? <WorkPillNav /> : <nav
         ref={navRef}
         className='nav-glass relative flex items-center gap-1 px-2 py-2 rounded-full'
         aria-label="Primary navigation"

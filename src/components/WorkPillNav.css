@@ -1,0 +1,18 @@
+/* The original small invitation, with its personality in the eyes. */
+.work-pill-nav { display: flex; align-items: center; gap: 4px; max-width: calc(100vw - 24px); padding: 6px; border-radius: 28px; color: #1d1d1f; font-family: Mona, system-ui, sans-serif; }
+.work-pill-trigger { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 44px; padding: 8px 15px; border: 0; border-radius: 24px; background: transparent; color: #49494d; font-size: 13px; font-weight: 600; white-space: nowrap; transition: background 180ms, color 180ms; }
+.work-pill-trigger:hover, .work-pill-nav.is-open .work-pill-trigger { color: #1d1d1f; background: #f1f1f3; }
+.work-pill-eyes { display: flex; align-items: center; gap: 3px; width: 24px; height: 22px; transform: rotate(-7deg); transition: transform 240ms ease; }
+.work-pill-eyes i { position: relative; display: block; width: 10px; height: 14px; border: 1px solid #444449; border-radius: 50%; background: #fff; }
+.work-pill-eyes i::after { content: ''; position: absolute; width: 4px; height: 6px; left: 2px; top: 4px; background: #29292d; border-radius: 50%; transition: transform 220ms ease; }
+.work-pill-nav.is-open .work-pill-eyes { transform: rotate(0); }
+.work-pill-nav.is-open .work-pill-eyes i::after { transform: translateX(2px); }
+.work-pill-links { display: flex; align-items: center; gap: 2px; animation: workPillReveal 240ms cubic-bezier(.22,1,.36,1) both; }
+.work-pill-links a { display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 44px; padding: 8px 15px; border-radius: 22px; color: #69696e; font-size: 13px; font-weight: 550; white-space: nowrap; transition: background 180ms, color 180ms; }
+.work-pill-links a:hover { color: #1d1d1f; background: #f1f1f3; }
+.work-pill-wave { font-size: 12px; transition: transform 180ms; }
+.work-pill-links a:hover .work-pill-wave { transform: translate(1px,-2px); }
+.work-pill-nav button:focus-visible, .work-pill-nav a:focus-visible { outline: 2px solid #55555d; outline-offset: 2px; }
+@keyframes workPillReveal { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+@media (max-width: 480px) { .work-pill-nav.is-open { flex-direction: column; border-radius: 24px; } .work-pill-trigger { min-width: 144px; } .work-pill-links { padding: 0 3px 3px; } .work-pill-links a { padding-inline: 18px; } }
+@media (prefers-reduced-motion: reduce) { .work-pill-nav *, .work-pill-nav *::after { animation: none; transition: none; } }
