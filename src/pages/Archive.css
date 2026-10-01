@@ -787,3 +787,55 @@
 @media (prefers-reduced-motion: reduce) {
   .desk-delivery-stamp, .canvas-folder-art i, .canvas-margin-note, .canvas-break-note, .desk-paperweights { transition: none; }
 }
+
+/* Desk controls share one stroke, one accent, and action-led motion. */
+.desk-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  vertical-align: middle;
+  color: inherit;
+}
+.canvas-board-actions .desk-icon,
+.canvas-note-grip .desk-icon,
+.canvas-work-hint .desk-icon,
+.work-presence-tag .desk-icon { width: 20px; height: 20px; }
+.canvas-board-actions button { min-height: 44px; }
+.canvas-board-actions button[aria-pressed="true"] { color: #a64f38; }
+.canvas-board-actions .desk-icon.is-active,
+.work-presence-tag .desk-icon.is-active { color: #a64f38; }
+.canvas-board-actions button:focus-visible,
+.canvas-note-grip:focus-visible,
+.work-presence-tag:focus-visible { outline: 2px solid #a64f38; outline-offset: 3px; }
+.desk-icon-sheet {
+  transform-origin: 12px 12px;
+  fill: #fffefa;
+  transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
+}
+.desk-icon-sheet-back { transform: translate(-3px, 1px) rotate(-19deg); }
+.desk-icon-sheet-middle { transform: translate(3px, -1px) rotate(17deg); }
+.desk-icon-sheet-front { transform: rotate(-3deg); }
+.desk-icon-tidy.is-active .desk-icon-sheet-back { transform: translate(-2px, -2px); }
+.desk-icon-tidy.is-active .desk-icon-sheet-middle { transform: translate(0, 0); }
+.desk-icon-tidy.is-active .desk-icon-sheet-front { transform: translate(2px, 2px); }
+.desk-icon-waves {
+  opacity: 0;
+  transform: scaleX(.7);
+  transform-origin: 14px 12px;
+  transition: opacity 180ms ease, transform 240ms ease;
+}
+.desk-icon-sound.is-active .desk-icon-waves { opacity: 1; transform: scaleX(1); }
+.desk-icon-reset.is-resetting { animation: desk-reset-turn 380ms cubic-bezier(.22, 1, .36, 1); }
+@keyframes desk-reset-turn { from { transform: rotate(90deg); } to { transform: rotate(0); } }
+.work-presence-tag { min-height: 44px; }
+.desk-icon-peel { fill: #f1e3d4; transform-origin: 16px 17px; transition: transform 220ms ease, fill 220ms ease; }
+.work-presence-tag:hover .desk-icon-peel,
+.work-presence-tag:focus-visible .desk-icon-peel,
+.desk-icon-sticker.is-active .desk-icon-peel { transform: translate(-1px, -1px) rotate(-9deg); fill: #e5c4b4; }
+.canvas-note-grip:not(:disabled):hover { color: #a64f38; background: #fffefa; }
+.canvas-folder-art .desk-icon-folder { width: 3.5rem; height: 3.5rem; stroke-width: 1.6; }
+@media (prefers-reduced-motion: reduce) {
+  .desk-icon-sheet, .desk-icon-waves, .desk-icon-peel { transition: none; }
+  .desk-icon-reset.is-resetting { animation: none; }
+}

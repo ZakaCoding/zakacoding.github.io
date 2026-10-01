@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 
+import { WorkDeskIcon } from './WorkDeskIcon';
 import { createPortfolioEcho } from '../lib/realtime';
 import { getWorkDeskViewer, joinWorkDesk, sendWorkCursor } from '../lib/workDesk';
 
@@ -283,7 +284,7 @@ export function WorkDeskPresence({ boardRef, meeting }) {
           </div>
         ) : (
           <>
-            <button className="work-presence-tag" type="button" aria-expanded={open} aria-controls="work-presence-card" onClick={() => setOpen((value) => !value)}><span aria-hidden="true">✎</span> Leave your name here <span aria-hidden="true">↗</span></button>
+            <button className="work-presence-tag" type="button" aria-expanded={open} aria-controls="work-presence-card" onClick={() => setOpen((value) => !value)}><WorkDeskIcon name="sticker" active={open} /> Leave your name here <WorkDeskIcon name="arrow-up-right" /></button>
             {open && <form id="work-presence-card" className="work-presence-card" onSubmit={submit}>
               <label htmlFor="work-presence-name">What should we call you?</label>
               <p>Want others to see you wandering around?</p>

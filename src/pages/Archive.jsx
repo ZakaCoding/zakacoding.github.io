@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, animate, motion, useDragControls, useMotionValue, useReducedMotion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ArrowsMove, ArrowRepeat, Folder2Open, X } from 'react-bootstrap-icons';
+import { ArrowRight } from 'react-bootstrap-icons';
+import { WorkDeskIcon } from '../components/WorkDeskIcon';
 
 import { DeskProjectPreview } from '../components/DeskProjectPreview';
 import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
@@ -87,7 +88,7 @@ function WorkNote({ project, boardRef, soundEnabled, playSound, meeting }) {
             onPointerDown={(event) => controls.start(event)}
             onKeyDown={moveWithKeyboard}
           >
-            <ArrowsMove aria-hidden="true" />
+            <WorkDeskIcon name="grip" />
           </button>
         </div>
         <DeskProjectPreview project={project} />
@@ -95,7 +96,7 @@ function WorkNote({ project, boardRef, soundEnabled, playSound, meeting }) {
           <h2>{project.title}</h2>
           <p>{project.summary}</p>
           <span className="canvas-note-action">
-            {project.action} <ArrowUpRight aria-hidden="true" />
+            {project.action} <WorkDeskIcon name="arrow-up-right" />
           </span>
         </a>
       </article>
@@ -199,9 +200,9 @@ function Archive() {
             <span className="canvas-board-label"><span className="canvas-board-live-dot" /> Zaka’s desk <span className="canvas-board-count">/ 03 selected + 03 filed</span></span>
             <WorkDeskPresence boardRef={boardRef} meeting={meeting} />
             <div className="canvas-board-actions">
-              <button type="button" aria-pressed={soundEnabled} onClick={() => { if (!soundEnabled) getAudioContext(); setSoundEnabled((enabled) => !enabled); }}><span aria-hidden="true">♪</span> Sound {soundEnabled ? 'on' : 'off'}</button>
-              <button type="button" className="desk-tidy-toggle" aria-pressed={meeting} onClick={tidyBoard}><span aria-hidden="true">{meeting ? '↶' : '✳'}</span> {meeting ? 'Back to my desk' : 'Before a meeting'}</button>
-              <button type="button" onClick={resetBoard}><ArrowRepeat aria-hidden="true" /> Reset</button>
+              <button type="button" aria-pressed={soundEnabled} onClick={() => { if (!soundEnabled) getAudioContext(); setSoundEnabled((enabled) => !enabled); }}><WorkDeskIcon name="sound" active={soundEnabled} /> Sound {soundEnabled ? 'on' : 'off'}</button>
+              <button type="button" className="desk-tidy-toggle" aria-pressed={meeting} onClick={tidyBoard}><WorkDeskIcon name="tidy" active={meeting} /> {meeting ? 'Back to my desk' : 'Before a meeting'}</button>
+              <button type="button" onClick={resetBoard}><WorkDeskIcon key={resetKey} name="reset" className={resetKey > 0 ? 'is-resetting' : ''} /> Reset</button>
             </div>
           </div>
           <div className={`canvas-board${meeting ? ' is-meeting' : ''}`} ref={boardRef}>
@@ -227,7 +228,7 @@ function Archive() {
                   );
                 })}
               </div>
-              <div className="canvas-work-hint"><ArrowsMove aria-hidden="true" /> {meeting ? 'Presentable. Suspiciously presentable.' : 'Pull up a chair. Pick up a project.'}</div>
+              <div className="canvas-work-hint"><WorkDeskIcon name="grip" /> {meeting ? 'Presentable. Suspiciously presentable.' : 'Pull up a chair. Pick up a project.'}</div>
             </div>
             <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
             <div className="canvas-margin-note canvas-margin-note-two"><span>scribble / 02</span><p>Messy ideas are welcome here.</p></div>
@@ -262,9 +263,9 @@ function Archive() {
               onClick={() => setFolderOpen((open) => !open)}
             >
               <span className="canvas-folder-tab">filed away / 03</span>
-              <span className="canvas-folder-art" aria-hidden="true"><i /><i /><Folder2Open /></span><span className="desk-folder-secret" aria-hidden="true"><s>build everything</s> start somewhere.</span>
+              <span className="canvas-folder-art" aria-hidden="true"><i /><i /><WorkDeskIcon name="folder" /></span><span className="desk-folder-secret" aria-hidden="true"><s>build everything</s> start somewhere.</span>
               <strong>Other little worlds</strong>
-              <span>{folderOpen ? 'Folder open · see below' : 'Ngefont, TakeIt & Amogasakti'} <ArrowUpRight aria-hidden="true" /></span>
+              <span>{folderOpen ? 'Folder open · see below' : 'Ngefont, TakeIt & Amogasakti'} <WorkDeskIcon name="arrow-up-right" /></span>
             </button>
           </div>
           <AnimatePresence initial={false}>
@@ -280,7 +281,7 @@ function Archive() {
                 transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div className="canvas-folder-inner">
-                  <div className="canvas-folder-heading"><div><span>OPEN FOLDER / 03 MORE PROJECTS</span><h2>More things I’ve made.</h2></div><button type="button" onClick={() => setFolderOpen(false)} aria-label="Close other projects"><X aria-hidden="true" /></button></div>
+                  <div className="canvas-folder-heading"><div><span>OPEN FOLDER / 03 MORE PROJECTS</span><h2>More things I’ve made.</h2></div><button type="button" onClick={() => setFolderOpen(false)} aria-label="Close other projects"><WorkDeskIcon name="close" /></button></div>
                   <div className="canvas-folder-grid">
                     {otherWork.map((project, index) => (
                       <motion.a
@@ -297,7 +298,7 @@ function Archive() {
                       >
                         <img src={project.image} alt="" loading="lazy" />
                         <span>{project.number} / {project.kind}</span>
-                        <strong>{project.title} <ArrowUpRight aria-hidden="true" /></strong>
+                        <strong>{project.title} <WorkDeskIcon name="arrow-up-right" /></strong>
                         <p>{project.summary}</p>
                       </motion.a>
                     ))}
