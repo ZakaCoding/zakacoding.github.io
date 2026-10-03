@@ -91,6 +91,10 @@ export function WorkBreakNote() {
         <span className="canvas-break-secret" id={secretId} aria-hidden={!peeking}>unless you brought coffee</span>
       </div>
       <span className="canvas-break-aside" role="status">{quiet ? 'You can still look around. Just quietly.' : 'Okay, the bugs can talk again.'}</span>
+      <a className="canvas-break-coffee-link" href="https://ko-fi.com/zakacoding" target="_blank" rel="noopener noreferrer">
+        Enjoyed the little worlds? Buy me a coffee <span aria-hidden="true">↗</span>
+        <span className="sr-only"> (opens in a new tab)</span>
+      </a>
     </div>
   );
 }

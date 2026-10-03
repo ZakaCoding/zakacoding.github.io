@@ -77,6 +77,9 @@
 .canvas-break-stickers.is-peeking .canvas-break-secret { opacity: 1; visibility: visible; }
 .canvas-break-aside { display: block; min-height: 2.8em; margin-top: 0.45rem; color: #72594b; font: 400 0.72rem/1.4 Mona, system-ui, sans-serif; }
 .canvas-break-note.is-chatty .canvas-break-aside { color: #a34e36; }
+.canvas-break-coffee-link { display: inline-block; margin-top: 0.35rem; color: #964b34; font: 700 0.72rem/1.45 Mona, system-ui, sans-serif; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.canvas-break-coffee-link:hover { color: #bd6244; }
+.canvas-break-coffee-link:focus-visible { outline: 2px solid #a64f38; outline-offset: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   .canvas-break-dnd, .canvas-break-dnd::before, .canvas-break-sticker-mount,
