@@ -8,6 +8,7 @@ import { DeskProjectPreview } from '../components/DeskProjectPreview';
 import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
 import { Footer } from '../components/Footer';
 import { WorkDeskPresence } from '../components/WorkDeskPresence';
+import { WorkBreakNote } from '../components/WorkBreakNote';
 import ngefont from '../assets/image/ngefont/ngfont-illustration.webp';
 import amogasakti from '../assets/image/amogasakti/amogasakti.webp';
 import takeit from '../assets/image/takeit/1.webp';
@@ -112,7 +113,6 @@ function Archive() {
   const [resetKey, setResetKey] = useState(0);
   const [folderOpen, setFolderOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const [doNotDisturb, setDoNotDisturb] = useState(true);
   const audioRef = useRef(null);
 
   const getAudioContext = () => {
@@ -232,24 +232,7 @@ function Archive() {
             </div>
             <div className="canvas-margin-note canvas-margin-note-one"><span>note to self / 01</span><p>Good tools begin with a better question.</p><i aria-hidden="true">↗</i></div>
             <div className="canvas-margin-note canvas-margin-note-two"><span>scribble / 02</span><p>Messy ideas are welcome here.</p></div>
-            <div className={'canvas-break-note' + (doNotDisturb ? ' is-quiet' : ' is-chatty')}>
-              <span className="canvas-break-label">{doNotDisturb ? 'out of office / probably' : 'back at my desk / allegedly'}</span>
-              <p>{doNotDisturb ? 'Thank you for your email, but...' : 'Plot twist: my inbox is awake.'}</p>
-              <div className="canvas-break-rebus">
-                <button
-                  type="button"
-                  className="canvas-break-dnd"
-                  role="switch"
-                  aria-label="Do not disturb"
-                  aria-checked={doNotDisturb}
-                  onClick={() => setDoNotDisturb((quiet) => !quiet)}
-                >
-                  <span className="canvas-break-dnd-label" aria-hidden="true">{doNotDisturb ? 'Do Not Disturb' : 'Please Disturb'}</span>
-                </button>
-                <span className="canvas-break-emojis" aria-hidden="true">{doNotDisturb ? '🍷 😱 🕯️' : '☕ 👋 💬'}</span>
-              </div>
-              <span className="canvas-break-aside" role="status">{doNotDisturb ? 'You can still look around. Just quietly.' : 'Okay, the bugs can talk again.'}</span>
-            </div>
+            <WorkBreakNote />
             <span className="canvas-board-scribble canvas-board-scribble-one" aria-hidden="true">curiosity in progress ↗</span>
             <span className="canvas-board-scribble canvas-board-scribble-two" aria-hidden="true">keep making things</span>
             <span className="canvas-board-cross canvas-board-cross-one" aria-hidden="true">+</span>
