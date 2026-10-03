@@ -3,11 +3,11 @@ import { useId, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import './WorkBreakNote.css';
 
-// One transparent illustration atlas; each viewBox frames a single die-cut.
+// Frame individual die-cuts from the atlas or the Pinterest reaction cutout.
 const stickerSets = {
   quiet: [
     { id: 'wine', frame: '140 65 285 468' },
-    { id: 'overwhelmed', frame: '546 108 436 413' },
+    { id: 'email-reaction', frame: '154 53 947 1148', image: '/work/stickers/email-reaction.webp', imageWidth: 1254, imageHeight: 1254 },
     { id: 'candle', frame: '1078 73 345 468', name: 'candle' },
   ],
   chatty: [
@@ -30,7 +30,7 @@ function StickerArtwork({ sticker, index, reduced }) {
         transition={{ duration: reduced ? 0 : 0.19, delay: reduced ? 0 : index * 0.025, ease: [0.22, 1, 0.36, 1] }}
       >
         <svg className="canvas-break-sticker-art" viewBox={sticker.frame} aria-hidden="true" focusable="false">
-          <image href="/work/stickers/desk-stickers.webp" width="1536" height="1024" />
+          <image href={sticker.image || '/work/stickers/desk-stickers.webp'} width={sticker.imageWidth || 1536} height={sticker.imageHeight || 1024} />
         </svg>
       </motion.span>
     </AnimatePresence>
