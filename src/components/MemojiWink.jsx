@@ -42,7 +42,7 @@ export const MemojiWink = () => {
     }, 120);
   };
   const fallback = <img src={poster} width="586" height="586" alt="Zaka’s Memoji" />;
-  return <div className="about-classic-memoji-player" ref={container} onMouseEnter={play} onMouseLeave={release}>
+  return <button type="button" className="about-classic-memoji-player" aria-label="Make Zaka wink" ref={container} onMouseEnter={play} onMouseLeave={release} onFocus={play} onBlur={release} onClick={play}>
     {nearby && !reducedMotion ? <Suspense fallback={fallback}><Player src={animationUrl} keepLastFrame speed={1.4} style={{ width: '100%', height: 'auto' }} lottieRef={(instance) => { animation.current = instance; instance.setSubframe(true); if (hovered.current) play(); }} /></Suspense> : fallback}
-  </div>;
+  </button>;
 };

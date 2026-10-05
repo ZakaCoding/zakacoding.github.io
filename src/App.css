@@ -1138,6 +1138,14 @@ a.hero-story-card:hover {
 
 /* About — ZakaCoding opening + continuous horizontal exhibition */
 @font-face {
+  font-family: 'About Shantell';
+  src: url('/owa/shantell-sans.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'About Welcome Script';
   src: url('./assets/font/Sacramento-Welcome.ttf') format('truetype');
   font-style: normal;
@@ -1296,21 +1304,7 @@ a.hero-story-card:hover {
   align-items: center;
   padding: clamp(7rem, 12vh, 9rem) clamp(3rem, 5vw, 6rem) clamp(6rem, 10vh, 7rem);
   overflow: hidden;
-  background: linear-gradient(90deg, #f7f8fb 0%, #f3f4fa 24%, #f1f1f9 66%, #f5f5f7 100%);
-}
-
-/* The glow disappears at both edges, continuing the surrounding canvas. */
-.about-editorial-opening::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  content: '';
-  background:
-    radial-gradient(ellipse at 35% 38%, rgba(178, 199, 244, 0.48), transparent 62%),
-    radial-gradient(ellipse at 67% 68%, rgba(220, 201, 231, 0.45), transparent 58%);
-  mask-image: linear-gradient(90deg, transparent, #000 22%, #000 75%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 75%, transparent);
+  background: #fff;
 }
 
 .about-logo-landing {
@@ -1477,50 +1471,62 @@ a.hero-story-card:hover {
   letter-spacing: 0.1em;
 }
 
+.about-greeting { position: relative; }
+
 .about-editorial-copy .about-hello-title {
-  margin: clamp(1.2rem, 3vh, 2rem) 0 0;
-  color: #292b43;
-  font-family: 'About Welcome Script', 'Segoe Script', cursive;
-  font-size: clamp(6rem, 10vw, 10.5rem);
+  margin: clamp(1.5rem, 4vh, 3rem) 0 0;
+  color: #202124;
+  font-size: clamp(7rem, 13.5vw, 13rem);
   font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.015em;
+  font-weight: 500;
+  line-height: 0.85;
+  letter-spacing: -0.085em;
 }
 
 .about-greeting-first {
   display: block;
-  padding: 0.06em 0.15em 0.05em 0;
+  font-family: 'About Shantell', 'Segoe Script', cursive;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.87em;
 }
 
 .about-greeting-stage {
   position: relative;
   display: block;
-  height: 1.22em;
-  margin-left: clamp(1.25rem, 3vw, 3rem);
-  color: #576cb5;
+  height: 1.15em;
+  margin: 0.02em 0 0 0.42em;
 }
 
 .about-greeting-word {
   position: absolute;
   inset: 0 auto auto 0;
-  white-space: nowrap;
-  padding: 0.06em 0.14em 0.12em 0;
-}
-
-.about-greeting-japanese {
-  top: 0.3em;
-  font-family: 'About Japanese', 'YuKyokasho', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
-  font-size: 0.45em;
+  padding: 0.02em 0.12em 0.14em 0;
+  font-family: 'About Welcome Script', 'Segoe Script', cursive;
+  font-size: 1.2em;
   font-weight: 400;
   letter-spacing: -0.035em;
+  line-height: 1;
+  white-space: nowrap;
+  color: #242424;
+  transform-origin: 40% 60%;
+}
+
+.about-greeting-period { color: #2769dc; }
+
+.about-greeting-japanese {
+  top: 0.5em;
+  font-family: 'About Japanese', 'YuKyokasho', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+  font-size: 0.34em;
+  font-weight: 400;
+  letter-spacing: -0.045em;
   line-height: 1.8;
 }
 
 .about-greeting-chinese {
-  top: 0.1em;
+  top: 0.15em;
   font-family: 'About Chinese', 'HanziPen SC', 'Kaiti SC', 'KaiTi', 'PingFang SC', sans-serif;
-  font-size: 0.72em;
+  font-size: 0.65em;
   font-weight: 400;
   letter-spacing: 0.04em;
   line-height: 1.4;
@@ -1530,16 +1536,23 @@ a.hero-story-card:hover {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.4rem;
+  gap: 0.5rem;
 }
 
 .about-greeting-languages {
   display: flex;
-  gap: 0.15rem;
+  gap: 0.12rem;
+  padding: 0.3rem;
+  border: 1px solid #ededee;
+  border-radius: 999px;
+  background: #f7f7f8;
+  box-shadow: inset 0 1px 0 #fff;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .about-greeting-controls button {
+  position: relative;
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding: 0.4rem 0.55rem;
@@ -1549,56 +1562,34 @@ a.hero-story-card:hover {
   background: transparent;
   font: 500 0.72rem/1.2 var(--about-font);
   cursor: pointer;
-  transition: background 220ms ease, color 220ms ease;
+  transition: color 220ms ease, background 220ms ease;
 }
 
-.about-greeting-languages button[aria-pressed='true'] {
-  color: #303a69;
-  background: rgba(255, 255, 255, 0.72);
-  border-color: rgba(85, 97, 150, 0.14);
+.about-greeting-selection {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid #fff;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 2px 6px #5054791c;
 }
 
-.about-greeting-controls button:hover {
-  color: #303a69;
-  background: rgba(255, 255, 255, 0.55);
-}
-
-.about-greeting-controls button:focus-visible {
-  outline: 2px solid #576cb5;
-  outline-offset: 3px;
-}
-
-.about-greeting-controls .about-greeting-pause {
-  font-size: 1rem;
-}
-
-.about-greeting-aside {
-  color: #6b6d7b;
-  font-size: 0.72rem;
-  margin-left: 0.35rem;
-}
-
-@keyframes about-welcome-light {
-  0%, 100% { transform: translate3d(-1%, -1%, 0) scale(1.02); opacity: 0.72; }
-  50% { transform: translate3d(1%, 1%, 0) scale(1.05); opacity: 1; }
-}
-
-.about-editorial-opening::before {
-  animation: about-welcome-light 16s ease-in-out infinite;
-  animation-play-state: paused;
-}
-
-.about-editorial-opening[data-welcome-active]::before {
-  animation-play-state: running;
-}
+.about-greeting-control-label { position: relative; z-index: 1; display: inline-block; }
+.about-greeting-languages button[aria-pressed='true'] { color: #343c73; }
+.about-greeting-controls button:hover { color: #303a69; background: #ffffff60; }
+.about-greeting-controls button:focus-visible { outline: 2px solid #576cb5; outline-offset: 3px; }
+.about-greeting-controls .about-greeting-pause { font-size: 1rem; border-color: #ffffffc0; background: #ffffff40; }
+.about-greeting-aside > span { display: inline-block; }
+.about-greeting-aside { color: #626477; font-size: 0.7rem; margin-left: 0.15rem; min-width: 4.5rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-editorial-opening::before { animation: none; }
   .about-greeting-controls button { transition: none; }
 }
 
+.about-editorial-copy p strong { color: #33364e; font-weight: 550; }
+
 .about-editorial-copy p {
-  max-width: 36rem;
+  max-width: 31rem;
   margin: clamp(1.5rem, 3vh, 2.5rem) 0 0;
   color: #555766;
   font-size: clamp(1.05rem, 1.45vw, 1.25rem);
@@ -1610,20 +1601,25 @@ a.hero-story-card:hover {
   position: relative;
   z-index: 1;
   align-self: center;
-  width: min(100%, 37vw, 580px);
-  height: min(68vh, 650px);
+  width: min(44vw, 650px);
+  height: min(70vh, 660px);
+  justify-self: center;
+  margin-left: -3vw;
+  padding-top: 3rem;
   display: grid;
   place-items: center;
 }
 
 .about-classic-memoji-player {
+  padding: 0;
   width: min(100%, 560px);
   height: auto;
   display: block;
-  border-radius: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.66);
-  box-shadow: 0 28px 65px rgba(42, 47, 80, 0.14);
-  cursor: grab;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  background: #fff;
+  cursor: pointer;
   overflow: hidden;
 }
 
@@ -1639,13 +1635,19 @@ a.hero-story-card:hover {
 }
 
 .about-hand-note-one {
-  top: 2rem;
-  left: 0;
+  top: 1rem;
+  left: 12%;
 }
 
+.about-hand-note-one svg { display: block; width: 80px; height: 52px; margin-left: 2rem; }
+.about-hand-note-one path { stroke: #929292; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.about-classic-memoji-player img { display: block; width: 100%; height: auto; }
+.about-classic-memoji-player:focus-visible { outline: 2px solid #2769dc; outline-offset: 6px; border-radius: 2rem; }
+
+
 .about-hand-note-two {
-  right: 0;
-  bottom: 2rem;
+  right: 3%;
+  bottom: 0;
   text-align: right;
   transform: rotate(5deg);
 }
@@ -3593,7 +3595,7 @@ a.hero-story-card:hover {
   }
 
   .about-editorial-copy .about-hello-title {
-    font-size: clamp(5rem, 11vw, 7rem);
+    font-size: clamp(6rem, 13vw, 9rem);
   }
 
   .about-who {
@@ -3746,12 +3748,7 @@ a.hero-story-card:hover {
     align-items: stretch;
     gap: 3rem;
     padding: 7rem 1rem 4rem;
-    background: linear-gradient(180deg, #fff 0%, #f3f4fa 24%, #f1f1f9 66%, #f5f5f7 100%);
-  }
-
-  .about-editorial-opening::before {
-    mask-image: linear-gradient(180deg, transparent, #000 20%, #000 76%, transparent);
-    -webkit-mask-image: linear-gradient(180deg, transparent, #000 20%, #000 76%, transparent);
+    background: #fff;
   }
 
   .about-method,
@@ -3866,7 +3863,7 @@ a.hero-story-card:hover {
   }
 
   .about-editorial-copy .about-hello-title {
-    font-size: clamp(4.8rem, 23vw, 8rem);
+    font-size: clamp(6rem, 26vw, 11rem);
   }
 
   .about-editorial-opening .about-logo-landing {
@@ -3876,7 +3873,7 @@ a.hero-story-card:hover {
   }
 
   .about-greeting-stage {
-    margin-left: 1.5rem;
+    margin-left: 0.35em;
   }
 
   .about-greeting-aside {
@@ -3893,8 +3890,11 @@ a.hero-story-card:hover {
   .about-editorial-memoji {
     width: 100%;
     height: auto;
-    min-height: 370px;
-    border-radius: 2rem;
+    min-height: 340px;
+    max-width: 480px;
+    margin: 0 auto;
+    padding-top: 3rem;
+    border-radius: 0;
   }
 
   .about-who {
@@ -4545,3 +4545,11 @@ a.hero-story-card:hover {
 }
 
 @media (prefers-reduced-motion: reduce) { .conversation-typing-indicator i { animation: none !important; } }
+
+/* Keep the two-line welcome inside short landscape viewports. */
+@media (min-width: 701px) and (max-height: 760px) {
+  .about-editorial-opening { padding-block: 5rem 3rem; }
+  .about-editorial-copy .about-hello-title { margin-top: 1.5rem; font-size: min(12vw, 22vh); }
+  .about-editorial-opening .about-editorial-copy p { margin-top: 1.2rem; font-size: 1rem; }
+  .about-editorial-memoji { height: 65vh; width: min(42vw, 65vh); }
+}

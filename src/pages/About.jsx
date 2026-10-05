@@ -425,17 +425,21 @@ const About = () => {
                 <span className="about-index">02 / A LITTLE INTRODUCTION</span>
                 <AboutGreeting />
                 <p>
-                  I&apos;m Zaka. I build thoughtful interfaces, useful systems, and the
-                  occasional open-source experiment. Curiosity usually starts it;
-                  making complicated things feel clear keeps me going.
+                  <strong>I&apos;m Zaka. Glad you&apos;re here.</strong><br />
+                  I turn complicated things into interfaces that feel simple.
+                  A little curiosity, a lot of care, and usually a coffee nearby.
                 </p>
               </div>
 
-              <div className="about-editorial-memoji">
-                <span className="about-hand-note about-hand-note-one">Build.<br />Learn.<br />Repeat.</span>
+              <motion.div className="about-editorial-memoji"
+                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.7 }}>
+                <span className="about-hand-note about-hand-note-one">the human<br />behind the pixels
+                  <svg viewBox="0 0 100 65" fill="none" aria-hidden="true"><path d="M8 8C66 0 87 21 65 52m-10-9 10 12 14-9" /></svg>
+                </span>
                 <MemojiWink />
-                <span className="about-hand-note about-hand-note-two">Read.<br />Code.<br />Coffee.</span>
-              </div>
+                <span className="about-hand-note about-hand-note-two">A curious mind.<br />A friendly face.</span>
+              </motion.div>
             </section>
 
             <section className="about-method" aria-labelledby="method-title">
