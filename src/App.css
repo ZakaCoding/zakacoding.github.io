@@ -1,3 +1,21 @@
+@font-face {
+  font-family: 'About Japanese';
+  src: url('./assets/font/Welcome-Japanese-1.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+3053,U+3061,U+306B,U+306F,U+3093;
+}
+
+@font-face {
+  font-family: 'About Chinese';
+  src: url('./assets/font/Welcome-Chinese-1.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+4F60,U+597D;
+}
+
 #root {
   width: 100%;
   height: 100%;
@@ -1120,8 +1138,8 @@ a.hero-story-card:hover {
 
 /* About — ZakaCoding opening + continuous horizontal exhibition */
 @font-face {
-  font-family: 'About Pacifico';
-  src: url('./assets/font/Pacifico-Hello.ttf') format('truetype');
+  font-family: 'About Welcome Script';
+  src: url('./assets/font/Sacramento-Welcome.ttf') format('truetype');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -1462,24 +1480,121 @@ a.hero-story-card:hover {
 .about-editorial-copy .about-hello-title {
   margin: clamp(1.2rem, 3vh, 2rem) 0 0;
   color: #292b43;
-  font-family: 'About Pacifico', 'Segoe Script', cursive;
-  font-size: clamp(5.5rem, 9vw, 9.5rem);
+  font-family: 'About Welcome Script', 'Segoe Script', cursive;
+  font-size: clamp(6rem, 10vw, 10.5rem);
   font-style: normal;
   font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  line-height: 1;
+  letter-spacing: -0.015em;
 }
 
-.about-hello-title span {
+.about-greeting-first {
   display: block;
-  width: fit-content;
-  padding: 0 0.15em 0.08em 0;
+  padding: 0.06em 0.15em 0.05em 0;
 }
 
-.about-hello-title span + span {
-  margin-top: -0.16em;
-  margin-left: clamp(2rem, 4vw, 4rem);
+.about-greeting-stage {
+  position: relative;
+  display: block;
+  height: 1.22em;
+  margin-left: clamp(1.25rem, 3vw, 3rem);
   color: #576cb5;
+}
+
+.about-greeting-word {
+  position: absolute;
+  inset: 0 auto auto 0;
+  white-space: nowrap;
+  padding: 0.06em 0.14em 0.12em 0;
+}
+
+.about-greeting-japanese {
+  top: 0.3em;
+  font-family: 'About Japanese', 'YuKyokasho', 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
+  font-size: 0.45em;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.8;
+}
+
+.about-greeting-chinese {
+  top: 0.1em;
+  font-family: 'About Chinese', 'HanziPen SC', 'Kaiti SC', 'KaiTi', 'PingFang SC', sans-serif;
+  font-size: 0.72em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.about-greeting-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.about-greeting-languages {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.about-greeting-controls button {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #626477;
+  background: transparent;
+  font: 500 0.72rem/1.2 var(--about-font);
+  cursor: pointer;
+  transition: background 220ms ease, color 220ms ease;
+}
+
+.about-greeting-languages button[aria-pressed='true'] {
+  color: #303a69;
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(85, 97, 150, 0.14);
+}
+
+.about-greeting-controls button:hover {
+  color: #303a69;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.about-greeting-controls button:focus-visible {
+  outline: 2px solid #576cb5;
+  outline-offset: 3px;
+}
+
+.about-greeting-controls .about-greeting-pause {
+  font-size: 1rem;
+}
+
+.about-greeting-aside {
+  color: #6b6d7b;
+  font-size: 0.72rem;
+  margin-left: 0.35rem;
+}
+
+@keyframes about-welcome-light {
+  0%, 100% { transform: translate3d(-1%, -1%, 0) scale(1.02); opacity: 0.72; }
+  50% { transform: translate3d(1%, 1%, 0) scale(1.05); opacity: 1; }
+}
+
+.about-editorial-opening::before {
+  animation: about-welcome-light 16s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.about-editorial-opening[data-welcome-active]::before {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-editorial-opening::before { animation: none; }
+  .about-greeting-controls button { transition: none; }
 }
 
 .about-editorial-copy p {
@@ -1509,6 +1624,7 @@ a.hero-story-card:hover {
   border: 1px solid rgba(255, 255, 255, 0.66);
   box-shadow: 0 28px 65px rgba(42, 47, 80, 0.14);
   cursor: grab;
+  overflow: hidden;
 }
 
 .about-hand-note {
@@ -3477,7 +3593,7 @@ a.hero-story-card:hover {
   }
 
   .about-editorial-copy .about-hello-title {
-    font-size: clamp(4.75rem, 10vw, 6rem);
+    font-size: clamp(5rem, 11vw, 7rem);
   }
 
   .about-who {
@@ -3750,11 +3866,22 @@ a.hero-story-card:hover {
   }
 
   .about-editorial-copy .about-hello-title {
-    font-size: clamp(4.5rem, 19vw, 7rem);
+    font-size: clamp(4.8rem, 23vw, 8rem);
   }
 
-  .about-hello-title span + span {
-    margin-left: clamp(1.5rem, 9vw, 3.5rem);
+  .about-editorial-opening .about-logo-landing {
+    top: 5rem;
+    right: 1rem;
+    width: min(32vw, 140px);
+  }
+
+  .about-greeting-stage {
+    margin-left: 1.5rem;
+  }
+
+  .about-greeting-aside {
+    flex-basis: 100%;
+    margin: 0.3rem 0 0 0.55rem;
   }
 
   .about-editorial-copy p {

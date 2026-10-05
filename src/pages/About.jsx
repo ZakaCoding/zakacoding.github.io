@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight, Github, Instagram, Linkedin } from 'react-bootstrap-icons';
 
 import memojiImage from '../assets/image/zaka-memoji.jpeg';
 import localAiRobot from '../assets/image/local-ai-robot.webp';
+import { AboutGreeting } from '../components/AboutGreeting';
 import { MemojiWink } from '../components/MemojiWink';
 import { ZakaCodingLogo } from '../components/ZakaCodingLogo';
 import { ConversationExperience } from '../components/conversation/ConversationExperience';
@@ -82,7 +83,6 @@ const fieldNotes = [
 
 const About = () => {
   const location = useLocation();
-  const reducedWelcomeMotion = useReducedMotion();
   const exhibitionRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
@@ -423,25 +423,7 @@ const About = () => {
               <div ref={logoLandingRef} className="about-logo-landing" aria-hidden="true" />
               <div className="about-editorial-copy">
                 <span className="about-index">02 / A LITTLE INTRODUCTION</span>
-                <motion.h2
-                  id="about-hello-title"
-                  className="about-hello-title"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.65 }}
-                  variants={{ hidden: {}, visible: { transition: { staggerChildren: reducedWelcomeMotion ? 0 : 0.12 } } }}
-                >
-                  {['Hello,', 'hello.'].map((word) => (
-                    <motion.span
-                      key={word}
-                      variants={{
-                        hidden: { opacity: reducedWelcomeMotion ? 1 : 0, y: reducedWelcomeMotion ? 0 : 14 },
-                        visible: { opacity: 1, y: 0 },
-                      }}
-                      transition={{ duration: reducedWelcomeMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    >{word}</motion.span>
-                  ))}
-                </motion.h2>
+                <AboutGreeting />
                 <p>
                   I&apos;m Zaka. I build thoughtful interfaces, useful systems, and the
                   occasional open-source experiment. Curiosity usually starts it;
