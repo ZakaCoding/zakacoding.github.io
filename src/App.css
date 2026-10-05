@@ -1154,6 +1154,8 @@ a.hero-story-card:hover {
 }
 
 .about-page {
+  /* Gradients follow the story: horizontal on desktop/iPad, vertical on phones. */
+  --about-flow: 90deg;
   --about-ink: #1d1d1f;
   --about-muted: #9a9aa1;
   --about-line: #dedee3;
@@ -1171,7 +1173,7 @@ a.hero-story-card:hover {
   min-height: 100svh;
   flex: 0 0 100vw;
   overflow: hidden;
-  background: linear-gradient(90deg, #fff 0%, #fff 72%, #f7f8fb 100%);
+  background: linear-gradient(var(--about-flow), #fff 0%, #f7f8fb 62%, #fcfcfd 84%, #fff 97%, #fff 100%);
 }
 
 .about-original-intro {
@@ -1668,7 +1670,7 @@ a.hero-story-card:hover {
   gap: clamp(2.5rem, 6vw, 8rem);
   align-items: center;
   padding: clamp(7rem, 12vh, 9rem) clamp(3rem, 7vw, 8rem) clamp(6rem, 10vh, 7rem);
-  background: linear-gradient(90deg, #f5f5f7 0%, #f5f5f7 70%, #f7f8fb 100%);
+  background: linear-gradient(var(--about-flow), #fff 0%, #fff 5%, #fdfdfe 16%, #f8f8fa 34%, #f5f5f7 52%, #f5f5f7 72%, #f7f8fb 97%, #f7f8fb 100%);
 }
 
 .about-method-copy {
@@ -1771,7 +1773,7 @@ a.hero-story-card:hover {
   flex-direction: column;
   justify-content: center;
   padding: clamp(6rem, 10vh, 8rem) clamp(3rem, 7vw, 8rem);
-  background: linear-gradient(90deg, #f7f8fb 0%, #eef1f7 25%, #eef1f7 100%);
+  background: linear-gradient(var(--about-flow), #f7f8fb 0%, #f7f8fb 3%, #f3f5f9 16%, #eef1f7 34%, #eef1f7 74%, #e8edfa 97%, #e8edfa 100%);
 }
 
 .about-field-notes-heading {
@@ -1967,7 +1969,7 @@ a.hero-story-card:hover {
   align-items: center;
   padding: clamp(6rem, 11vh, 9rem) clamp(3rem, 7vw, 8rem);
   color: #202a3b;
-  background: linear-gradient(90deg, #e8edfa 0%, #cbd8ff 58%, #e9edf7 100%);
+  background: linear-gradient(var(--about-flow), #e8edfa 0%, #e8edfa 3%, #dfe7fc 20%, #cbd8ff 55%, #dce4fa 80%, #e9edf7 97%, #e9edf7 100%);
 }
 
 .about-lab-copy h2 { color: #25354a; }
@@ -2456,7 +2458,7 @@ a.hero-story-card:hover {
   overflow: hidden;
   padding: clamp(6.5rem, 10vh, 8rem) clamp(3rem, 5vw, 5rem) 2rem;
   color: var(--closing-ink);
-  background: linear-gradient(90deg, #e9edf7 0%, #f5f5f7 26%, #f5f5f7 100%);
+  background: linear-gradient(var(--about-flow), #e9edf7 0%, #e9edf7 3%, #eff1f7 18%, #f5f5f7 38%, #f5f5f7 100%);
 }
 
 .about-contact-panel .about-index {
@@ -3662,7 +3664,6 @@ a.hero-story-card:hover {
     width: 100%;
     height: auto;
     min-height: 920px;
-    background: linear-gradient(180deg, #fff 0%, #fff 78%, #f7f8fb 100%);
   }
 
   .about-original-intro {
@@ -3732,6 +3733,10 @@ a.hero-story-card:hover {
     overflow: visible;
   }
 
+  .about-page {
+    --about-flow: 180deg;
+  }
+
   .about-exhibition-track {
     width: 100%;
     height: auto;
@@ -3765,7 +3770,6 @@ a.hero-story-card:hover {
     flex-direction: column;
     gap: 3.5rem;
     padding: 7rem 1rem 5rem;
-    background: linear-gradient(180deg, #f5f5f7 0%, #f5f5f7 86%, #f7f8fb 100%);
   }
 
   .about-method-copy h2,
@@ -3803,7 +3807,6 @@ a.hero-story-card:hover {
   .about-field-notes {
     display: block;
     padding: 6.5rem 1rem 5rem;
-    background: linear-gradient(180deg, #f7f8fb 0%, #eef1f7 18%, #eef1f7 100%);
   }
 
   .about-field-notes-heading {
@@ -3846,7 +3849,6 @@ a.hero-story-card:hover {
     align-items: stretch;
     gap: 3rem;
     padding: 6.5rem 1rem 5rem;
-    background: linear-gradient(180deg, #e8edfa 0%, #cbd8ff 72%, #e9edf7 100%);
   }
 
   .about-lab-scene {
@@ -3998,10 +4000,6 @@ a.hero-story-card:hover {
 
   .about-chapter-blue {
     background: linear-gradient(180deg, #e8edfa 0%, var(--about-blue) 18%, var(--about-blue) 100%);
-  }
-
-  .about-contact-panel {
-    background: linear-gradient(180deg, #e9edf7 0%, #f5f5f7 22%, #f5f5f7 100%);
   }
 
   .about-chapter > div {
