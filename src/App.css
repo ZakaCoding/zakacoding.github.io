@@ -1119,6 +1119,14 @@ a.hero-story-card:hover {
 }
 
 /* About — ZakaCoding opening + continuous horizontal exhibition */
+@font-face {
+  font-family: 'About Shantell';
+  src: url('/owa/shantell-sans.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 .about-page {
   --about-ink: #1d1d1f;
   --about-muted: #9a9aa1;
@@ -1259,6 +1267,8 @@ a.hero-story-card:hover {
 
 .about-editorial-opening {
   position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
   width: 100vw;
   height: 100%;
   flex: 0 0 100vw;
@@ -1267,11 +1277,46 @@ a.hero-story-card:hover {
   gap: clamp(2.5rem, 5vw, 6rem);
   align-items: center;
   padding: clamp(7rem, 12vh, 9rem) clamp(3rem, 5vw, 6rem) clamp(6rem, 10vh, 7rem);
-  background: linear-gradient(90deg, #f7f8fb 0%, #f5f5f7 25%, #f5f5f7 100%);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 52% 65% at 9% 4%, rgba(159, 232, 255, 0.85), transparent 72%),
+    radial-gradient(ellipse 48% 80% at 74% 78%, rgba(123, 124, 255, 0.82), transparent 77%),
+    linear-gradient(112deg, #256ce1 0%, #1749b9 47%, #538cdb 100%);
+}
+
+.about-editorial-opening::before,
+.about-editorial-opening::after {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+}
+
+.about-editorial-opening::before {
+  width: min(76vw, 1100px);
+  aspect-ratio: 1;
+  top: -58%;
+  left: -22%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 42%;
+  box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.11), 0 0 110px rgba(126, 211, 255, 0.26);
+  transform: rotate(-25deg);
+}
+
+.about-editorial-opening::after {
+  right: -15%;
+  bottom: -60%;
+  width: min(75vw, 1000px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 44%;
+  box-shadow: inset 0 0 100px rgba(255, 255, 255, 0.1), 0 0 100px rgba(106, 177, 255, 0.24);
+  transform: rotate(24deg);
 }
 
 .about-logo-landing {
   position: absolute;
+  z-index: 2;
   top: clamp(2rem, 4vh, 3.5rem);
   right: clamp(3rem, 5vw, 6rem);
   width: clamp(10rem, 16vw, 15rem);
@@ -1414,6 +1459,8 @@ a.hero-story-card:hover {
 }
 
 .about-editorial-copy {
+  position: relative;
+  z-index: 1;
   align-self: center;
 }
 
@@ -1426,59 +1473,52 @@ a.hero-story-card:hover {
   text-transform: uppercase;
 }
 
-.about-editorial-copy h2 {
-  max-width: 760px;
-  margin: 1.5rem 0 0;
-  color: #26384a;
-  font-family: var(--about-font);
-  font-size: clamp(4rem, 6.9vw, 7.5rem);
-  font-weight: 420;
-  line-height: 0.94;
-  letter-spacing: -0.066em;
+.about-editorial-copy .about-index {
+  color: rgba(255, 255, 255, 0.78);
 }
 
-.about-editorial-copy h2 span {
-  color: var(--about-blue);
+.about-editorial-copy .about-hello-title {
+  margin: clamp(1.5rem, 4vh, 2.8rem) 0 0;
+  color: #fff;
+  font-family: 'About Shantell', 'Segoe Script', cursive;
+  font-size: clamp(6rem, 10.3vw, 11.5rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.83;
+  letter-spacing: -0.095em;
+  transform: rotate(-5deg);
 }
 
-.about-loading-dots {
-  display: inline-block;
-  width: 1.15em;
-  color: var(--about-blue);
-  text-align: left;
+.about-hello-title span {
+  display: block;
+  width: fit-content;
+  padding-right: 0.12em;
+  background: linear-gradient(145deg, #fff 14%, #d0edff 40%, #fff 58%, #a8dfff 90%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.64);
+  filter: drop-shadow(0 3px 0 rgba(10, 73, 167, 0.28)) drop-shadow(0 20px 22px rgba(0, 34, 118, 0.23));
 }
 
-.about-loading-dots::after {
-  content: '';
-  animation: aboutTerminalDots 1.2s steps(1, end) infinite;
-}
-
-@keyframes aboutTerminalDots {
-  0%, 20% { content: ''; }
-  25%, 45% { content: '.'; }
-  50%, 70% { content: '..'; }
-  75%, 100% { content: '...'; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .about-loading-dots::after {
-    content: '...';
-    animation: none;
-  }
+.about-hello-title span + span {
+  margin-top: 0.16em;
+  margin-left: clamp(2.2rem, 6vw, 7rem);
 }
 
 .about-editorial-copy p {
-  max-width: 720px;
-  margin: clamp(2rem, 4vh, 3.5rem) 0 0;
-  color: #a0a6b1;
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-  line-height: 1.35;
+  max-width: 620px;
+  margin: clamp(2.5rem, 5vh, 4rem) 0 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(1.05rem, 1.55vw, 1.42rem);
+  line-height: 1.5;
 }
 
 .about-editorial-memoji {
   position: relative;
+  z-index: 1;
   align-self: center;
-  width: min(37vw, 580px);
+  width: min(100%, 37vw, 580px);
   height: min(68vh, 650px);
   display: grid;
   place-items: center;
@@ -1489,14 +1529,15 @@ a.hero-story-card:hover {
   height: auto;
   display: block;
   border-radius: 2.5rem;
-  box-shadow: 0 32px 70px rgba(38, 49, 65, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  box-shadow: 0 36px 80px rgba(8, 38, 122, 0.27), 0 0 65px rgba(175, 218, 255, 0.26);
   cursor: grab;
 }
 
 .about-hand-note {
   position: absolute;
   z-index: 2;
-  color: #8d8d95;
+  color: rgba(255, 255, 255, 0.78);
   font-family: var(--about-font);
   font-size: clamp(0.85rem, 1.2vw, 1.05rem);
   font-style: italic;
@@ -3454,7 +3495,12 @@ a.hero-story-card:hover {
   .about-editorial-opening {
     width: 100vw;
     flex-basis: 100vw;
-    grid-template-columns: minmax(430px, 1fr) minmax(300px, 0.6fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+    gap: 2rem;
+  }
+
+  .about-editorial-copy .about-hello-title {
+    font-size: clamp(4.75rem, 10vw, 6rem);
   }
 
   .about-who {
@@ -3601,10 +3647,16 @@ a.hero-story-card:hover {
   .about-editorial-opening {
     width: 100%;
     height: auto;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
+    gap: 3rem;
     padding: 7rem 1rem 4rem;
-    background: linear-gradient(180deg, #f7f8fb 0%, #f5f5f7 18%, #f5f5f7 100%);
+    background:
+      radial-gradient(ellipse 90% 45% at 10% 5%, rgba(159, 232, 255, 0.7), transparent 75%),
+      radial-gradient(ellipse 100% 50% at 100% 85%, rgba(123, 124, 255, 0.7), transparent 75%),
+      linear-gradient(150deg, #256ce1 0%, #1749b9 60%, #538cdb 100%);
   }
 
   .about-method,
@@ -3718,17 +3770,24 @@ a.hero-story-card:hover {
     bottom: -0.5rem;
   }
 
-  .about-editorial-copy h2 {
-    font-size: clamp(3.8rem, 18vw, 5.8rem);
+  .about-editorial-copy .about-hello-title {
+    font-size: clamp(4.8rem, 18vw, 7rem);
+  }
+
+  .about-hello-title span + span {
+    margin-left: clamp(1.5rem, 9vw, 3.5rem);
   }
 
   .about-editorial-copy p {
-    font-size: 1.2rem;
+    max-width: 35rem;
+    margin-top: 2.75rem;
+    font-size: 1.12rem;
   }
 
   .about-editorial-memoji {
     width: 100%;
-    height: 520px;
+    height: auto;
+    min-height: 370px;
     border-radius: 2rem;
   }
 

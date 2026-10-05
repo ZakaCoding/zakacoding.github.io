@@ -421,15 +421,15 @@ const About = () => {
             <section className="about-editorial-opening">
               <div ref={logoLandingRef} className="about-logo-landing" aria-hidden="true" />
               <div className="about-editorial-copy">
-                <span className="about-index">02 / ABOUT</span>
-                <h2>
-                  I Read, Code, and drink too much coffee
-                  <span className="about-loading-dots" aria-label="loading" />
+                <span className="about-index">02 / A LITTLE INTRODUCTION</span>
+                <h2 className="about-hello-title">
+                  <span>Hello,</span>
+                  <span>hello.</span>
                 </h2>
                 <p>
-                  I&apos;m a curious builder and full-stack engineer. I move between
-                  operational systems, thoughtful interfaces, local AI, and open-source
-                  experiments—always trying to make complicated things feel clear.
+                  I&apos;m Zaka. I build thoughtful interfaces, useful systems, and the
+                  occasional open-source experiment. Curiosity usually starts it;
+                  making complicated things feel clear keeps me going.
                 </p>
               </div>
 
