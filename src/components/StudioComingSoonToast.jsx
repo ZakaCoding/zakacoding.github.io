@@ -57,7 +57,7 @@ export function StudioComingSoonToast() {
             <p className="studio-toast-copy">A little studio for curious ideas.</p>
             <div className="studio-toast-footer">
               <span className="studio-toast-status">Coming soon</span>
-              <span className="studio-toast-domain">studio.zakacoding.dev</span>
+              <a className="studio-toast-domain" href="https://studio.zakacoding.dev" target="_blank" rel="noopener noreferrer" aria-label="Visit ZakaCoding Studio, opens in a new tab">studio.zakacoding.dev</a>
             </div>
           </motion.aside>
         )}

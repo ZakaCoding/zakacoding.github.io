@@ -606,6 +606,28 @@ a.hero-story-card:hover {
   text-transform: uppercase;
 }
 
+.home-studio-link {
+  color: #5c5c62;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.home-studio-link:hover { color: #1d1d1f; }
+.portfolio-studio-link {
+  display: block;
+  margin-top: 0.75rem;
+  color: #6e6e73;
+  font: 500 0.875rem/1.5 Mona, system-ui, sans-serif;
+  text-align: right;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.portfolio-studio-link:hover { color: #1d1d1f; }
+@media (max-width: 767px) {
+  .portfolio-studio-link { text-align: left; }
+  .home-hero-footer { flex-wrap: wrap; gap: 0.5rem 1rem; }
+}
+
 @media (max-width: 1100px) {
   .hero-bento {
     grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);

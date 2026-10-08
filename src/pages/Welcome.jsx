@@ -215,9 +215,9 @@ export function Welcome() {
           </motion.a>
         </motion.div>
 
-        <div className="home-hero-footer" aria-hidden="true">
+        <div className="home-hero-footer">
           <span>Portfolio / 2026</span>
-          <span>ZakaCoding · Indonesia</span>
+          <span>ZakaCoding · Indonesia · <a className="home-studio-link" href="https://studio.zakacoding.dev" target="_blank" rel="noopener noreferrer" aria-label="Visit ZakaCoding Studio, opens in a new tab">Studio</a></span>
         </div>
       </section>
     </main>
