@@ -1,29 +1,26 @@
-const STORAGE_KEY = 'zakacoding.operator.session.v1';
+import { clearLegacyCredentials } from '../sessionMemory.js';
+
+const MAX_SESSION_AGE = 8 * 60 * 60 * 1000;
+let activeSession = null;
 
 export const readOperatorSession = () => {
-  try {
-    const session = JSON.parse(window.localStorage.getItem(STORAGE_KEY));
-    if (!session?.token) return null;
-
-    if (session.expiresAt && Date.parse(session.expiresAt) <= Date.now()) {
-      window.localStorage.removeItem(STORAGE_KEY);
-      return null;
-    }
-
-    return session;
-  } catch {
-    return null;
-  }
+  if (activeSession && Date.parse(activeSession.expiresAt) > Date.now()) return { ...activeSession };
+  activeSession = null;
+  return null;
 };
 
 export const saveOperatorSession = ({ token, expiresAt = null, operator = null }) => {
-  const session = { token, expiresAt, operator };
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  return session;
+  if (typeof token !== 'string' || !token) throw new Error('The server did not return an operator token.');
+  const serverExpiry = expiresAt ? Date.parse(expiresAt) : Infinity;
+  const deadline = Math.min(serverExpiry, Date.now() + MAX_SESSION_AGE);
+  if (!Number.isFinite(deadline) || deadline <= Date.now()) throw new Error('The operator session has expired. Sign in again.');
+  activeSession = { token, expiresAt: new Date(deadline).toISOString(), operator };
+  return { ...activeSession };
 };
 
 export const clearOperatorSession = () => {
-  window.localStorage.removeItem(STORAGE_KEY);
+  activeSession = null;
+  clearLegacyCredentials();
 };
 
 export const getOperatorDeviceName = () => {

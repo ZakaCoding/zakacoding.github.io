@@ -62,7 +62,7 @@ export function OperatorLogin({ isAuthenticating, notice, onLogin }) {
         </form>
 
         <p className="operator-login-footnote">
-          Your browser stores only a revocable operator token. Visitors cannot reach this desk without backend authentication.
+          Operator access is protected by your account. Refreshing this page requires a new sign-in.
         </p>
       </section>
     </main>

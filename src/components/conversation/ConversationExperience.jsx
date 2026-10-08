@@ -308,7 +308,7 @@ export const ConversationExperience = () => {
               <button type="button" className="about-conversation-close" onClick={() => setIsMinimized(true)} aria-label="Minimize conversation">−</button>
             </div>
           </header>
-          <p className="conversation-availability">Leave a message—I’ll reply when I’m back at my desk.</p>
+          <p className="conversation-availability">Leave a message—I’ll reply when I’m back at my desk. Keep this page open to continue the conversation.</p>
 
           {(showOpening && (conversation.isStarting || conversation.isLoading)) || (conversation.isLoading && conversation.messages.length === 0) ? (
             <p className="about-conversation-loading" aria-live="polite">Loading messages…</p>

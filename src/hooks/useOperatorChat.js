@@ -78,6 +78,17 @@ export const useOperatorChat = () => {
     setNotice(error?.message || fallback);
   }, [expireSession]);
 
+  useEffect(() => {
+    if (!session?.expiresAt) return undefined;
+    const timer = window.setTimeout(() => {
+      // Revoke the issued token when reachable; local expiry must also work offline.
+      if (session.token) logoutOperator(session.token).catch(() => {});
+      expireSession();
+      setNotice('Your operator session has expired. Sign in again.');
+    }, Math.max(0, Date.parse(session.expiresAt) - Date.now()));
+    return () => window.clearTimeout(timer);
+  }, [expireSession, session?.expiresAt, session?.token]);
+
   const refreshInbox = useCallback(async ({ quiet = false, token = session?.token } = {}) => {
     if (!token) return;
     if (!quiet) setIsLoadingInbox(true);
