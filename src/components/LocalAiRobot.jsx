@@ -1,4 +1,4 @@
-import { Player } from '@lottiefiles/react-lottie-player';
+import Player from './LottiePlayer';
 
 import localAiRobot from '../assets/image/local-ai-robot.webp';
 import robotEyes from '../assets/lottie/local-ai-eyes.json?url';

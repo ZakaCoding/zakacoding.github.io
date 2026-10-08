@@ -3,7 +3,7 @@ import { useReducedMotion } from 'framer-motion';
 import poster from '../assets/image/memoji-poster.webp';
 import animationUrl from '../assets/lottie/memoji-optimized.json?url';
 
-const Player = lazy(() => import('@lottiefiles/react-lottie-player').then((module) => ({ default: module.Player })));
+const Player = lazy(() => import('./LottiePlayer'));
 
 export const MemojiWink = () => {
   const container = useRef(null);
@@ -43,6 +43,6 @@ export const MemojiWink = () => {
   };
   const fallback = <img src={poster} width="586" height="586" alt="Zaka’s Memoji" />;
   return <button type="button" className="about-classic-memoji-player" aria-label="Make Zaka wink" ref={container} onMouseEnter={play} onMouseLeave={release} onFocus={play} onBlur={release} onClick={play}>
-    {nearby && !reducedMotion ? <Suspense fallback={fallback}><Player src={animationUrl} keepLastFrame speed={1.4} style={{ width: '100%', height: 'auto' }} lottieRef={(instance) => { animation.current = instance; instance.setSubframe(true); if (hovered.current) play(); }} /></Suspense> : fallback}
+    {nearby && !reducedMotion ? <Suspense fallback={fallback}><Player src={animationUrl} speed={1.4} style={{ width: '100%', height: 'auto' }} lottieRef={(instance) => { animation.current = instance; if (instance) { instance.setSubframe(true); if (hovered.current) play(); } }} /></Suspense> : fallback}
   </button>;
 };
