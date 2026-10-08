@@ -278,7 +278,8 @@ imageCallouts.forEach((callout) => {
 });
 
 const copyButton = byId('copy-install');
-copyButton.addEventListener('click', async () => {
+// Some story layouts omit the copy control; keep their remaining controls active.
+copyButton?.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText('pipx install ollama-workspace-agent\ncd your-project\nowa');
     copyButton.textContent = 'Copied ✓';

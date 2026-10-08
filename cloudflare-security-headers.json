@@ -1,0 +1,37 @@
+{
+  "name": "Portfolio browser security headers",
+  "kind": "zone",
+  "phase": "http_response_headers_transform",
+  "rules": [
+    {
+      "action": "rewrite",
+      "expression": "(http.host in {\"zakacoding.dev\" \"www.zakacoding.dev\"})",
+      "description": "Protect portfolio and Desk documents",
+      "enabled": true,
+      "action_parameters": {
+        "headers": {
+          "content-security-policy": {
+            "operation": "set",
+            "value": "default-src 'self'; script-src 'self' 'sha256-VDhFJi9ZJTtDEgITc5JSCw/ypudDUXseYQr4nemwLxg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; media-src 'self'; connect-src 'self' https://ws-chat-zakacoding.fly.dev wss://ws-chat-zakacoding.fly.dev; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+          },
+          "x-frame-options": {
+            "operation": "set",
+            "value": "DENY"
+          },
+          "x-content-type-options": {
+            "operation": "set",
+            "value": "nosniff"
+          },
+          "referrer-policy": {
+            "operation": "set",
+            "value": "strict-origin-when-cross-origin"
+          },
+          "permissions-policy": {
+            "operation": "set",
+            "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+          }
+        }
+      }
+    }
+  ]
+}
