@@ -13,6 +13,7 @@ import 'lenis/dist/lenis.css';
 
 // static component
 import { Navbar } from './components/Navbar'
+import { StudioComingSoonToast } from './components/StudioComingSoonToast';
 
 // pages
 import { Welcome } from './pages/Welcome';
@@ -87,6 +88,7 @@ function AppContent() {
           <Route path='*' element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
+      {location.pathname === '/' && <StudioComingSoonToast />}
     </>
   );
 }
