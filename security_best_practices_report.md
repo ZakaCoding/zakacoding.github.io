@@ -1,110 +1,56 @@
-# Release and security review — 2026-10-09
+# Release and security remediation — 2026-10-09
 
 ## Executive summary
 
-The Studio announcement and Vite upgrade are merged into `main` at `586f7d9`. The Vite upgrade initially prevented a normal clean install: React plugin 4.7.0 supports Vite 4–7, while the merged lockfile selects Vite 8.3.2. Updating the plugin to 5.2.0 resolves that conflict. The Node requirement is now declared in `package.json` and documented in `README.md`.
+The merged Studio announcement and Vite upgrade are compatible with a normal clean install after React plugin 5.2.0 was adopted. Authorized security remediation now clears all **22 npm dependency findings**. Both the full and production audits report **zero known vulnerabilities** against the final lockfile.
 
-**Security approval is withheld.** The refreshed npm audit reports **22 affected dependency entries: 2 critical, 15 high, and 5 moderate**. The production dependency tree reports **13: 1 critical, 10 high, and 2 moderate**. Counts include transitive parents affected by the same advisory; they are not counts of distinct exploits. A production dependency entry does not establish that the vulnerable code ships in the browser.
+The repository also removes persistent chat credentials, uses an expression-free animation runtime, and builds an enforced CSP into all seven HTML documents. **Live release hardening remains conditional on applying the generated Cloudflare response-header rule.** Account access was unavailable, so framing and other header-only controls have not been activated. Backend token lifetimes have not been changed. Zero advisory findings are not a guarantee against undiscovered vulnerabilities.
 
-The principal vulnerable versions below were already in `origin/main` before these merges. No new exploitable injection path was found in the Studio toast. Persistent bearer tokens and missing browser security headers also need follow-up. This review records findings; security dependency migrations, authentication changes, and edge configuration changes have not been applied.
+## Method and scope
 
-## Scope and method
+Used OpenAI's [security-best-practices skill](https://github.com/openai/skills/blob/main/skills/.curated/security-best-practices/SKILL.md), with its React and frontend JavaScript guidance. Dependency scans used npm's advisory service; manual review covered rendering, generated HTML, credentials, URL handling, service workers, and outbound destinations. Targeted secret-pattern checks do not replace a dedicated secret scanner or a Git-history audit. This work changes the portfolio repository; it does not deploy the site or change the chat backend.
 
-- Used OpenAI's [security-best-practices skill](https://github.com/openai/skills/blob/main/skills/.curated/security-best-practices/SKILL.md), including its React and general frontend JavaScript references.
-- Ran `npm audit --json` and `npm audit --omit=dev --json` against the corrected lockfile, using the npm advisory service. Both exit with status 1 because findings remain.
-- Reviewed React rendering, generated HTML, URL handling, network destinations, session storage, public configuration, and service worker behavior. Searched first-party JavaScript for HTML injection, dynamic code execution, cross-window messaging, and dynamically loaded scripts.
-- Checked tracked text files for common private-key, AWS, GitHub, and OpenAI credential patterns without printing matched values. No matching secret was found. The tracked environment files contain public browser connection settings; a Reverb application key is not an operator credential.
-- Inspected HTTPS response headers for the live Home and `/operator/` documents. These describe the currently published site, not deployment of this local merge.
-- Backend authorization, token expiry enforcement, infrastructure configuration, Git history secret scanning, and penetration testing are outside this review. No dedicated SAST or secret-scanning binary was installed; the source review and credential checks use targeted patterns and manual inspection.
+## Dependency findings: resolved
 
-## Critical dependency findings
+| ID | Original severity and impact | Remediation and current evidence |
+| --- | --- | --- |
+| 1 | Critical: prototype pollution in Pages publishing tooling | `package.json:41` pins `gh-pages` to **6.1.1**, fixing the old 3.2.3 advisory. Its existing `-d dist` CLI and default branch are supported. 6.3.0 was evaluated but carries an audited vulnerable glob subtree, so it was not retained. |
+| 2 | Critical: shell command injection in the unused toggle/native dependency tree | Removed unused `react-toggle-dark-mode` and its native/3D/tooling peers. `shell-quote` is absent from the final tree. No app-controlled shell sink was identified. |
+| 3 | High: parser denial-of-service advisories | Upgraded Tailwind and its PostCSS integration to **4.3.3**, removed unused Flowbite packages, and applied compatible parser lockfile updates. The old reset and palette are retained in `src/styles/preflight.css:1` and `src/index.css:1`. Both audits are clean. |
+| 4 | Moderate: router redirect and SSR hydration advisories | Upgraded `react-router-dom` to **7.18.4** (`package.json:29`). Existing client HashRouter routes, Desk entry, and static project pages remain in use. |
 
-### 1. Vulnerable Pages deployment dependency
+The first two critical advisories were [gh-pages prototype pollution](https://github.com/advisories/GHSA-8mmm-9v2q-x3f9) and [shell-quote command injection](https://github.com/advisories/GHSA-pqg4-j6r4-53mv). Their presence in the prior dependency tree did not demonstrate exploitation through the portfolio.
 
-- **Rule:** REACT-SUPPLY-001. **Severity:** Critical according to npm; local deployment tooling exposure.
-- **Location/evidence:** `package.json:44` declares `"gh-pages": "^3.0.0"`; `package-lock.json:3717` locks version `3.2.3`.
-- **Impact:** Crafted options reaching vulnerable `gh-pages` object handling can cause prototype pollution in the deployment process.
-- **Advisory:** [GHSA-8mmm-9v2q-x3f9](https://github.com/advisories/GHSA-8mmm-9v2q-x3f9), affecting versions below 5.0.0. npm suggests 6.3.0.
-- **Fix:** Upgrade `gh-pages` in a separate reviewed change and verify its CLI/branch/CNAME behavior without publishing.
-- **Mitigation/limits:** Treat publishing configuration as trusted input and defer deployment. This package does not execute in the portfolio browser bundle; no remote exploitation path through the toast was identified.
+## Application hardening
 
-### 2. Shell quoting command injection in an unused dependency subtree
+### 5. Persistent bearer credentials: storage issue resolved
 
-- **Rule:** REACT-SUPPLY-001. **Severity:** Critical according to npm; Node/tooling exposure.
-- **Location/evidence:** `package-lock.json:7661` locks `shell-quote` to `1.10.0`; `package.json:30` includes `react-toggle-dark-mode`, which brings `react-spring` and native/tooling peers. No first-party import of the toggle package was found.
-- **Impact:** Attacker-controlled tokens used by the vulnerable quoting function in a shell command can permit command injection in a Node process.
-- **Advisory:** [GHSA-pqg4-j6r4-53mv](https://github.com/advisories/GHSA-pqg4-j6r4-53mv), affecting 1.8.4 through versions below 1.11.0.
-- **Fix:** Remove the unused toggle dependency and re-audit its subtree, or update the quoting dependency to a patched release after verifying its consumers.
-- **Mitigation/limits:** Do not pass untrusted input into shell commands. Membership in the production dependency tree does not imply browser command execution; no app-controlled shell sink was found.
+`src/lib/operator/storage.js:3` and `src/lib/conversation/storage.js:3` now retain credentials only in module memory. `src/lib/sessionMemory.js:3` removes both legacy credential keys on every React entry, including Home. Preferences, drafts, and failed-message outboxes remain separate; they do not contain bearer credentials.
 
-## High dependency findings
+Operator use is bounded locally to the earlier server expiry or eight hours (`src/lib/operator/storage.js:14`). The expiry timer signs out locally and attempts backend token revocation when reachable (`src/hooks/useOperatorChat.js:81`). Explicit logout still revokes through the existing bearer API. No cookie authentication was introduced.
 
-### 3. Build and native dependency denial-of-service advisories
+**Behavior change:** visitor sessions survive hash-route navigation within the open document, but cannot resume after a refresh or document closure. Desk refresh requires sign-in. Existing backend conversations remain durable; lost visitor credentials cannot recover access. The UI and README explain the new behavior.
 
-- **Rule:** REACT-SUPPLY-001. **Severity:** High according to npm; exposure depends on the vulnerable parser receiving attacker-controlled build inputs.
-- **Location/evidence:** `package-lock.json:2011` locks `braces` to `3.0.3`, and `package-lock.json:7760` locks `source-map-js` to `1.2.1`. The audited tree also includes vulnerable `brace-expansion`.
-- **Impact:** Crafted glob patterns, selectors, or source maps can exhaust CPU or the stack in the affected tooling. Native/Metro parents inherit several of these findings.
-- **Fix:** Remove unused dependency subtrees first, then update affected parsers and their parents through compatible releases. Validate Tailwind output before any major migration.
-- **Mitigation/limits:** Build only trusted sources and keep preview servers local. There is no demonstrated public request path into these build parsers. Avoid `npm audit fix --force`, which proposes unrelated major upgrades.
+**Limit:** in-memory credentials remain accessible to malicious code executing in the active document. The frontend cap is not server-side expiry. The inspected local backend issues tokens using `chat.operator_token_ttl_days`, whose source default is 90 days; effective deployed configuration was not verified. Closing or refreshing a document discards its token without guaranteed server revocation. Backend lifetime and any previously issued-token revocation remain an operator/backend concern.
 
-## Medium application and dependency findings
+### 6. Browser policy: repository fixed; edge activation pending
 
-### 4. Router advisories require a reviewed migration
+`scripts/security-policy.mjs:3` restricts executable scripts to same-origin bundles and exact JSON-LD hashes. It blocks inline handlers, eval, objects, and base-URL injection, and limits API/WebSocket destinations to configured HTTPS/WSS origins. Embedded icon fonts are allowed as font data, and inline styles remain allowed for Framer Motion and interactive desk styling. All built documents receive the policy before executable or style resources (`scripts/apply-security-policy.mjs:8`).
 
-- **Rule:** REACT-SUPPLY-001 / REACT-REDIRECT-001. **Severity:** Moderate in npm.
-- **Location/evidence:** `package-lock.json:6844` and `package-lock.json:6859` lock `react-router` and `react-router-dom` to `6.30.6`; routing is configured in `src/App.jsx`.
-- **Advisories:** [Backslash open redirect](https://github.com/advisories/GHSA-wrjc-x8rr-h8h6) and [SSR hydration constructor injection](https://github.com/advisories/GHSA-337j-9hxr-rhxg). npm proposes router 7.18.4.
-- **Fix:** Review an upgrade with hash routes, operator redirects, and external-link behavior covered by browser checks.
-- **Mitigation/limits:** This site uses a client-rendered HashRouter, not React Router SSR hydration. Reviewed redirect targets use fixed same-origin path prefixes; no attacker-controlled external navigation target was found. Those facts reduce demonstrated exposure but do not remove the dependency advisories.
+The build produces `dist/cloudflare-security-headers.json` with CSP plus `frame-ancestors 'none'`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, referrer policy, and permissions policy. [Apply instructions](docs/security-headers.md) preserve unrelated Cloudflare rules. A generated file does not activate a rule. HTML meta CSP cannot supply framing or MIME-sniffing response-header protection; no connected Cloudflare management integration was available.
 
-### 5. Bearer tokens persist in origin-wide local storage
+### 7. Eval-capable animation runtime: resolved
 
-- **Rule:** REACT-AUTH-001 / JS-STORAGE-001. **Severity:** Medium; existing design risk.
-- **Location/evidence:** `src/lib/operator/storage.js:19–22` persists `{ token, expiresAt, operator }` through `localStorage.setItem`; `src/lib/conversation/storage.js:47–54` persists the visitor conversation token.
-- **Impact:** An XSS or compromised script anywhere on `zakacoding.dev` could read these tokens. `/operator/` is a separate document, but paths do not isolate origin-wide storage. Operator expiry may be null, and client checks do not prove server-side expiry.
-- **Fix:** Design short-lived in-memory tokens or server-managed HttpOnly sessions, with backend authorization/expiry and CSRF reviewed together. Preserve the intended operator shortcut and visitor continuation behavior.
-- **Mitigation/limits:** Require bounded server-side lifetimes and revocation, and strengthen CSP. This is not evidence of an active XSS or of a committed token; switching to session storage alone would not prevent script access.
+`src/components/LottiePlayer.jsx:4` imports the light SVG player from **lottie-web 5.13.0**, excluding the expression interpreter. Both repository animation assets contain no expression strings. Memoji hover/focus behavior, robot eyes, and reduced-motion behavior are retained. The production build no longer emits the Lottie eval warning, and no direct eval or dynamic Function constructor was found in the light runtime.
 
-### 6. Browser security headers are absent in the sampled live documents
+## Verification
 
-- **Rule:** REACT-HEADERS-001 / REACT-CSP-001. **Severity:** Medium; defense-in-depth gap.
-- **Location/evidence:** HTTPS HEAD responses for `https://zakacoding.dev/` and `https://zakacoding.dev/operator/` returned 200 without `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, or `Permissions-Policy`. `index.html` and `operator/index.html` contain no meta CSP.
-- **Impact:** The sampled app shells lack CSP restrictions and framing controls, increasing the consequence of a future injection bug and allowing framing unless another browser control intervenes.
-- **Fix:** Configure headers at the hosting edge. Trial CSP in report-only mode against Home, About, Work, operator, animation, and realtime behavior before enforcement.
-- **Mitigation/limits:** A meta CSP can constrain scripts but cannot supply `frame-ancestors` or report-only enforcement. No Cloudflare configuration was changed. These samples do not establish headers on every route or response.
+- A clean `npm ci` succeeds without force or legacy peer dependency options. Remaining ESLint/tooling deprecation notices are maintenance notices, not findings in the current npm audit.
+- `npm audit --json`: **0 critical, 0 high, 0 moderate, 0 low**. `npm audit --omit=dev --json`: **0**. Results describe the final lockfile and advisory data sampled on 2026-10-09.
+- Production build, lint, release configuration check, all three Node test files, and `git diff --check` pass. Tests cover legacy credential cleanup, memory-only sessions, expiry bounds, generated entry pages, CSP hashes/TLS, and edge rules.
+- Chromium verification passes at 1440, 390, and 320 pixels, including reduced motion, credential cleanup, mocked bearer login/visitor restoration, expiry revocation, animations, static routes, and rejection of injected inline JavaScript. Normal flows produce no CSP violations or application exceptions. Work keyboard reveal, menu geometry, Escape, and focus restoration also pass. Screenshots were inspected. Backend authorization and actual realtime delivery are not established by mocked API/socket checks; the installed socket adapter was normalized to discard data after closure as native sockets do.
+- Targeted private-key, AWS, GitHub, and OpenAI credential-pattern checks across tracked and intended new text files found no matching secret. No first-party eval or dynamic Function constructor was found. The built CNAME remains `zakacoding.dev`.
+- Broader route testing found an existing missing copy-button error on the standalone OwA page; `public/owa/owa.js:281` now guards that optional control so remaining page behavior can initialize.
+- Modern browser support follows the upgraded compiler: Chrome 111+, Safari 16.4+, Firefox 128+. Chromium was available for local checks; actual Safari/Firefox devices were not tested.
 
-## Low hardening finding
-
-### 7. Lottie retains an eval-capable runtime
-
-- **Rule:** JS-XSS-003 / JS-CSP-002. **Severity:** Low in the reviewed app context.
-- **Location/evidence:** `src/components/MemojiWink.jsx:46` uses `@lottiefiles/react-lottie-player`; the Vite 8 build warns about direct `eval` in its bundled implementation.
-- **Impact:** The runtime complicates a strict CSP; untrusted expression-bearing animations could expand the execution surface.
-- **Fix:** Assess an expression-free/light player while preserving the accepted Memoji behavior.
-- **Mitigation/limits:** Current animation input is a repository-controlled asset, not an upload or API response. Do not enable `unsafe-eval` just to suppress CSP failures. No attacker-controlled input into this eval path was demonstrated.
-
-## Complete npm finding inventory
-
-| npm severity | Affected entries |
-| --- | --- |
-| Critical (2) | `gh-pages`, `shell-quote` |
-| High (15) | `@react-native/community-cli-plugin`, `@react-native/virtualized-lists`, `@react-three/fiber`, `brace-expansion`, `braces`, `chokidar`, `fast-glob`, `metro`, `metro-config`, `metro-file-map`, `metro-transform-worker`, `micromatch`, `react-native`, `source-map-js`, `tailwindcss` |
-| Moderate (5) | `flowbite-react`, `postcss-nested`, `postcss-selector-parser`, `react-router`, `react-router-dom` |
-
-## Positive checks and release validation
-
-- The Studio toast uses fixed JSX text, a non-sensitive dismissal flag, guarded storage access, and timer cleanup. It adds no outbound request, dynamic URL, or HTML injection sink.
-- Visitor and operator message bodies use React text interpolation. Generated project prose is escaped. Reviewed service worker notification links are restricted to the same origin, and the worker does not cache authenticated requests.
-- First-party source searches found no raw HTML injection, `eval`, `new Function`, third-party script loader, or cross-window messaging handler requiring origin validation.
-- `npm ci` completed successfully without `--force` or `--legacy-peer-deps`. It retains pre-existing peer warnings from the unused native/3D subtree.
-- The production build completed with Vite 8.3.2 and React plugin 5.2.0, and generated all three project stories, sitemap, and 404 page. The Lottie eval warning remains as described in finding 7.
-- `npm run lint`, `npm run release:check`, `node --test tests/operator-entry.test.mjs`, and `git diff --check` passed.
-- Chromium checks against the final Vite 8 output passed at 1440, 390, and 320 pixels, including reduced motion, keyboard dismissal, persistence after reload, and route smoke checks for About, Work, operator, and generated Work pages. The toast stayed inside each viewport; no browser exceptions were observed. Screenshots were inspected. These checks do not exercise an authenticated backend session.
-
-## Recommended follow-up order
-
-1. Upgrade vulnerable Pages tooling and remove unused toggle/native dependency branches; rerun both audits.
-2. Review remaining parser and router upgrades with focused regression checks.
-3. Plan token lifetime/storage changes with the chat backend and edge CSP/framing controls.
-
-No source push, Pages publication, Fly release, or edge configuration change was performed during this review.
+No push, Pages publication, Fly deployment, or Cloudflare change was performed. Apply and verify the edge rule when publishing this build.
