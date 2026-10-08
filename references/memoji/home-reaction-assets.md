@@ -2,6 +2,12 @@
 
 Generated with the built-in image_gen tool using `src/assets/image/zaka-memoji-screenlit.webp` as the edit target. The final project assets are `src/assets/image/zaka-memoji-quarter-blink-eyes.png`, `src/assets/image/zaka-memoji-half-blink-eyes.png`, `src/assets/image/zaka-memoji-blink-eyes.png`, and `src/assets/image/zaka-memoji-gaze-eyes.png`. Each is a feathered crop of the generated portrait so the base Memoji and laptop stay fixed.
 
+The mouth pose is `src/assets/image/zaka-memoji-soft-smile-mouth.png`, a feathered crop of an image_gen edit of the same portrait. It changes only the open grin to a small closed smile. The mask is restricted to the lower face above the laptop edge. The renderer eases into it after the first blink, holds briefly while the gaze is down, then eases back before the final blink.
+
+## Soft smile prompt
+
+Use case: precise-object-edit. Asset: expression layer for the existing ZakaCoding Memoji reaction. The 1120×1404 portrait is the exact edit target. Change only the mouth and immediately surrounding lip and cheek pixels to a subtly smaller, softly closed smile, as if he has noticed something on the laptop. Preserve the exact face, eyes, brows, hair, nose, laptop, stickers, black background, warm rim light, cool screen light, camera, crop, and dimensions. Keep the mouth pixel aligned for a small feathered transition. No teeth in the closed smile, no speaking shape, no other edits or text.
+
 ## Blink prompt
 
 Use case: precise-object-edit. Asset: closed-blink expression layer for the existing 1120x1404 home-screen Memoji portrait. Use the supplied image as the edit target. Keep the exact camera, scale, centered face, hair, smile, laptop, stickers, backdrop, warm hair rim light, and cool laptop screen light. Change only BOTH eyelids and eyebrows: both eyes naturally closed in a soft blink, brows lowered slightly and relaxed as in a quick blink. Do not shift the head or laptop. No additional objects or text. Match the exact source image dimensions and composition; the eyebrow-and-eye area will be feather-masked over the source in code, so align facial features precisely.
@@ -20,6 +26,6 @@ Use case: precise-object-edit. Create an expression-layer image aligned exactly 
 
 ## 60 fps render
 
-`scripts/generate-memoji-reaction.py` combines the two expression crops with the original portrait and a moving screen glow. It encodes 168 frames of 1120 × 1404 H.264 MP4 at 60 fps into `src/assets/video/memoji-reaction-60fps.mp4`. The site plays that clip on hover or tap and shows the original portrait for reduced motion.
+`scripts/generate-memoji-reaction.py` combines the eye and mouth expression crops with the original portrait and a moving screen glow. It encodes 168 frames of 1120 × 1404 H.264 MP4 at 60 fps into `src/assets/video/memoji-reaction-60fps.mp4`. The site plays that clip on hover or tap and shows the original portrait for reduced motion.
 
 To regenerate, install Pillow and ffmpeg, then run `python scripts/generate-memoji-reaction.py` from the repository root. Set `FFMPEG_BIN` to the ffmpeg executable path if it is not on `PATH`.
