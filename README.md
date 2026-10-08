@@ -4,7 +4,7 @@ Source for [zakacoding.dev](https://zakacoding.dev/), Zaka Noor's portfolio. It 
 
 ## Run locally
 
-Requires Node.js and npm.
+Requires Node.js 20.19+ on the Node 20 line, or Node.js 22.12+ (including newer major versions), and npm. These minimum versions are required by Vite 8.
 
 ```bash
 npm ci
@@ -32,6 +32,8 @@ npm run release
 ```
 
 `npm run release` checks the production configuration, builds the site, and publishes `dist/` to the `gh-pages` branch. The public browser settings used for release are in `.env.production`. Create and push a Git tag separately when marking a version; deployment does not create one.
+
+Run `npm audit` and `npm audit --omit=dev` before approving a release. The [2026-10-09 security review](security_best_practices_report.md) records outstanding dependency findings and browser security hardening work; a successful build alone does not clear those findings.
 
 The `public/CNAME` file keeps `zakacoding.dev` attached to GitHub Pages across releases. The Pages custom domain and Cloudflare DNS must point to the same domain. The chat API and Reverb remain on Fly; their deployed origin allowlists must include `https://zakacoding.dev` and `https://www.zakacoding.dev` for browser features to work from the custom domain.
 
