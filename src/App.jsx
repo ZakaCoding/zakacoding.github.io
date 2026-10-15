@@ -70,7 +70,7 @@ function AppContent() {
   }, [isOperatorDesk, location.pathname, location.search]);
   useEffect(() => {
     if (isOperatorDesk) return;
-    const page = location.pathname === '/about' ? 'About | Yes I wrote this in third person' : location.pathname === '/archive' ? 'Work | It worked on my machine' : '!Hello World';
+    const page = location.pathname === '/about' ? 'About | Yes I wrote this in third person' : location.pathname === '/archive' ? 'Work | It worked on my machine' : 'ZakaCoding | Zaka Noor & Design Studio';
     document.title = page;
   }, [location.pathname, isOperatorDesk]);
 
