@@ -217,7 +217,7 @@ export function Welcome() {
 
         <div className="home-hero-footer">
           <span>Portfolio / 2026</span>
-          <span>ZakaCoding · Indonesia · <a className="home-studio-link" href="https://studio.zakacoding.dev" target="_blank" rel="noopener noreferrer" aria-label="Visit ZakaCoding Studio, opens in a new tab">Studio</a></span>
+          <span>ZakaCoding · Indonesia · <a className="home-studio-link" href="https://studio.zakacoding.dev" target="_blank" rel="noopener noreferrer" aria-label="Visit ZakaCoding Studio, opens in a new tab">Studio</a> · <a className="home-studio-link" href="https://design.zakacoding.dev/start" target="_blank" rel="noopener noreferrer" aria-label="Explore Design Studio by ZakaCoding, opens in a new tab">Design Studio by ZakaCoding</a></span>
         </div>
       </section>
     </main>
