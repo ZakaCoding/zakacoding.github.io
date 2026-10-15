@@ -35,6 +35,7 @@ export function Footer () {
                             </div>
                             <h2 className="sm:text-right text-left text-gray-800 dark:text-white pr-1 font-bold">FULLSTACK WEB DEV</h2>
                             <a href="https://studio.zakacoding.dev" target="_blank" rel="noopener noreferrer" className="portfolio-studio-link" aria-label="Visit ZakaCoding Studio, opens in a new tab">A little studio called ZakaCoding</a>
+                            <a href="https://design.zakacoding.dev/start" target="_blank" rel="noopener noreferrer" className="portfolio-studio-link" aria-label="Explore Design Studio by ZakaCoding, opens in a new tab">Design Studio by ZakaCoding: design with your AI agent</a>
                         </div>
                     </Col>
                 </Row>
