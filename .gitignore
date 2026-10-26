@@ -28,3 +28,5 @@ graphify-out
 
 .env
 .env.local
+# Raw Craft browser captures; curated WebP evidence is committed.
+/docs/evidence/craft-story/*.png

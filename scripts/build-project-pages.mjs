@@ -1,6 +1,7 @@
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { projects } from '../src/lib/projects.js';
 import { renderOwaStory } from './owa-story.mjs';
+import { renderCraftStory } from './craft-story.mjs';
 
 const origin = 'https://zakacoding.dev';
 const escape = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
@@ -14,6 +15,11 @@ const shell = (title, description, path, body) => `<!doctype html><html lang="en
 await mkdir('dist/work', { recursive: true });
 for (const project of projects) {
   const path = `/work/${project.slug}/`;
+  if (project.slug === 'craft') {
+    await mkdir(`dist${path}`, { recursive: true });
+    await writeFile(`dist${path}index.html`, renderCraftStory());
+    continue;
+  }
   if (project.slug === 'owa') {
     await mkdir(`dist${path}`, { recursive: true });
     await writeFile(`dist${path}index.html`, renderOwaStory());
