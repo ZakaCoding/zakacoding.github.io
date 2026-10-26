@@ -23,7 +23,7 @@ for(const [width,height,motion] of [[1440,1000,'no-preference'],[1366,768,'no-pr
   await page.locator(`[data-step="${step}"]`).click();
   if(await page.locator('#workflow-shot').getAttribute('src')!==`/craft/${step}.webp`)throw Error('Workflow failed');
   await page.locator('.workflow-image [data-enlarge]').click();
-  if(!await page.locator('dialog').evaluate(e=>e.open))throw Error('Lightbox failed');
+  if(!await page.locator('.lightbox').evaluate(e=>e.open))throw Error('Lightbox failed');
   await page.keyboard.press('Escape');
  }
  await page.locator('[data-enlarge="coffee"]').click();
@@ -35,14 +35,36 @@ for(const [width,height,motion] of [[1440,1000,'no-preference'],[1366,768,'no-pr
  await page.locator('[data-play-film]').click();
  await page.waitForFunction(() => document.querySelector('video').currentTime > 0.2);
  const video=await page.locator('video').evaluate(v=>({readyState:v.readyState,error:v.error?.message,duration:v.duration,paused:v.paused,currentTime:v.currentTime}));
- await page.locator('video').evaluate(v=>v.pause());
+ await page.locator('[data-film-toggle]').click();
+ if (!await page.locator('video').evaluate(v => v.paused)) throw Error('Pause control failed');
+ await page.locator('[data-film-mute]').click();
+ if (!await page.locator('video').evaluate(v => v.muted)) throw Error('Mute control failed');
+ await page.locator('[data-film-mute]').click();
+ if (await page.locator('video').evaluate(v => v.muted)) throw Error('Unmute control failed');
+ await page.locator('.film-seek').fill('8');
+ await page.locator('.film-seek').dispatchEvent('input');
+ await page.waitForFunction(() => Math.abs(document.querySelector('video').currentTime - 8) < 0.3);
+ await page.locator('[data-open-film]').click();
+ if (!await page.locator('#film-dialog').evaluate(d => d.open)) throw Error('Video popup failed');
+ if (await page.locator('#film-dialog video').count() !== 1) throw Error('Popup must use the same player');
+ if (Math.abs(await page.locator('video').evaluate(v => v.currentTime) - 8) > 0.3) throw Error('Popup reset playback');
+ await page.locator('[data-film-toggle]').click();
+ await page.waitForFunction(() => document.querySelector('video').currentTime > 8.3);
+ await page.keyboard.press('Escape');
+ await page.waitForFunction(() => !document.querySelector('#film-dialog').open);
+ if (!await page.locator('video').evaluate(v => v.paused)) throw Error('Popup close must pause playback');
+ if (!await page.locator('[data-open-film]').evaluate(b => b === document.activeElement)) throw Error('Popup focus was not restored');
+ await page.locator('[data-open-film]').click();
+ await page.locator('.film-dialog-close').click();
+ await page.waitForFunction(() => !document.querySelector('#film-dialog').open);
+ const playerControls = { pause: true, mute: true, seek: true, popup: true, playbackPreserved: true, escape: true, closeButton: true, focusRestored: true };
  // Visit each section to exercise reveal and document overflow throughout the story.
  for(const section of await page.locator('main > section').all()) { await section.scrollIntoViewIfNeeded(); await page.waitForTimeout(motion==='reduce'?0:180); }
  await page.evaluate(() => { document.activeElement?.blur(); window.scrollTo({top:0,behavior:'instant'}); });
  await page.waitForTimeout(1100);
  await page.screenshot({animations:'disabled',path:`docs/evidence/craft-story/craft-${width}-full.png`,fullPage:true});
  const broken=await page.locator('main img').evaluateAll(imgs=>imgs.filter(i=>!i.complete||!i.naturalWidth).map(i=>i.src));
- reports.push({width,height,motion,overflow,heroCtaVisible:cta.y+cta.height<=height,initialVideoRequest,detailsOpen,video,broken,errors,failures});
+ reports.push({width,height,motion,overflow,heroCtaVisible:cta.y+cta.height<=height,initialVideoRequest,detailsOpen,video,playerControls,broken,errors,failures});
  await page.close();
 }
 const home=await browser.newPage({viewport:{width:1440,height:1000}});

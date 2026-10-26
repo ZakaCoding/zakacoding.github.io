@@ -56,7 +56,90 @@ document.querySelectorAll('[data-step]').forEach(button => {
   });
 });
 const film = document.querySelector('#craft-film');
-document.querySelector('[data-play-film]').addEventListener('click', () => { film.play().catch(() => {}); });
+const player = document.querySelector('.film-player');
+const inlineMount = document.querySelector('.film-inline-mount');
+const popup = document.querySelector('#film-dialog');
+const popupMount = document.querySelector('.film-popup-mount');
+const expandButton = document.querySelector('[data-open-film]');
+const playButton = document.querySelector('[data-film-toggle]');
+const muteButton = document.querySelector('[data-film-mute]');
+const seek = document.querySelector('.film-seek');
+const message = document.querySelector('.film-message');
+const timestamp = seconds => {
+  const safe = Number.isFinite(seconds) ? Math.max(0, Math.floor(seconds)) : 0;
+  return `${Math.floor(safe / 60)}:${String(safe % 60).padStart(2, '0')}`;
+};
+// Native video controls remain available when JavaScript is disabled.
+film.controls = false;
+document.querySelector('.film-controls').hidden = false;
+function syncPlayer() {
+  const duration = Number.isFinite(film.duration) ? film.duration : 26.266;
+  const playing = !film.paused && !film.ended;
+  const muted = film.muted || film.volume === 0;
+  playButton.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
+  playButton.querySelector('[data-play-icon]').hidden = playing;
+  playButton.querySelector('[data-pause-icon]').hidden = !playing;
+  muteButton.setAttribute('aria-label', muted ? 'Unmute video' : 'Mute video');
+  muteButton.setAttribute('aria-pressed', String(muted));
+  muteButton.querySelector('[data-sound-icon]').hidden = muted;
+  muteButton.querySelector('[data-muted-icon]').hidden = !muted;
+  document.querySelector('[data-film-time]').textContent = timestamp(film.currentTime);
+  document.querySelector('[data-film-duration]').textContent = timestamp(duration);
+  seek.disabled = film.readyState < 1 || duration <= 0;
+  seek.max = duration;
+  seek.value = film.currentTime;
+  seek.setAttribute('aria-valuetext', `${Math.floor(film.currentTime)} seconds of ${Math.floor(duration)} seconds`);
+  seek.style.setProperty('--film-progress', `${Math.min(100, film.currentTime / duration * 100)}%`);
+}
+async function playFilm() {
+  message.hidden = true;
+  try {
+    if (film.ended) film.currentTime = 0;
+    await film.play();
+  } catch (error) {
+    // Moving or closing the player can cancel an in-flight playback request.
+    if (error.name === 'AbortError') return;
+    message.textContent = 'Playback could not start. Try the play button again.';
+    message.hidden = false;
+    syncPlayer();
+  }
+}
+playButton.addEventListener('click', () => { if (film.paused || film.ended) playFilm(); else film.pause(); });
+muteButton.addEventListener('click', () => { film.muted = !film.muted; });
+seek.addEventListener('input', () => {
+  if (film.readyState >= 1) { film.currentTime = Number(seek.value); syncPlayer(); }
+});
+['loadedmetadata', 'durationchange', 'timeupdate', 'play', 'pause', 'ended', 'volumechange', 'seeked'].forEach(event => film.addEventListener(event, syncPlayer));
+film.addEventListener('error', () => {
+  message.textContent = 'The video could not load. Reload the page to try again.';
+  message.hidden = false;
+  syncPlayer();
+});
+document.querySelector('[data-play-film]').addEventListener('click', playFilm);
+expandButton.addEventListener('click', () => {
+  const wasPlaying = !film.paused && !film.ended;
+  inlineMount.style.height = `${player.getBoundingClientRect().height}px`;
+  popup.showModal();
+  // Move the same player so popup playback keeps the current time and sound state.
+  popupMount.append(player);
+  expandButton.setAttribute('aria-expanded', 'true');
+  if (wasPlaying) playFilm();
+});
+function closeFilmPopup() { popup.close(); }
+document.querySelector('.film-dialog-close').addEventListener('click', closeFilmPopup);
+popup.addEventListener('click', event => {
+  if (event.target !== popup) return;
+  const box = popup.getBoundingClientRect();
+  if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeFilmPopup();
+});
+popup.addEventListener('close', () => {
+  film.pause();
+  inlineMount.append(player);
+  inlineMount.style.removeProperty('height');
+  expandButton.setAttribute('aria-expanded', 'false');
+  expandButton.focus({ preventScroll: true });
+});
+syncPlayer();
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 if ('IntersectionObserver' in window) {
   if (!reduceMotion.matches) {
@@ -67,7 +150,7 @@ if ('IntersectionObserver' in window) {
     document.documentElement.classList.add('reveal-ready');
   }
   // Playback is always user initiated. Pause video when it leaves the viewport.
-  const videoObserver = new IntersectionObserver(entries => { if (!entries[0].isIntersecting) film.pause(); });
+  const videoObserver = new IntersectionObserver(entries => { if (!entries[0].isIntersecting && !popup.open) film.pause(); });
   videoObserver.observe(film);
   const chapterObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {

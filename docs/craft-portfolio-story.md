@@ -28,7 +28,7 @@ customer work. The video is dated so its older roadmap/end-card wording has cont
 Motion communicates sequence and interaction: hero entry, section reveals,
 workflow image changes, hover feedback and image enlargement. Reduced-motion
 preferences disable animation. There is no automatic video playback or scroll
-hijacking. Video has native controls and `preload="none"`.
+hijacking. Video has a custom pill controller and `preload="none"`. Native controls remain available without JavaScript.
 
 ## Source and media provenance
 
@@ -104,3 +104,24 @@ GitHub CI, merge, publication and live verification are separate from local chec
 The existing release process builds and publishes `dist/`; do not upload source
 files alone. Verify the active Cloudflare CSP against the generated header artifact
 when preparing a later authorized release. No release command was run here.
+
+## Owner revision: video card and title treatment (27 October)
+
+The film now sits in a pale rounded card, following the card hierarchy on the
+Diana Fun reference: title, short description, circular expand button, inset
+video and compact metadata. The pill controller supports play/pause, seek,
+elapsed/total time and mute. Expanding opens a native dialog and moves the same
+player into it, retaining time and sound state. Closing pauses playback, restores
+the inline player and returns keyboard focus to the expand button.
+
+The note “A product I wanted to use.” now uses the existing Mona sans face with
+bold italic, slightly rotated emphasis on “wanted,” following the regular sans
+plus rotalic emphasis of the reference title. No font files from Diana’s site
+were copied. Bootstrap icons come from the existing installed dependency; their
+MIT license accompanies the local SVGs in `public/craft/icons/`.
+
+`player-revision.json` records controller, seek, mute, popup playback continuity,
+Escape, close-button and focus checks in Chromium at 1440px, 390px and 320px
+(reduced motion), plus WebKit at 1440px and 390px. Revised visual captures are
+stored beside the original evidence. The reusable browser smoke script now
+checks these controls as well. Playback also continues when expanding an already-playing video; backdrop close and the no-JavaScript native-controller fallback were verified in separate browser checks.

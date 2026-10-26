@@ -12,7 +12,17 @@
         "readyState": 4,
         "duration": 26.266016,
         "paused": false,
-        "currentTime": 0.225911
+        "currentTime": 0.243043
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
       },
       "broken": [],
       "errors": [],
@@ -30,7 +40,17 @@
         "readyState": 4,
         "duration": 26.266016,
         "paused": false,
-        "currentTime": 0.239165
+        "currentTime": 0.227712
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
       },
       "broken": [],
       "errors": [],
@@ -48,7 +68,17 @@
         "readyState": 4,
         "duration": 26.266016,
         "paused": false,
-        "currentTime": 0.225274
+        "currentTime": 0.227222
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
       },
       "broken": [],
       "errors": [],
@@ -66,7 +96,17 @@
         "readyState": 4,
         "duration": 26.266016,
         "paused": false,
-        "currentTime": 0.224964
+        "currentTime": 0.236436
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
       },
       "broken": [],
       "errors": [],
@@ -84,7 +124,17 @@
         "readyState": 4,
         "duration": 26.266016,
         "paused": false,
-        "currentTime": 0.232778
+        "currentTime": 0.227561
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
       },
       "broken": [],
       "errors": [],

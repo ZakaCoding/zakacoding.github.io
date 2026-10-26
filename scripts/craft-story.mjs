@@ -26,11 +26,29 @@ export function renderCraftStory() {
 <div class="chapter-bar"><a class="chapter-brand" href="#main">Craft</a><nav aria-label="On this page"><a href="#why">The idea</a><a href="#film">In motion</a><a href="#experience">The experience</a><a href="#made">Made with Craft</a><a href="#engine">Under the hood</a></nav><a class="chapter-contact" href="mailto:hello@zakacoding.dev">Let’s talk ↗</a></div>
 <section class="intro section" id="why" aria-labelledby="why-title">
   <div class="intro-main" data-reveal><p class="eyebrow">The idea behind Craft</p><h2 id="why-title">The space between<br><span>“what if” and “there it is.”</span></h2><p class="large-copy">You have the idea. Then come the blank canvas, the first draft, the copy tweaks, and all the little decisions in between.</p><p>Craft brings a conversation into that space. It lives inside Design Studio, so you can ask for a plan, work through your copy, review suggested edits, or create a first design without leaving the editor.</p><p>I’m building it for independent makers and small teams who move between design and development. The goal is a shorter path to a useful first version, while keeping the result open to your own judgment.</p></div>
-  <aside class="project-note" data-reveal><span class="handwritten">A product I wanted to use.</span><dl><div><dt>My role</dt><dd>Product, experience design,<br>full-stack engineering & operations</dd></div><div><dt>Built within</dt><dd>Design Studio by ZakaCoding</dd></div><div><dt>Stage</dt><dd>Early product · invitation access</dd></div><div><dt>Foundation</dt><dd>Built on Penpot.<br>Craft developed by ZakaCoding.</dd></div></dl></aside>
+  <aside class="project-note" data-reveal><p class="note-title">A product I <em>wanted</em> to use.</p><dl><div><dt>My role</dt><dd>Product, experience design,<br>full-stack engineering & operations</dd></div><div><dt>Built within</dt><dd>Design Studio by ZakaCoding</dd></div><div><dt>Stage</dt><dd>Early product · invitation access</dd></div><div><dt>Foundation</dt><dd>Built on Penpot.<br>Craft developed by ZakaCoding.</dd></div></dl></aside>
 </section>
 <section class="film-section section" id="film" aria-labelledby="film-title">
   <div class="film-heading" data-reveal><h2 id="film-title">A little less explaining.<br><span>Let’s see it move.</span></h2><p>Ask in plain words. Review the suggestion. Choose what makes it onto your canvas.</p><a class="text-link" href="#craft-film" data-play-film>Play Craft’s product film ↘</a></div>
-  <figure class="film-frame" data-reveal><video id="craft-film" controls playsinline preload="none" poster="/craft/film-poster.webp" aria-describedby="film-caption"><source src="/craft/craft-beat.mp4" type="video/mp4"><a href="/craft/craft-beat.mp4">Download the Craft product film</a></video><figcaption id="film-caption">Craft product film · 25 October 2026. Real Craft panel, illustrated canvas, demo account and sample credits. The film’s roadmap and “coming soon” text reflect its recording date. Current capabilities are explained below.</figcaption></figure>
+  <figure class="film-frame" data-reveal>
+    <div class="film-card">
+      <div class="film-card-heading"><div><h3>Meet your canvas companion.</h3><p>Ask, review, and make it yours.<br>A short look inside Craft.</p></div><button class="film-expand icon-button" type="button" data-open-film aria-label="Open Craft film in a popup" aria-haspopup="dialog" aria-controls="film-dialog"><img src="/craft/icons/arrows-angle-expand.svg" width="18" height="18" alt=""></button></div>
+      <div class="film-inline-mount">
+        <div class="film-player">
+          <video id="craft-film" controls playsinline preload="none" poster="/craft/film-poster.webp" aria-label="Craft product film" aria-describedby="film-caption"><source src="/craft/craft-beat.mp4" type="video/mp4"><a href="/craft/craft-beat.mp4">Download the Craft product film</a></video>
+          <div class="film-controls" role="group" aria-label="Video controls" hidden>
+            <button class="icon-button" type="button" data-film-toggle aria-label="Play video"><img src="/craft/icons/play-fill.svg" width="16" height="16" alt="" data-play-icon><img src="/craft/icons/pause-fill.svg" width="16" height="16" alt="" data-pause-icon hidden></button>
+            <span class="film-time"><span data-film-time>0:00</span><span aria-hidden="true"> / </span><span data-film-duration>0:26</span></span>
+            <input class="film-seek" type="range" min="0" max="26.266" step="0.1" value="0" aria-label="Seek video" aria-valuetext="0 seconds of 26 seconds" disabled>
+            <button class="icon-button" type="button" data-film-mute aria-label="Mute video" aria-pressed="false"><img src="/craft/icons/volume-up.svg" width="18" height="18" alt="" data-sound-icon><img src="/craft/icons/volume-mute.svg" width="18" height="18" alt="" data-muted-icon hidden></button>
+          </div>
+          <p class="film-message" role="status" hidden></p>
+        </div>
+      </div>
+      <div class="film-card-meta"><span>Product film</span><span>00:26 · With sound</span></div>
+    </div>
+    <figcaption id="film-caption">25 October 2026. Real Craft panel, illustrated canvas, demo account and sample credits. The film’s roadmap and “coming soon” text reflect its recording date. Current capabilities are explained below.</figcaption>
+  </figure>
 </section>
 <section class="experience section" id="experience" aria-labelledby="experience-title">
   <div class="section-intro" data-reveal><h2 id="experience-title">A conversation.<br><span>With a clear next step.</span></h2><p>The useful part isn’t just getting an answer. It’s knowing what Craft understood, what it intends to change, and when you’re ready to let it.</p></div>
@@ -65,6 +83,7 @@ export function renderCraftStory() {
 <section class="closing section" aria-labelledby="closing-title" data-reveal><p class="product-name">Craft<span>Built on Penpot. Craft by ZakaCoding.</span></p><h2 id="closing-title">Let’s make room<br><span>for your next idea.</span></h2><p>Explore the studio, or talk with me about the product, the technology, and where it goes next.</p><div class="closing-actions"><a class="button" href="https://design.zakacoding.dev/start">Explore Design Studio ↗</a><a class="text-link" href="mailto:hello@zakacoding.dev">hello@zakacoding.dev ↗</a></div></section>
 </main>
 <footer><a href="/">← Back to ZakaCoding</a><a href="/#/about">Product, design & engineering by Zaka Noor ↗</a><a href="#main">Back to top ↑</a></footer>
+<dialog id="film-dialog" class="film-dialog" aria-labelledby="film-dialog-title" aria-describedby="film-dialog-description"><div class="film-dialog-heading"><div><h2 id="film-dialog-title">Meet your canvas companion.</h2><p id="film-dialog-description">Craft · Product film · 26 seconds</p></div><button type="button" class="icon-button film-dialog-close" aria-label="Close video popup"><img src="/craft/icons/x-lg.svg" width="16" height="16" alt=""></button></div><div class="film-popup-mount"></div><p class="film-dialog-note">Ask in plain words. Review each suggestion. Choose what makes it onto your canvas.</p></dialog>
 <dialog class="lightbox" aria-labelledby="lightbox-title"><div class="lightbox-bar"><h2 id="lightbox-title">A closer look</h2><button type="button" class="lightbox-close" aria-label="Close image">Close ×</button></div><div class="lightbox-scroll"><img id="lightbox-image" alt=""></div></dialog>
 </body></html>`;
 }
