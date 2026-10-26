@@ -90,11 +90,16 @@ img {
   text-decoration:none;
 }
 .home-link {
+  --brand-loop:8.4s;
+  display:inline-flex;
+  align-items:center;
+  flex-shrink:0;
+  gap:10px;
   font-weight:750;
   letter-spacing:-.04em;
   font-size:17px;
 }
-.home-link span {
+.home-link .brand-context {
   font-weight:400;
   color:var(--muted);
   letter-spacing:0;
@@ -582,7 +587,7 @@ dd {
 }
 .workflow {
   margin-top:65px;
-  background:var(--tint);
+  background:#fff;
   border-radius:var(--radius);
   padding:55px 70px;
   display:grid;
@@ -1334,4 +1339,99 @@ footer {
   .film-popup-mount .film-player { min-width:0; }
   .film-dialog-note { font-size:10px; }
   .note-title { font-size:22px; }
+}
+
+/* The two authentic ZakaCoding SVG marks become a compact, looping signature.
+   A fixed stage reserves the entire wordmark, so every phase has the same width. */
+.brand-motion {
+  display:block;
+  position:relative;
+  width:186px;
+  height:38px;
+  flex-shrink:0;
+  isolation:isolate;
+}
+.brand-tile {
+  display:block;
+  position:absolute;
+  left:0;
+  top:3px;
+  width:32px;
+  height:32px;
+  transform-origin:50% 50%;
+}
+.brand-tile-zaka {
+  z-index:2;
+  animation:brand-za-stack var(--brand-loop) cubic-bezier(.22,.75,.2,1) infinite both;
+}
+.brand-tile-coding {
+  z-index:1;
+  transform:translateX(38px);
+  animation:brand-code-slide var(--brand-loop) cubic-bezier(.22,.75,.2,1) infinite both;
+}
+.home-link .brand-wordmark {
+  position:absolute;
+  left:80px;
+  top:0;
+  display:block;
+  line-height:38px;
+  font-family:Mona,system-ui,sans-serif;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-.055em;
+  color:var(--ink);
+  white-space:nowrap;
+  animation:brand-name-reveal var(--brand-loop) cubic-bezier(.22,.75,.2,1) infinite both;
+}
+.home-link .brand-context {
+  font-size:13px;
+  white-space:nowrap;
+  animation:brand-name-reveal var(--brand-loop) cubic-bezier(.22,.75,.2,1) infinite both;
+}
+@keyframes brand-za-stack {
+  0%,5% { transform:translateY(4px) rotate(-7deg) scale(.91); }
+  13%,18% { transform:translateY(0) rotate(0) scale(1); }
+  24% { transform:translateY(-3px) rotate(-8deg) scale(1.025); }
+  39%,80% { transform:translateY(0) rotate(0) scale(1); }
+  90% { transform:translateY(1px) rotate(3deg) scale(.98); }
+  100% { transform:translateY(4px) rotate(-7deg) scale(.91); }
+}
+@keyframes brand-code-slide {
+  0%,9% { opacity:0; transform:translate(0,10px) rotate(-12deg) scale(.82); }
+  19% { opacity:1; transform:translate(2px,-5px) rotate(9deg) scale(.96); }
+  26% { opacity:1; transform:translate(0,-7px) rotate(-5deg) scale(1); }
+  40% { opacity:1; transform:translate(40px,0) rotate(2deg) scale(1); }
+  46%,80% { opacity:1; transform:translate(38px,0) rotate(0) scale(1); }
+  90% { opacity:1; transform:translate(0,3px) rotate(-8deg) scale(.96); }
+  100% { opacity:0; transform:translate(0,10px) rotate(-12deg) scale(.82); }
+}
+@keyframes brand-name-reveal {
+  0%,31% { opacity:0; transform:translateX(-16px); clip-path:inset(0 100% 0 0); }
+  49%,77% { opacity:1; transform:translateX(0); clip-path:inset(0 0 0 0); }
+  87%,100% { opacity:0; transform:translateX(-12px); clip-path:inset(0 100% 0 0); }
+}
+.home-link:is(:hover,:focus-visible) .brand-tile,
+.home-link:is(:hover,:focus-visible) .brand-wordmark,
+.home-link:is(:hover,:focus-visible) .brand-context,
+.home-link:has(.brand-motion.is-paused) .brand-context,
+.brand-motion.is-paused .brand-tile,
+.brand-motion.is-paused .brand-wordmark {
+  animation-play-state:paused;
+}
+@media(max-width:767px) {
+  .home-link { gap:0; }
+  .home-link .brand-context { display:none; }
+  .brand-motion { width:165px; height:34px; }
+  .brand-tile { width:28px; height:28px; }
+  .home-link .brand-wordmark { left:75px; font-size:16px; line-height:34px; }
+}
+@media(max-width:359px) {
+  .site-header { padding-inline:16px; }
+  .site-header nav { font-size:9px; }
+  .brand-motion { width:160px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .brand-tile-zaka { transform:none; }
+  .brand-tile-coding { transform:translateX(38px); opacity:1; }
+  .home-link .brand-wordmark { opacity:1; transform:none; clip-path:none; }
 }

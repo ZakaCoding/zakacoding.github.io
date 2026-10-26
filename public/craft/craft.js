@@ -163,3 +163,17 @@ if ('IntersectionObserver' in window) {
   }, { rootMargin: '-15% 0px -55% 0px' });
   document.querySelectorAll('.chapter-bar nav a').forEach(link => { const section = document.querySelector(link.hash); if (section) chapterObserver.observe(section); });
 }
+
+// Keep the brand loop quiet while the header is offscreen or the tab is hidden.
+const brandMotion = document.querySelector('.brand-motion');
+let brandInView = true;
+const syncBrandVisibility = () => brandMotion.classList.toggle('is-paused', document.hidden || !brandInView);
+document.addEventListener('visibilitychange', syncBrandVisibility);
+if ('IntersectionObserver' in window) {
+  const brandObserver = new IntersectionObserver(entries => {
+    brandInView = entries[0].isIntersecting;
+    syncBrandVisibility();
+  });
+  brandObserver.observe(brandMotion);
+}
+syncBrandVisibility();

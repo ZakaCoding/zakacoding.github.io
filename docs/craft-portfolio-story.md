@@ -125,3 +125,23 @@ Escape, close-button and focus checks in Chromium at 1440px, 390px and 320px
 (reduced motion), plus WebKit at 1440px and 390px. Revised visual captures are
 stored beside the original evidence. The reusable browser smoke script now
 checks these controls as well. Playback also continues when expanding an already-playing video; backdrop close and the no-JavaScript native-controller fallback were verified in separate browser checks.
+
+## Owner revision: white workflow and animated brand (27 October)
+
+The `.workflow` surface is now pure white. The detail-page header embeds the
+original `public/logo/zaka.svg` and `coding.svg` geometry directly, with no
+redrawing or replacement mark. Its 8.4-second loop introduces Za, lifts the code
+tile from the stack, slides it right, reveals the ZakaCoding wordmark, holds the
+complete signature, and folds back into the stack. The small Craft context joins
+the wordmark reveal.
+
+The animation reserves a fixed header footprint to prevent navigation movement.
+It pauses on hover or keyboard focus, while offscreen, and when the tab is hidden.
+Reduced-motion mode displays both authentic tiles and the wordmark statically.
+Phone layouts retain the logo and name while omitting the secondary Craft label.
+
+`brand-revision.json` records original SVG geometry comparison, fixed-width phase
+checks, white workflow background, offscreen pause, browser errors and overflow.
+Coverage includes Chromium desktop, 390px, 320px and reduced motion, plus WebKit
+desktop and phone. Phase screenshots and the white workflow capture are stored
+with the other review evidence.

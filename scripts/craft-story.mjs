@@ -1,4 +1,10 @@
 // Standalone, indexable product story. All media comes from existing Craft work.
+import { readFileSync } from 'node:fs';
+
+// Keep the original owner-supplied SVG geometry; animate only its wrapper.
+const brandTile = (name) => readFileSync(new URL(`../public/logo/${name}.svg`, import.meta.url), 'utf8')
+  .replace('<svg ', `<svg class="brand-tile brand-tile-${name}" aria-hidden="true" focusable="false" `);
+const brand = `<span class="brand-motion" aria-hidden="true">${brandTile('zaka')}${brandTile('coding')}<span class="brand-wordmark">ZakaCoding</span></span><span class="brand-context" aria-hidden="true">/ Craft</span>`;
 const picture = (file, alt, extra = '') => `<img src="/craft/${file}.webp" alt="${alt}" loading="lazy" decoding="async" ${extra}>`;
 export function renderCraftStory() {
   return `<!doctype html>
@@ -14,7 +20,7 @@ export function renderCraftStory() {
 <link rel="stylesheet" href="/craft/craft.css"><script type="module" src="/craft/craft.js"></script>
 </head><body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-header"><a class="home-link" href="/" aria-label="ZakaCoding home">ZakaCoding<span> / Craft</span></a><nav aria-label="Main navigation"><a href="/#/archive">All work ↗</a><a href="https://design.zakacoding.dev/start">Visit Design Studio ↗</a></nav></header>
+<header class="site-header"><a class="home-link" href="/" aria-label="ZakaCoding home">${brand}</a><nav aria-label="Main navigation"><a href="/#/archive">All work ↗</a><a href="https://design.zakacoding.dev/start">Visit Design Studio ↗</a></nav></header>
 <main id="main">
 <section class="hero" aria-labelledby="hero-title">
   <p class="product-name">Craft<span>by ZakaCoding</span></p>
