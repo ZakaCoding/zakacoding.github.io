@@ -17,6 +17,7 @@ Vite prints the local URL. The portfolio pages work without a backend. The conve
 
 - `/` — homepage
 - `/work/` — selected work and engineering stories, generated as static pages at build time
+- `/work/craft/` — Craft product story with the product film, interactive workflow, native design examples and engineering decisions
 - `/#/archive` — project archive
 - `/#/about` — About page and conversation interface
 - `/operator/` — authenticated conversation desk with a dedicated Home Screen manifest (old `/#/operator` links redirect here)

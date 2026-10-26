@@ -70,7 +70,7 @@ export function Welcome() {
             </h1>
 
             <p className="hero-summary">
-              Between refills, I build logistics platforms that don&apos;t lose track of trucks, a{' '}
+              Between refills, I build Craft, an AI companion for your design canvas, a{' '}
               <button
                 className="local-ai-word"
                 type="button"
@@ -192,13 +192,13 @@ export function Welcome() {
             <BoxArrowUpRight className="story-arrow" aria-hidden="true" />
           </motion.a>
 
-          <motion.article className="hero-card hero-story-card hero-logistics-card" variants={heroItem} transition={{ duration: 0.65, ease: easeOut }}>
-            <span className="story-label">At work</span>
-            <strong>Logistics</strong>
-            <small>Systems behind real operations</small>
-            <span className="story-count">05 connected products</span>
-            <a className="story-case-link" href="/work/logistics/">Read the engineering story ↗</a>
-          </motion.article>
+          <motion.a className="hero-card hero-story-card hero-craft-card" href="/work/craft/" aria-label="Meet Craft, your canvas companion" variants={heroItem} transition={{ duration: 0.65, ease: easeOut }}>
+            <span className="story-label">Design × AI</span>
+            <strong>Craft</strong>
+            <small>A thinking partner, right on your canvas</small>
+            <span className="story-count">Built into Design Studio</span>
+            <span className="story-case-link">Meet Craft ↗</span>
+          </motion.a>
 
           <motion.a
             className="hero-card hero-story-card hero-cmap-card"

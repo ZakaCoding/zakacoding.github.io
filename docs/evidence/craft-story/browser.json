@@ -1,0 +1,149 @@
+{
+  "reports": [
+    {
+      "width": 1440,
+      "height": 1000,
+      "motion": "no-preference",
+      "overflow": false,
+      "heroCtaVisible": true,
+      "initialVideoRequest": false,
+      "detailsOpen": true,
+      "video": {
+        "readyState": 4,
+        "duration": 26.266016,
+        "paused": false,
+        "currentTime": 0.243043
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
+      },
+      "broken": [],
+      "errors": [],
+      "failures": []
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "motion": "no-preference",
+      "overflow": false,
+      "heroCtaVisible": true,
+      "initialVideoRequest": false,
+      "detailsOpen": true,
+      "video": {
+        "readyState": 4,
+        "duration": 26.266016,
+        "paused": false,
+        "currentTime": 0.227712
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
+      },
+      "broken": [],
+      "errors": [],
+      "failures": []
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "motion": "no-preference",
+      "overflow": false,
+      "heroCtaVisible": true,
+      "initialVideoRequest": false,
+      "detailsOpen": true,
+      "video": {
+        "readyState": 4,
+        "duration": 26.266016,
+        "paused": false,
+        "currentTime": 0.227222
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
+      },
+      "broken": [],
+      "errors": [],
+      "failures": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "motion": "no-preference",
+      "overflow": false,
+      "heroCtaVisible": true,
+      "initialVideoRequest": false,
+      "detailsOpen": true,
+      "video": {
+        "readyState": 4,
+        "duration": 26.266016,
+        "paused": false,
+        "currentTime": 0.236436
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
+      },
+      "broken": [],
+      "errors": [],
+      "failures": []
+    },
+    {
+      "width": 320,
+      "height": 740,
+      "motion": "reduce",
+      "overflow": false,
+      "heroCtaVisible": true,
+      "initialVideoRequest": false,
+      "detailsOpen": true,
+      "video": {
+        "readyState": 4,
+        "duration": 26.266016,
+        "paused": false,
+        "currentTime": 0.227561
+      },
+      "playerControls": {
+        "pause": true,
+        "mute": true,
+        "seek": true,
+        "popup": true,
+        "playbackPreserved": true,
+        "escape": true,
+        "closeButton": true,
+        "focusRestored": true
+      },
+      "broken": [],
+      "errors": [],
+      "failures": []
+    }
+  ],
+  "homepage": {
+    "craftLink": 1,
+    "logisticsLink": 0,
+    "craftCard": "DESIGN × AI\nCraft\nA thinking partner, right on your canvas\nBUILT INTO DESIGN STUDIO\nMeet Craft ↗"
+  }
+}

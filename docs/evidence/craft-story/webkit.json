@@ -1,0 +1,18 @@
+[
+  {
+    "engine": "WebKit",
+    "width": 1440,
+    "opened": true,
+    "overflow": false,
+    "videoPlayed": true,
+    "errors": []
+  },
+  {
+    "engine": "WebKit",
+    "width": 390,
+    "opened": true,
+    "overflow": false,
+    "videoPlayed": true,
+    "errors": []
+  }
+]

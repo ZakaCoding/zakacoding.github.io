@@ -1,5 +1,12 @@
 export const projects = [
   {
+    slug: 'craft', name: 'Craft', category: 'Design tools / Applied AI', role: 'Product, design & engineering · Zaka Noor',
+    summary: 'An AI companion inside Design Studio. Plan ideas, review proposed changes, and create editable designs with your approval.',
+    technologies: ['Penpot', 'TypeScript', 'Workers AI', 'AI Gateway', 'R2'],
+    links: [['Explore Design Studio', 'https://design.zakacoding.dev/start']],
+    visual: 'craft',
+  },
+  {
     slug: 'owa', name: 'OwA', category: 'Local AI / Developer tooling', role: 'Independent project · Zaka Noor',
     summary: 'A coding agent built around local models, repository context, and a developer’s own machine.',
     problem: 'A useful coding assistant needs to understand the repository it is working in. For a local tool, that understanding also has to fit the constraints of smaller models and local hardware.',

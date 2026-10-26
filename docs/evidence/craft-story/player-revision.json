@@ -1,0 +1,112 @@
+[
+  {
+    "engine": "Chromium",
+    "width": 1440,
+    "height": 1000,
+    "motion": "no-preference",
+    "title": {
+      "font": "Mona, system-ui, sans-serif",
+      "emphasis": "wanted",
+      "rotation": "matrix(0.992546, 0.121869, -0.121869, 0.992546, 0, 0)"
+    },
+    "paused": true,
+    "mute": true,
+    "seek": true,
+    "popupTime": 8,
+    "singlePlayer": true,
+    "escape": true,
+    "closeButton": true,
+    "focusRestored": true,
+    "overflow": false,
+    "errors": [],
+    "failures": []
+  },
+  {
+    "engine": "Chromium",
+    "width": 390,
+    "height": 844,
+    "motion": "no-preference",
+    "title": {
+      "font": "Mona, system-ui, sans-serif",
+      "emphasis": "wanted",
+      "rotation": "matrix(0.992546, 0.121869, -0.121869, 0.992546, 0, 0)"
+    },
+    "paused": true,
+    "mute": true,
+    "seek": true,
+    "popupTime": 8,
+    "singlePlayer": true,
+    "escape": true,
+    "closeButton": true,
+    "focusRestored": true,
+    "overflow": false,
+    "errors": [],
+    "failures": []
+  },
+  {
+    "engine": "Chromium",
+    "width": 320,
+    "height": 740,
+    "motion": "reduce",
+    "title": {
+      "font": "Mona, system-ui, sans-serif",
+      "emphasis": "wanted",
+      "rotation": "matrix(0.992546, 0.121869, -0.121869, 0.992546, 0, 0)"
+    },
+    "paused": true,
+    "mute": true,
+    "seek": true,
+    "popupTime": 8,
+    "singlePlayer": true,
+    "escape": true,
+    "closeButton": true,
+    "focusRestored": true,
+    "overflow": false,
+    "errors": [],
+    "failures": []
+  },
+  {
+    "engine": "WebKit",
+    "width": 1440,
+    "height": 900,
+    "motion": "no-preference",
+    "title": {
+      "font": "Mona, system-ui, sans-serif",
+      "emphasis": "wanted",
+      "rotation": "matrix(0.992546, 0.121869, -0.121869, 0.992546, 0, 0)"
+    },
+    "paused": true,
+    "mute": true,
+    "seek": true,
+    "popupTime": 8,
+    "singlePlayer": true,
+    "escape": true,
+    "closeButton": true,
+    "focusRestored": true,
+    "overflow": false,
+    "errors": [],
+    "failures": []
+  },
+  {
+    "engine": "WebKit",
+    "width": 390,
+    "height": 844,
+    "motion": "no-preference",
+    "title": {
+      "font": "Mona, system-ui, sans-serif",
+      "emphasis": "wanted",
+      "rotation": "matrix(0.992546, 0.121869, -0.121869, 0.992546, 0, 0)"
+    },
+    "paused": true,
+    "mute": true,
+    "seek": true,
+    "popupTime": 8,
+    "singlePlayer": true,
+    "escape": true,
+    "closeButton": true,
+    "focusRestored": true,
+    "overflow": false,
+    "errors": [],
+    "failures": []
+  }
+]

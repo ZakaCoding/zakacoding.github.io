@@ -1,0 +1,277 @@
+[
+  {
+    "engine": "Chromium",
+    "width": 1440,
+    "height": 1000,
+    "reducedMotion": "no-preference",
+    "originalGeometry": [
+      true,
+      true
+    ],
+    "geometry": [
+      {
+        "name": "za",
+        "bounds": {
+          "x": 72,
+          "width": 237
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.802081, -0.170488, 0.170488, 0.802081, 0, 10)"
+      },
+      {
+        "name": "stack",
+        "bounds": {
+          "x": 72,
+          "width": 237
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.995031, -0.0730252, 0.0730252, 0.995031, 0.114656, -6.88534)"
+      },
+      {
+        "name": "wordmark",
+        "bounds": {
+          "x": 72,
+          "width": 237
+        },
+        "nameOpacity": "1",
+        "codeTransform": "matrix(1, 0, 0, 1, 38, 0)"
+      },
+      {
+        "name": "return",
+        "bounds": {
+          "x": 72,
+          "width": 237
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.81834, -0.167431, 0.167431, 0.81834, 0, 9.23538)"
+      }
+    ],
+    "overflow": false,
+    "workflowBackground": "rgb(255, 255, 255)",
+    "offscreenPaused": true,
+    "errors": []
+  },
+  {
+    "engine": "Chromium",
+    "width": 390,
+    "height": 844,
+    "reducedMotion": "no-preference",
+    "originalGeometry": [
+      true,
+      true
+    ],
+    "geometry": [
+      {
+        "name": "za",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.802081, -0.170488, 0.170488, 0.802081, 0, 10)"
+      },
+      {
+        "name": "stack",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.995031, -0.0730252, 0.0730252, 0.995031, 0.114656, -6.88534)"
+      },
+      {
+        "name": "wordmark",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "1",
+        "codeTransform": "matrix(1, 0, 0, 1, 38, 0)"
+      },
+      {
+        "name": "return",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.81834, -0.167431, 0.167431, 0.81834, 0, 9.23538)"
+      }
+    ],
+    "overflow": false,
+    "workflowBackground": "rgb(255, 255, 255)",
+    "offscreenPaused": true,
+    "errors": []
+  },
+  {
+    "engine": "Chromium",
+    "width": 320,
+    "height": 740,
+    "reducedMotion": "no-preference",
+    "originalGeometry": [
+      true,
+      true
+    ],
+    "geometry": [
+      {
+        "name": "za",
+        "bounds": {
+          "x": 16,
+          "width": 160
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.802081, -0.170488, 0.170488, 0.802081, 0, 10)"
+      },
+      {
+        "name": "stack",
+        "bounds": {
+          "x": 16,
+          "width": 160
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.995031, -0.0730252, 0.0730252, 0.995031, 0.114656, -6.88534)"
+      },
+      {
+        "name": "wordmark",
+        "bounds": {
+          "x": 16,
+          "width": 160
+        },
+        "nameOpacity": "1",
+        "codeTransform": "matrix(1, 0, 0, 1, 38, 0)"
+      },
+      {
+        "name": "return",
+        "bounds": {
+          "x": 16,
+          "width": 160
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.81834, -0.167431, 0.167431, 0.81834, 0, 9.23538)"
+      }
+    ],
+    "overflow": false,
+    "workflowBackground": "rgb(255, 255, 255)",
+    "offscreenPaused": true,
+    "errors": []
+  },
+  {
+    "engine": "Chromium",
+    "width": 320,
+    "height": 740,
+    "reducedMotion": "reduce",
+    "originalGeometry": [
+      true,
+      true
+    ],
+    "geometry": [],
+    "overflow": false,
+    "workflowBackground": "rgb(255, 255, 255)",
+    "offscreenPaused": true,
+    "errors": []
+  },
+  {
+    "engine": "WebKit",
+    "width": 1440,
+    "height": 900,
+    "reducedMotion": "no-preference",
+    "originalGeometry": [
+      true,
+      true
+    ],
+    "geometry": [
+      {
+        "name": "za",
+        "bounds": {
+          "x": 72,
+          "width": 236.65625
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.802081, -0.170488, 0.170488, 0.802081, 0, 10)"
+      },
+      {
+        "name": "stack",
+        "bounds": {
+          "x": 72,
+          "width": 236.65625
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.995031, -0.073025, 0.073025, 0.995031, 0.114656, -6.885344)"
+      },
+      {
+        "name": "wordmark",
+        "bounds": {
+          "x": 72,
+          "width": 236.65625
+        },
+        "nameOpacity": "1",
+        "codeTransform": "matrix(1, 0, 0, 1, 38, 0)"
+      },
+      {
+        "name": "return",
+        "bounds": {
+          "x": 72,
+          "width": 236.65625
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.81834, -0.167432, 0.167432, 0.81834, 0, 9.235382)"
+      }
+    ],
+    "overflow": false,
+    "workflowBackground": "rgb(255, 255, 255)",
+    "offscreenPaused": true,
+    "errors": []
+  },
+  {
+    "engine": "WebKit",
+    "width": 390,
+    "height": 844,
+    "reducedMotion": "no-preference",
+    "originalGeometry": [
+      true,
+      true
+    ],
+    "geometry": [
+      {
+        "name": "za",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.802081, -0.170488, 0.170488, 0.802081, 0, 10)"
+      },
+      {
+        "name": "stack",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.995031, -0.073025, 0.073025, 0.995031, 0.114656, -6.885344)"
+      },
+      {
+        "name": "wordmark",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "1",
+        "codeTransform": "matrix(1, 0, 0, 1, 38, 0)"
+      },
+      {
+        "name": "return",
+        "bounds": {
+          "x": 20,
+          "width": 165
+        },
+        "nameOpacity": "0",
+        "codeTransform": "matrix(0.81834, -0.167432, 0.167432, 0.81834, 0, 9.235382)"
+      }
+    ],
+    "overflow": false,
+    "workflowBackground": "rgb(255, 255, 255)",
+    "offscreenPaused": true,
+    "errors": []
+  }
+]
