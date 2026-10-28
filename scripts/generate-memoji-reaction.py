@@ -17,6 +17,7 @@ OUTPUT = ROOT / 'src' / 'assets' / 'video' / 'memoji-reaction-60fps.mp4'
 FPS = 60
 DURATION = 2.8
 PATCH_POS = (315, 385)
+MOUTH_POS = (450, 682)
 
 
 def smooth(start, end, time):
@@ -67,6 +68,7 @@ def main():
     half_blink = Image.open(ASSETS / 'zaka-memoji-half-blink-eyes.png').convert('RGBA')
     quarter_blink = Image.open(ASSETS / 'zaka-memoji-quarter-blink-eyes.png').convert('RGBA')
     gaze = Image.open(ASSETS / 'zaka-memoji-gaze-eyes.png').convert('RGBA')
+    soft_smile = Image.open(ASSETS / 'zaka-memoji-soft-smile-mouth.png').convert('RGBA')
     face_glow = glow(550, 230, (140, 192, 255), 38)
     rim_glow = glow(700, 35, (188, 220, 255), 75)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
@@ -90,6 +92,7 @@ def main():
             closure = max(first_blink, last_blink)
             gaze_strength = smooth(0.37, 0.49, time) * (1 - smooth(2.32, 2.42, time))
             light_strength = smooth(0.19, 0.69, time) * (1 - smooth(2.15, 2.70, time))
+            smile_strength = smooth(0.72, 1.14, time) * (1 - smooth(1.72, 2.18, time))
             image = base.copy()
 
             if gaze_strength > 0:
@@ -106,6 +109,8 @@ def main():
                 lid = blink.copy()
                 lid.putalpha(lid_alpha)
                 image.alpha_composite(lid, PATCH_POS)
+            if smile_strength > 0:
+                image.alpha_composite(with_strength(soft_smile, smile_strength), MOUTH_POS)
             if light_strength > 0:
                 shift = round(-14 + 28 * smooth(0.2, 2.15, time))
                 image.alpha_composite(with_strength(face_glow, light_strength), (285 + shift, 560))
